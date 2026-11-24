@@ -306,7 +306,7 @@ const wrap=document.getElementById('boardWrap'),cv=document.getElementById('draw
 const ctx=cv.getContext('2d'),bgCtx=bgCv.getContext('2d');
 let cssW=innerWidth,cssH=innerHeight,dpr=Math.min(devicePixelRatio||1,2);
 let view={x:0,y:0,k:1};
-const X=v=>v*cssW*view.k+view.x,Y=v=>v*cssH*view.k+view.y,SZ=v=>v*cssH*view.k;
+const X=v=>v*cssW,Y=v=>v*cssH,SZ=v=>v*cssH; /* world px on the css basis; ctx carries the view transform */
 function fit(){cssW=innerWidth;cssH=innerHeight;
   [cv,bgCv].forEach(c=>{c.width=Math.round(cssW*dpr);c.height=Math.round(cssH*dpr);});
   redraw();if(textPos)clampEntry();}
@@ -594,8 +594,8 @@ let undoStack=[],redoStack=[];
 function pushUndo(){undoStack.push(JSON.stringify(curPage().strokes,(k,v)=>k==='_img'?undefined:v));if(undoStack.length>60)undoStack.shift();redoStack=[];}
 
 /* ================= backgrounds ================= */
-const LAYOUTS=[['blank','سادة'],['lines','سطور'],['narrow','سطور ضيقة'],['two','سطرين'],['nine','٩ أسطر'],['grid','شبكة'],['dots','نقط'],['iso','أيزومتري'],['graph','بياني'],['dark','سبورة خضراء']];
-const SCENES=[['rainbow','قوس قزح'],['night','ليل ونجوم'],['balloons','بالونات'],['meadow','حديقة'],['sea','بحر'],['hearts','قلوب'],['lanterns','فوانيس'],['sprinkles','نثار نجوم'],['doodlestars','نجوم مرسومة'],['paperstars','ورق بنجوم'],['floralborder','إطار زهور'],['ginghamstars','كاروهات ونجوم']];
+const LAYOUTS=[['blank','سادة'],['lines','سطور'],['narrow','سطور ضيقة'],['two','سطرين'],['nine','٩ أسطر'],['grid','شبكة'],['dots','نقط'],['iso','أيزومتري'],['graph','بياني']];
+const SCENES=[['rainbow','قوس قزح'],['balloons','بالونات'],['meadow','حديقة'],['sea','بحر'],['hearts','قلوب'],['lanterns','فوانيس'],['sprinkles','نثار نجوم'],['doodlestars','نجوم مرسومة'],['paperstars','ورق بنجوم'],['floralborder','إطار زهور'],['ginghamstars','كاروهات ونجوم']];
 function starPath(c,x,y,r,rot){c.beginPath();for(let i=0;i<10;i++){const rr=i%2?r*.45:r;const a=rot+i*Math.PI/5-Math.PI/2;const px=x+rr*Math.cos(a),py=y+rr*Math.sin(a);i?c.lineTo(px,py):c.moveTo(px,py);}c.closePath();}
 function spark4(c,x,y,r,col){c.fillStyle=col;c.beginPath();for(let i=0;i<8;i++){const rr=i%2?r*.28:r;const a=i*Math.PI/4;const px=x+rr*Math.cos(a),py=y+rr*Math.sin(a);i?c.lineTo(px,py):c.moveTo(px,py);}c.closePath();c.fill();}
 function drawLayout(c,bg,W,H,boost){
@@ -734,7 +734,7 @@ function drawScene(c,bg,W,H){
     for(let i=0;i<16;i++){const x=((i*59+21)%96)/100*W,y=((i*41+3)%94)/100*H;spark4(c,x,y,H*.014,cols[(i+2)%5]);}}
   else drawLayout(c,'blank',W,H);}
 function drawBg(c,W,H){const bg=curPage().bg;
-  if(LAYOUTS.some(l=>l[0]===bg))drawLayout(c,bg,W,H);else drawScene(c,bg,W,H);}
+  if(bg==='dark'||LAYOUTS.some(l=>l[0]===bg))drawLayout(c,bg,W,H);else drawScene(c,bg,W,H);}
 
 /* ================= stroke rendering ================= */
 function drawStroke(c,s){
@@ -889,11 +889,11 @@ function hitStroke(px,py){
 function nearHandle(px,py){
   if(!sel)return false;const b=strokeBBox(sel);if(!b)return false;
   const hx=view.x+b[2]*view.k,hy=view.y+b[3]*view.k;
-  return Math.hypot(px-hx,py-hy)<20;}
+  return Math.hypot(px-hx,py-hy)<28;}
 function nearDelete(px,py){
   if(!sel)return false;const b=strokeBBox(sel);if(!b)return false;
   const hx=view.x+b[2]*view.k,hy=view.y+b[1]*view.k;
-  return Math.hypot(px-hx,py-hy)<20;}
+  return Math.hypot(px-hx,py-hy)<28;}
 function moveStroke(s,dx,dy){
   if(s.kind==='stroke')s.points.forEach(p=>{p[0]+=dx;p[1]+=dy;});
   else if(s.kind==='shape'){s.x0+=dx;s.x1+=dx;s.y0+=dy;s.y1+=dy;}
