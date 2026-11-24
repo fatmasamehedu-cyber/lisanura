@@ -290,10 +290,21 @@ const PALETTE=['#7c2d49','#d16a92','#d9a44f','#4f7fd9','#3aa77c','#e05c5c','#7a5
 const LS='lisanura-board-v2';
 function curPage(){return state.pages[state.cur];}
 let saveT=null;
+function isTeacherOnline(){return !!(window.LN&&LN.configured()&&LN.user&&LN.profile&&LN.profile.role==='teacher');}
+function setSaveState(s){const el=document.getElementById('saveState');if(!el)return;
+  if(s!==undefined){el.textContent=s;return;}
+  el.textContent=isTeacherOnline()?'محفوظ في حسابك':'حفظ محلي على هذا الجهاز';}
 function save(){if(readOnly)return;try{const d=JSON.stringify(state,p=>(typeof p==='object'&&p&&p._img)?{...p,_img:undefined}:p);
-  if(d.length<4.5e6)localStorage.setItem(LS,d);flashSave();}catch(e){}
-  if(window.LN&&LN.configured())try{LN.saveBoard(JSON.parse(JSON.stringify(state,(k,v)=>k==='_img'?undefined:v)));}catch(e){}}
-function flashSave(){const el=document.getElementById('saveState');el.textContent='حُفظ';clearTimeout(saveT);saveT=setTimeout(()=>el.textContent='',1200);}
+  if(d.length<4.5e6)localStorage.setItem(LS,d);}catch(e){}
+  if(window.LN&&LN.configured())try{
+    LN.saveBoard(JSON.parse(JSON.stringify(state,(k,v)=>k==='_img'?undefined:v)),st=>{
+      if(st==='saving')setSaveState('جاري الحفظ في حسابك...');
+      else if(st==='saved')setSaveState('محفوظ في حسابك');
+      else setSaveState('تعذر الحفظ السحابي');});
+    if(!isTeacherOnline()){setSaveState('حُفظ محليًا');flashSave();}
+  }catch(e){setSaveState('حُفظ محليًا');flashSave();}}
+function flashSave(){clearTimeout(saveT);saveT=setTimeout(()=>setSaveState(),1600);}
+document.addEventListener('ln-auth',()=>setSaveState());
 function migrate(o){ /* v1: world 1600x1000, sizes in px */
   o.pages.forEach(p=>p.strokes.forEach(s=>{
     if(s.kind==='stroke'){s.points=s.points.map(pt=>[pt[0]/1600,pt[1]/1000,1]);s.size/=1000;}
@@ -906,7 +917,15 @@ async function buildBooks(body){
     list.innerHTML='<div style="font-size:13px;color:#a4748a;text-align:center">جاري تحميل كتبي...</div>';
     let books=[];try{books=await LN.listBooks();}catch(e){}
     list.innerHTML='';
-    if(!books.length)list.innerHTML='<div style="font-size:13px;color:#a4748a;text-align:center">لسه مفيش كتب، ارفعي أول كتاب</div>';
+    /* books saved on this device as a guest: offer one-tap move into her account */
+    let localB=[];try{localB=await dbAll();}catch(e){}
+    if(localB.length){const mv=document.createElement('button');mv.className='abtn gold';
+      mv.textContent='انقلي كتبك المحلية لحسابك ('+arNum(localB.length)+')';
+      mv.onclick=async()=>{mv.disabled=true;mv.textContent='جاري النقل...';
+        let ok=0;for(const b of localB){try{await LN.uploadBook(b.name,b.data);await dbDel(b.id);ok++;}catch(e){}}
+        toast('اتنقلت '+arNum(ok)+' كتاب لحسابك');closeCard('books');openBooksPanel();};
+      list.appendChild(mv);}
+    if(!books.length&&!localB.length)list.innerHTML='<div style="font-size:13px;color:#a4748a;text-align:center">لسه مفيش كتب، ارفعي أول كتاب</div>';
     books.forEach(b=>{const row=document.createElement('div');row.className='bookrow';
       row.innerHTML='<b></b><button class="abtn" style="padding:5px 12px;font-size:13px">افتحي</button><button class="abtn ghost" style="padding:5px 10px;font-size:13px">✕</button>';
       row.querySelector('b').textContent=b.name;
@@ -1038,7 +1057,7 @@ function buildAcct(body){
   body.innerHTML='<div id="acctIn" style="width:100%"></div>';
   LN.init().then(()=>{
     const w=body.querySelector('#acctIn');
-    if(!LN.user){LN.renderAuth(w,{onAuth:()=>{closeCard('acct');location.reload();}});return;}
+    if(!LN.user){LN.renderAuth(w,{onAuth:async()=>{closeCard('acct');await restoreFromCloud();toast('أهلاً بيكِ');}});return;}
     const p=LN.profile||{};const roleAr=p.role==='teacher'?'معلمة':'طالبة';
     let html='<div style="text-align:center;color:var(--maroon)"><b style="font-size:17px"></b><div style="font-size:13px;color:#a4748a">'+roleAr+'</div></div>';
     if(p.role==='teacher')html+='<div style="font-size:12px;color:#a4748a;text-align:center;margin-top:8px">كود المعلمة (تشاركيه مع الطلاب عند تسجيلهم):</div>'
@@ -1055,6 +1074,33 @@ function buildAcct(body){
     if(stEl)LN.listStudents().then(ss=>{stEl.textContent='الطلاب المرتبطين: '+arNum(ss.length);});
     w.querySelector('#acOut').onclick=async()=>{await LN.signOut();location.reload();};});}
 
+/* merge local guest pages into the cloud board instead of dropping them */
+function mergeBoards(cloudState,localState){
+  const sig=p=>JSON.stringify(p);
+  const cloudSigs=new Set((cloudState.pages||[]).map(sig));
+  const extra=(localState.pages||[]).filter(p=>p.strokes&&p.strokes.length&&!cloudSigs.has(sig(p)));
+  if(extra.length)cloudState.pages=(cloudState.pages||[]).concat(extra);
+  return extra.length;}
+/* after login (home page or حسابي panel): bring her account's board, merging any guest work */
+async function restoreFromCloud(){
+  if(!isTeacherOnline()){setSaveState();return;}
+  try{
+    const cloud=await LN.loadBoard();
+    const hasCloud=cloud&&cloud.state&&cloud.state.pages&&cloud.state.pages.length;
+    const localHas=state.pages&&state.pages.some(p=>p.strokes&&p.strokes.length);
+    if(hasCloud){
+      const local=state;state=cloud.state;
+      const added=mergeBoards(state,local);
+      state.cur=0;rehydrate();fit();syncPageUI();
+      if(added){toast('ضفنا شغلك المحلي كصفحات جديدة في حسابك');save();}
+      else toast('رجعنا آخر سبورة محفوظة من حسابك');
+    }else if(localHas){
+      await LN.saveBoardNow(JSON.parse(JSON.stringify(state,(k,v)=>k==='_img'?undefined:v)));
+      toast('شغلك اتسجل في حسابك');
+    }
+  }catch(e){}
+  setSaveState();}
+
 /* ================= boot ================= */
 (async()=>{
   load();
@@ -1064,11 +1110,10 @@ function buildAcct(body){
      A signed-in teacher gets her cloud board back; a guest just uses the board (local save). */
   try{if(window.LN&&LN.configured()){
     await LN.init();
-    if(LN.user&&LN.profile&&LN.profile.role==='teacher'&&!fromHash){
-      const cloud=await LN.loadBoard();
-      if(cloud&&cloud.state&&cloud.state.pages&&cloud.state.pages.length){
-        state=cloud.state;rehydrate();fit();syncPageUI();}}}
-  }catch(e){}
+    if(!fromHash)await restoreFromCloud();
+    else setSaveState();}
+  else setSaveState();
+  }catch(e){setSaveState();}
   document.fonts&&document.fonts.load&&document.fonts.load('40px "Amiri Quran"');
   if(!fromHash&&matchMedia('(orientation: portrait)').matches&&innerWidth<760)setTimeout(()=>toast('لفّي الموبايل بالعرض لسبورة أكبر'),1200);
 })();

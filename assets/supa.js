@@ -85,11 +85,17 @@ window.LN=(()=>{
 
   /* ---------------- board autosave ---------------- */
   let boardTimer=null;
-  function saveBoard(state){ /* debounced cloud autosave (teacher) */
+  function saveBoard(state,onStatus){ /* debounced cloud autosave (teacher) */
     if(!sb||!user||!profile||profile.role!=='teacher')return;
     clearTimeout(boardTimer);
+    if(onStatus)onStatus('saving');
     boardTimer=setTimeout(async()=>{
-      try{await sb.from('board_states').upsert({teacher_id:user.id,state,updated_at:new Date().toISOString()});}catch(e){}},800);}
+      try{await sb.from('board_states').upsert({teacher_id:user.id,state,updated_at:new Date().toISOString()});if(onStatus)onStatus('saved');}
+      catch(e){if(onStatus)onStatus('error');}},800);}
+  async function saveBoardNow(state){ /* immediate save (seeding / merging at login) */
+    await init();if(!user||!profile||profile.role!=='teacher')return false;
+    try{await sb.from('board_states').upsert({teacher_id:user.id,state,updated_at:new Date().toISOString()});return true;}
+    catch(e){return false;}}
   async function loadBoard(){
     await init();if(!user)return null;
     try{const {data}=await sb.from('board_states').select('state,updated_at').eq('teacher_id',user.id).maybeSingle();
@@ -228,7 +234,7 @@ window.LN=(()=>{
 
   return {init,configured,renderAuth,
     signUpTeacher,signUpStudent,signIn,signOut,
-    saveBoard,loadBoard,shareBoard,loadShared,
+    saveBoard,saveBoardNow,loadBoard,shareBoard,loadShared,
     uploadBook,listBooks,downloadBook,deleteBook,
     saveProgress,loadProgress,listStudents,myTeacher,
     liveStart,livePush,liveJoin,liveStop,liveLeave,
