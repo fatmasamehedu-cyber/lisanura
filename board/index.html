@@ -39,7 +39,7 @@ svg.ic.fill{fill:currentColor;stroke:none}
 .mascot{position:fixed;bottom:70px;inset-inline-end:8px;width:64px;pointer-events:none;filter:drop-shadow(0 3px 6px rgba(0,0,0,.2));z-index:5}
 
 /* floating top bar */
-.topbar{position:fixed;top:8px;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:6px;padding:5px 8px;background:rgba(255,255,255,.94);border:2px solid var(--line);border-radius:30px;box-shadow:0 6px 20px rgba(124,45,73,.18);z-index:30;max-width:97vw;overflow-x:auto;scrollbar-width:none}
+.topbar{position:fixed;top:8px;left:0;right:0;margin:0 auto;width:fit-content;max-width:calc(100vw - 16px);display:flex;align-items:center;gap:6px;padding:5px 8px;background:rgba(255,255,255,.94);border:2px solid var(--line);border-radius:30px;box-shadow:0 6px 20px rgba(124,45,73,.18);z-index:30;overflow-x:auto;scrollbar-width:none}
 .topbar::-webkit-scrollbar{display:none}
 .topbar .title{display:flex;align-items:center;gap:6px;white-space:nowrap;font-family:'Naskh',serif;font-weight:700;font-size:19px;color:var(--rose-d)}
 .topbar .title img{width:32px;height:32px;border-radius:50%;background:#fff;border:2px solid var(--line);object-fit:cover}
@@ -54,7 +54,7 @@ svg.ic.fill{fill:currentColor;stroke:none}
 .pagenav button svg{width:16px;height:16px}
 
 /* floating rail */
-.rail{position:fixed;inset-inline-start:8px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;align-items:center;gap:2px;padding:5px 3px;background:rgba(255,255,255,.94);border:2px solid var(--line);border-radius:20px;box-shadow:0 6px 20px rgba(124,45,73,.18);z-index:25;max-height:96vh;overflow-y:auto;scrollbar-width:none}
+.rail{position:fixed;inset-inline-start:8px;top:78px;bottom:86px;display:flex;flex-direction:column;align-items:center;gap:2px;padding:5px 3px;background:rgba(255,255,255,.94);border:2px solid var(--line);border-radius:20px;box-shadow:0 6px 20px rgba(124,45,73,.18);z-index:25;overflow-y:auto;scrollbar-width:none}
 .rail::-webkit-scrollbar{display:none}
 .rail button{width:48px;min-height:44px;border-radius:12px;border:2px solid transparent;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:17px;color:var(--maroon);gap:1px;padding:2px}
 .rail button span{font-size:9px;font-weight:700;white-space:nowrap}
@@ -63,7 +63,8 @@ svg.ic.fill{fill:currentColor;stroke:none}
 .rail .sep{width:34px;height:2px;background:var(--line);border-radius:2px;margin:2px 0}
 
 /* floating bottom bar */
-.bottombar{position:fixed;bottom:8px;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:10px;padding:6px 12px;background:rgba(255,255,255,.94);border:2px solid var(--line);border-radius:30px;box-shadow:0 6px 20px rgba(124,45,73,.18);z-index:25;max-width:96vw;flex-wrap:nowrap}
+.bottombar{position:fixed;bottom:8px;left:0;right:0;margin:0 auto;width:fit-content;max-width:calc(100vw - 16px);display:flex;align-items:center;gap:10px;padding:6px 12px;background:rgba(255,255,255,.94);border:2px solid var(--line);border-radius:30px;box-shadow:0 6px 20px rgba(124,45,73,.18);z-index:25;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none}
+.bottombar::-webkit-scrollbar{display:none}
 .swatches{display:flex;gap:5px;align-items:center}
 .sw{width:27px;height:27px;border-radius:50%;border:3px solid #fff;box-shadow:0 0 0 2px var(--line);transition:.12s;flex:0 0 auto}
 .sw.on{box-shadow:0 0 0 3px var(--rose-d);transform:scale(1.15)}
@@ -138,6 +139,9 @@ body.viewer .liveBadge{display:block}
 #textEntry textarea{background:rgba(255,255,255,.92);border:2px dashed var(--rose);border-radius:8px;padding:4px 8px;font-family:'Naskh',serif;direction:rtl;outline:none;resize:both;min-width:120px;min-height:40px}
 .toast{position:fixed;bottom:76px;left:50%;transform:translateX(-50%);background:var(--maroon);color:#fff;padding:10px 22px;border-radius:30px;font-size:14px;font-weight:700;z-index:99;display:none;box-shadow:0 6px 18px rgba(0,0,0,.3);max-width:88vw;text-align:center}
 
+@media (min-width:761px){
+  .rail{top:64px;bottom:72px}
+}
 @media (max-width:760px){
   .topbar .title b{display:none}
   .topbar .title img{width:28px;height:28px}
@@ -149,6 +153,26 @@ body.viewer .liveBadge{display:block}
   .sw{width:24px;height:24px}
   input[type=range]{width:64px}
   .sizebox span{display:none}
+}
+@media (max-width:480px){
+  .topbar{gap:4px;padding:4px 6px}
+  .tbtn{min-width:30px;height:30px;padding:0 5px}
+  svg.ic{width:20px;height:20px}
+  .pagenav b{font-size:11px;min-width:44px}
+  .pagenav button{width:24px;height:24px}
+  .rail button{width:42px;min-height:42px}
+  .bottombar{gap:6px;padding:5px 8px}
+  .sw{width:22px;height:22px}
+}
+/* short screens: phone landscape */
+@media (max-height:480px){
+  .topbar{top:4px}
+  .rail{top:58px;bottom:62px}
+  .rail button{min-height:38px}
+  .bottombar{bottom:4px;padding:4px 10px}
+  .liveBadge{top:52px}
+  .mascot{display:none}
+  .toast{bottom:60px}
 }
 </style>
 </head>
@@ -238,7 +262,7 @@ body.viewer .liveBadge{display:block}
 </div>
 
 <div id="textEntry"><textarea id="textArea" rows="1"></textarea></div>
-<div id="authGate" style="position:fixed;inset:0;background:#fdeef4;z-index:60;display:none;align-items:center;justify-content:center;overflow:auto"></div>
+
 <div class="toast" id="toast"></div>
 <input type="file" id="imgInput" accept="image/*" style="display:none">
 <input type="file" id="pdfInput" accept="application/pdf" style="display:none">
@@ -991,28 +1015,17 @@ function buildAcct(body){
     const stEl=w.querySelector('#acStudents');
     if(stEl)LN.listStudents().then(ss=>{stEl.textContent='الطلاب المرتبطين: '+arNum(ss.length);});
     w.querySelector('#acOut').onclick=async()=>{await LN.signOut();location.reload();};});}
-function showAuthGate(){
-  const g=document.getElementById('authGate');g.style.display='flex';
-  g.innerHTML='<div><div style="text-align:right;margin-bottom:8px"><button id="agHome" style="display:inline-flex;align-items:center;gap:6px;background:#fff;border:2px solid #d16a92;color:#7c2d49;border-radius:14px;padding:7px 14px;font-family:Naskh;font-size:15px;font-weight:700;cursor:pointer"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11l8-7 8 7"/><path d="M6.5 9.5V20h11V9.5"/></svg>الرئيسية</button></div><div id="agBox"></div><div style="text-align:center;margin-top:12px"><button id="agSkip" style="background:none;border:none;color:#a4748a;font-family:Naskh;font-size:14px;text-decoration:underline;cursor:pointer">أو تابعي بدون حساب (الحفظ على هذا الجهاز فقط)</button></div></div>';
-  LN.renderAuth(g.querySelector('#agBox'),{onAuth:async()=>{g.style.display='none';
-    if(LN.profile&&LN.profile.role==='teacher'){
-      const cloud=await LN.loadBoard();
-      if(cloud&&cloud.state&&cloud.state.pages&&cloud.state.pages.length){
-        state=cloud.state;rehydrate();fit();syncPageUI();toast('رجعنا آخر سبورة محفوظة');}
-      else toast('أهلاً بيكِ يا معلمة');}
-    else toast('أهلاً بيكِ');}});
-  g.querySelector('#agSkip').onclick=()=>{g.style.display='none';};
-  g.querySelector('#agHome').onclick=()=>{location.href='../';};}
 
 /* ================= boot ================= */
 (async()=>{
   load();
   const fromHash=loadFromHash();
   rehydrate();fit();syncPageUI();
+  /* no forced login here: sign-in lives on the site home page; the session is shared site-wide.
+     A signed-in teacher gets her cloud board back; a guest just uses the board (local save). */
   try{if(window.LN&&LN.configured()){
     await LN.init();
-    if(!LN.user&&!fromHash)showAuthGate();
-    else if(LN.user&&LN.profile&&LN.profile.role==='teacher'&&!fromHash){
+    if(LN.user&&LN.profile&&LN.profile.role==='teacher'&&!fromHash){
       const cloud=await LN.loadBoard();
       if(cloud&&cloud.state&&cloud.state.pages&&cloud.state.pages.length){
         state=cloud.state;rehydrate();fit();syncPageUI();}}}
