@@ -159,7 +159,7 @@ body.viewer .liveBadge{display:block}
   .sizebox span{display:none}
 }
 @media (max-width:480px){
-  .topbar{gap:3px;padding:4px 6px;flex-wrap:wrap;row-gap:3px;border-radius:18px;overflow-x:visible;-webkit-mask-image:none;mask-image:none}
+  .topbar{gap:3px;padding:4px 6px}
   .tbtn{min-width:30px;height:30px;padding:0 5px}
   svg.ic{width:20px;height:20px}
   .pagenav b{font-size:11px;min-width:44px}
@@ -974,30 +974,57 @@ function detectShape(p){ /* smart shapes on normalized points */
     for(let i=0;i<P.length;i++){const q=P[i];const d=Math.abs((B[0]-A[0])*(A[1]-q[1])-(A[0]-q[0])*(B[1]-A[1]))/(L||1);if(d>mx){mx=d;mi=i;}}
     if(mx/L<.05)return{shape:'line',x0:A[0]/cssW,y0:A[1]/cssH,x1:B[0]/cssW,y1:B[1]/cssH};
     if(mx/L<.18&&mi>P.length*.62)return{shape:'arrow',x0:A[0]/cssW,y0:A[1]/cssH,x1:B[0]/cssW,y1:B[1]/cssH};}
-  /* must be closed to be a shape; otherwise keep her stroke */
+  /* closed loop? be forgiving: overshoot, overlap, loose ends all count */
   const gap=Math.hypot(B[0]-A[0],B[1]-A[1]);
-  if(gap>Math.max(w,h)*.35)return null;
+  const tol=Math.max(14,Math.min(w,h)*.25);
+  let ring=null;
+  /* 1) overshoot/spiral: the stroke comes back near its start, then keeps going - trim the tail */
+  let ti=-1;
+  for(let i=Math.max(3,Math.floor(P.length*.15));i<P.length;i++){
+    if(Math.hypot(P[i][0]-A[0],P[i][1]-A[1])<=tol)ti=i;}
+  if(ti>3&&P.length-1-ti<=Math.max(6,P.length*.6))ring=P.slice(0,ti+1);
+  /* 2) the end lands near an earlier point - the loop starts at that crossing */
+  if(!ring){
+    for(let i=0;i<P.length-3;i++){
+      if(Math.hypot(P[i][0]-B[0],P[i][1]-B[1])<=tol){ring=P.slice(i);break;}}}
+  /* 3) plain small gap between the ends */
+  if(!ring&&gap<=Math.max(w,h)*.6)ring=P.slice();
+  if(!ring)return null; /* not a loop at all: keep her stroke */
+  /* the loop must really wind around (>= ~250 deg total turning) */
+  let turn=0;
+  for(let i=1;i<ring.length-1;i++){
+    const a=ring[i-1],b=ring[i],c=ring[i+1];
+    const v1x=b[0]-a[0],v1y=b[1]-a[1],v2x=c[0]-b[0],v2y=c[1]-b[1];
+    const l1=Math.hypot(v1x,v1y),l2=Math.hypot(v2x,v2y);
+    if(l1<1||l2<1)continue;
+    let co=(v1x*v2x+v1y*v2y)/(l1*l2);if(co>1)co=1;if(co<-1)co=-1;
+    turn+=Math.acos(co);}
+  if(turn<4.4)return null; /* open arc or squiggle: keep her stroke */
   /* corner detection on the closed ring: count sharp turns */
-  const ring=P.slice();
   if(ring.length>1&&Math.hypot(ring[ring.length-1][0]-ring[0][0],ring[ring.length-1][1]-ring[0][1])<2)ring.pop();
   const N=ring.length;
   const sm2=ring.map((_,i)=>{const a=ring[(i-1+N)%N],b=ring[i],c=ring[(i+1)%N];return [(a[0]+2*b[0]+c[0])/4,(a[1]+2*b[1]+c[1])/4];});
-  const kk=Math.max(2,Math.round(N/28));
-  const cs=new Array(N);
-  for(let i=0;i<N;i++){
-    const a=sm2[(i-kk+N)%N],b=sm2[i],c=sm2[(i+kk)%N];
-    const v1x=b[0]-a[0],v1y=b[1]-a[1],v2x=c[0]-b[0],v2y=c[1]-b[1];
-    const l1=Math.hypot(v1x,v1y),l2=Math.hypot(v2x,v2y);
-    cs[i]=(l1<2||l2<2)?1:(v1x*v2x+v1y*v2y)/(l1*l2);
-  }
-  const corners=[];
-  for(let i=0;i<N;){
-    if(cs[i]<.45){let j=i,bi=i;
-      while(j<N&&cs[j]<.45){if(cs[j]<cs[bi])bi=j;j++;}
-      corners.push(bi);i=j;}
-    else i++;}
-  if(corners.length>1&&cs[0]<.45&&cs[N-1]<.45){
-    if(cs[corners[0]]<=cs[corners[corners.length-1]])corners.pop();else corners.shift();}
+  function countCorners(kk,thr){
+    const cs=new Array(N);
+    for(let i=0;i<N;i++){
+      const a=sm2[(i-kk+N)%N],b=sm2[i],c=sm2[(i+kk)%N];
+      const v1x=b[0]-a[0],v1y=b[1]-a[1],v2x=c[0]-b[0],v2y=c[1]-b[1];
+      const l1=Math.hypot(v1x,v1y),l2=Math.hypot(v2x,v2y);
+      cs[i]=(l1<2||l2<2)?1:(v1x*v2x+v1y*v2y)/(l1*l2);
+    }
+    const out=[];
+    for(let i=0;i<N;){
+      if(cs[i]<thr){let j=i,bi=i;
+        while(j<N&&cs[j]<thr){if(cs[j]<cs[bi])bi=j;j++;}
+        out.push(bi);i=j;}
+      else i++;}
+    if(out.length>1&&cs[0]<thr&&cs[N-1]<thr){
+      if(cs[out[0]]<=cs[out[out.length-1]])out.pop();else out.shift();}
+    return out;}
+  let corners=countCorners(Math.max(2,Math.round(N/28)),.45);
+  if(corners.length<=2){ /* maybe a polygon whose corners got smoothed away: retry sharper */
+    const c2=countCorners(Math.max(2,Math.round(N/40)),.55);
+    if(c2.length>=3&&c2.length<=5)corners=c2;}
   const V=corners.length;
   if(V===3)return box('triangle');
   if(V===4)return box('rect');
