@@ -102,8 +102,8 @@ input[type=range]{accent-color:var(--rose);width:90px}
 .witem .ic{color:var(--rose)}
 
 /* floating widget cards */
-.fcard{position:fixed;background:#fff;border:2px solid var(--rose);border-radius:16px;box-shadow:0 10px 30px rgba(124,45,73,.3);z-index:45;min-width:230px;max-width:340px;overflow:hidden}
-.fcard .fhead{display:flex;align-items:center;gap:6px;background:linear-gradient(135deg,var(--rose),var(--rose-d));color:#fff;padding:6px 10px;font-weight:700;font-size:14px;cursor:move;user-select:none}
+.fcard{position:fixed;background:#fff;border:2px solid var(--rose);border-radius:16px;box-shadow:0 10px 30px rgba(124,45,73,.3);z-index:45;min-width:230px;max-width:340px;max-width:calc(100vw - 24px);max-height:calc(100vh - 110px);display:flex;flex-direction:column;overflow:hidden}
+.fcard .fhead{display:flex;align-items:center;gap:6px;background:linear-gradient(135deg,var(--rose),var(--rose-d));color:#fff;padding:6px 10px;font-weight:700;font-size:14px;cursor:move;user-select:none;touch-action:none}
 .fcard .fhead .fx{margin-inline-start:auto;width:24px;height:24px;border-radius:8px;color:#fff;font-size:14px;display:flex;align-items:center;justify-content:center}
 .fcard .fhead .fx:hover{background:rgba(255,255,255,.25)}
 .fcard .fbody{padding:12px;display:flex;flex-direction:column;gap:8px;align-items:center;max-height:70vh;overflow-y:auto}
@@ -690,8 +690,6 @@ let zTop=50;const cards={};
 function makeCard(id,title,build){
   const old=document.getElementById('fc-'+id);if(old){old.style.zIndex=++zTop;return;}
   const card=document.createElement('div');card.className='fcard';card.id='fc-'+id;
-  card.style.top=(70+Object.keys(cards).length*26)+'px';
-  card.style.insetInlineStart=(90+Object.keys(cards).length*26)+'px';
   card.style.zIndex=++zTop;
   card.innerHTML='<div class="fhead"><span>'+title+'</span><button class="fx">✕</button></div><div class="fbody"></div>';
   document.body.appendChild(card);
@@ -699,11 +697,23 @@ function makeCard(id,title,build){
   card.addEventListener('pointerdown',()=>{card.style.zIndex=++zTop;});
   const head=card.querySelector('.fhead');
   head.addEventListener('pointerdown',e=>{if(e.target.classList.contains('fx'))return;
-    const sx=e.clientX,sy=e.clientY,r=card.getBoundingClientRect();
-    function mv(ev){card.style.left=(r.left+ev.clientX-sx)+'px';card.style.top=(r.top+ev.clientY-sy)+'px';card.style.insetInlineStart='auto';}
-    function up(){removeEventListener('pointermove',mv);removeEventListener('pointerup',up);}
+    e.preventDefault();try{head.setPointerCapture(e.pointerId);}catch(_){}
+    const r=card.getBoundingClientRect(),sx=e.clientX,sy=e.clientY;
+    card.style.left=r.left+'px';card.style.top=r.top+'px';card.style.insetInlineStart='auto';
+    function mv(ev){let nx=r.left+ev.clientX-sx,ny=r.top+ev.clientY-sy;
+      nx=Math.min(Math.max(nx,8),Math.max(8,innerWidth-r.width-8));
+      ny=Math.min(Math.max(ny,6),Math.max(6,innerHeight-r.height-8));
+      card.style.transform='translate3d('+(nx-r.left)+'px,'+(ny-r.top)+'px,0)';}
+    function up(){removeEventListener('pointermove',mv);removeEventListener('pointerup',up);
+      const r2=card.getBoundingClientRect();
+      card.style.transform='';card.style.left=r2.left+'px';card.style.top=r2.top+'px';}
     addEventListener('pointermove',mv);addEventListener('pointerup',up);});
-  build(card.querySelector('.fbody'));cards[id]=card;}
+  build(card.querySelector('.fbody'));cards[id]=card;
+  /* open centered horizontally, below the top bar, fully inside the screen */
+  const k=Object.keys(cards).length-1,w=card.offsetWidth,h=card.offsetHeight;
+  let left=Math.round((innerWidth-w)/2);left=Math.min(Math.max(left,8),Math.max(8,innerWidth-w-8));
+  let top=70+k*24;top=Math.min(top,Math.max(70,innerHeight-h-16));
+  card.style.left=left+'px';card.style.top=top+'px';}
 document.querySelectorAll('.witem').forEach(b=>b.addEventListener('click',()=>{
   const w=b.dataset.w;wPanel.classList.remove('open');
   if(w==='timer')makeCard('timer','المؤقِّت',buildTimer);
