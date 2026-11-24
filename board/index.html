@@ -36,7 +36,9 @@ svg.ic.fill{fill:currentColor;stroke:none}
 #boardWrap canvas{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none}
 #bgCanvas{pointer-events:none}
 #drawCanvas{cursor:crosshair;z-index:2}
-.mascot{position:fixed;bottom:70px;inset-inline-end:10px;display:flex;align-items:center;gap:6px;pointer-events:none;z-index:5;background:rgba(255,255,255,.85);border:2px solid var(--line);border-radius:22px;padding:4px 12px;box-shadow:0 3px 8px rgba(124,45,73,.15)}.mascot img{width:24px;height:24px}.mascot span{font-family:'Naskh',serif;font-weight:700;font-size:19px;color:var(--rose-d);line-height:1}
+.mascot{position:fixed;bottom:70px;inset-inline-end:10px;display:flex;align-items:center;gap:6px;pointer-events:none;z-index:5;background:rgba(255,255,255,.85);border:2px solid var(--line);border-radius:22px;padding:4px 12px;box-shadow:0 3px 8px rgba(124,45,73,.15)}.mascot img{width:24px;height:24px}.mascot span{font-family:'Naskh',serif;font-weight:700;font-size:19px;color:var(--rose-d);line-height:1}.mascot .wm-en{display:none}
+html[lang=en] .mascot .wm-ar{display:none}
+html[lang=en] .mascot .wm-en{display:inline}
 
 /* floating top bar */
 .topbar{position:fixed;top:8px;left:0;right:0;margin:0 auto;width:fit-content;max-width:calc(100vw - 16px);display:flex;align-items:center;gap:6px;padding:5px 8px;background:rgba(255,255,255,.94);border:2px solid var(--line);border-radius:30px;box-shadow:0 6px 20px rgba(124,45,73,.18);z-index:30;overflow-x:auto;scrollbar-width:none}
@@ -190,7 +192,7 @@ html[dir=ltr] .widgetPanel{box-shadow:4px 0 18px rgba(0,0,0,.12)}
   .rail button{min-height:38px}
   .bottombar{bottom:4px;padding:4px 10px}
   .liveBadge{top:52px}
-  .mascot{display:none}
+  .mascot{bottom:58px;padding:2px 9px}.mascot span{font-size:14px}.mascot img{width:18px;height:18px}
   .toast{bottom:60px}
 }
 </style>
@@ -200,7 +202,7 @@ html[dir=ltr] .widgetPanel{box-shadow:4px 0 18px rgba(0,0,0,.12)}
   <canvas id="bgCanvas"></canvas>
   <canvas id="drawCanvas"></canvas>
 </div>
-<div class="mascot"><img src="https://fatmasamehedu-cyber.github.io/lisanura/favicon.svg" alt=""><span>ليسانورا</span></div>
+<div class="mascot"><img src="https://fatmasamehedu-cyber.github.io/lisanura/favicon.svg" alt=""><span class="wm-ar">ليسانورا</span><span class="wm-en">Lisanura</span></div>
 
 <div class="topbar">
   <button class="tbtn" id="backBtn" title="الصفحة الرئيسية" style="gap:4px;padding-inline:10px"><svg class="ic" viewBox="0 0 24 24"><path d="M4 11l8-7 8 7"/><path d="M6.5 9.5V20h11V9.5"/></svg><b style="font-family:Naskh;font-size:15px">الرئيسية</b></button>
@@ -487,6 +489,7 @@ const T={"الرئيسية":"Home",
 "صفحة ":"Page ",
 " من ":" of ",
 "ليسانورا":"Lisanura",
+"رجع العرض الأصلي":"View reset",
 "أنا طالبة":"I'm a student",
 "أنا معلمة":"I'm a teacher",
 "تسجيل دخول":"Sign in",
@@ -934,8 +937,8 @@ function handMove(e){
     const d=Math.hypot(a.x-b.x,a.y-b.y),mx=(a.x+b.x)/2,my=(a.y+b.y)/2;
     const wx=(handStart.mx-view.x)/(cssW*view.k),wy=(handStart.my-view.y)/(cssH*view.k);
     view.k=Math.min(4,Math.max(.4,handStart.k*d/(handStart.d||1)));
-    view.x=mx-wx*cssW*view.k;view.y=my-wy*cssH*view.k;redraw();return;}
-  if(handMode==='pan'){view.x=handStart.x+e.clientX-handStart.px;view.y=handStart.y+e.clientY-handStart.py;redraw();return;}
+    view.x=mx-wx*cssW*view.k;view.y=my-wy*cssH*view.k;clampView();redraw();return;}
+  if(handMode==='pan'){view.x=handStart.x+e.clientX-handStart.px;view.y=handStart.y+e.clientY-handStart.py;clampView();redraw();return;}
   if(handMode==='move'&&sel){const dx=(e.clientX-handStart.px)/(cssW*view.k),dy=(e.clientY-handStart.py)/(cssH*view.k);
     moveStroke(sel,dx,dy);handStart.px=e.clientX;handStart.py=e.clientY;redraw();return;}
   if(handMode==='resize'&&sel&&handStart.b){const b=handStart.b;
@@ -957,8 +960,14 @@ function handUp(e){
 cv.addEventListener('wheel',e=>{if(readOnly)return;e.preventDefault();
   const k2=Math.min(4,Math.max(.4,view.k*(e.deltaY<0?1.12:1/1.12)));
   const wx=(e.clientX-view.x)/(cssW*view.k),wy=(e.clientY-view.y)/(cssH*view.k);
-  view.k=k2;view.x=e.clientX-wx*cssW*k2;view.y=e.clientY-wy*cssH*k2;redraw();},{passive:false});
+  view.k=k2;view.x=e.clientX-wx*cssW*k2;view.y=e.clientY-wy*cssH*k2;clampView();redraw();},{passive:false});
+cv.addEventListener('dblclick',()=>{view={x:0,y:0,k:1};sel=null;redraw();toast(tt('رجع العرض الأصلي'));});
 
+/* keep the board always at least 20% visible: content can never be panned off-screen */
+function clampView(){
+  const bw=cssW*view.k,bh=cssH*view.k;
+  view.x=Math.min(cssW*.8,Math.max(cssW*.2-bw,view.x));
+  view.y=Math.min(cssH*.8,Math.max(cssH*.2-bh,view.y));}
 function detectShape(p){ /* smart shapes on normalized points */
   if(p.length<6)return null;
   const P=p.map(q=>[q[0]*cssW,q[1]*cssH]); /* work in px */
