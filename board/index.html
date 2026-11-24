@@ -159,12 +159,14 @@ body.viewer .liveBadge{display:block}
   .sizebox span{display:none}
 }
 @media (max-width:480px){
-  .topbar{gap:4px;padding:4px 6px;-webkit-mask-image:linear-gradient(to left,transparent 0,#000 20px,#000 calc(100% - 20px),transparent 100%);mask-image:linear-gradient(to left,transparent 0,#000 20px,#000 calc(100% - 20px),transparent 100%)}
+  .topbar{gap:3px;padding:4px 6px;flex-wrap:wrap;row-gap:3px;border-radius:18px;overflow-x:visible;-webkit-mask-image:none;mask-image:none}
   .tbtn{min-width:30px;height:30px;padding:0 5px}
   svg.ic{width:20px;height:20px}
   .pagenav b{font-size:11px;min-width:44px}
   .pagenav button{width:24px;height:24px}
-  .rail button{width:42px;min-height:42px}
+  .rail{top:124px;bottom:64px}
+  .rail button{width:40px;min-height:33px;font-size:13px}
+  .rail button span{font-size:7px}
   .bottombar{gap:4px;padding:5px 6px}
   .sw{width:20px;height:20px}
   #sizePreview{width:24px;height:24px}
@@ -172,6 +174,15 @@ body.viewer .liveBadge{display:block}
 }
 html[dir=ltr] .fcard textarea,html[dir=ltr] #textEntry textarea{direction:ltr}
 html[dir=ltr] .widgetPanel{box-shadow:4px 0 18px rgba(0,0,0,.12)}
+/* shorter screens: shrink rail so every tool stays visible */
+@media (max-height:880px){
+  .rail{gap:1px;padding:4px 2px}
+  .rail button{min-height:36px;width:44px;font-size:15px}
+  .rail button span{font-size:8px}
+}
+@media (max-height:660px){
+  .rail button{min-height:32px;width:42px;font-size:13px}
+}
 /* short screens: phone landscape */
 @media (max-height:480px){
   .topbar{top:4px}
@@ -703,8 +714,10 @@ function drawShape(c,sh,x0,y0,x1,y1){
   else if(sh==='star'){const cx=(x0+x1)/2,cy=(y0+y1)/2,R=Math.max(Math.abs(x1-x0),Math.abs(y1-y0))/2,r=R*.45;
     c.beginPath();for(let i=0;i<10;i++){const a=-Math.PI/2+i*Math.PI/5,rad=i%2?r:R;const px=cx+rad*Math.cos(a),py=cy+rad*Math.sin(a);i?c.lineTo(px,py):c.moveTo(px,py);}c.closePath();c.stroke();}}
 function redraw(){
-  [bgCtx,ctx].forEach(c=>{c.setTransform(1,0,0,1,0,0);c.clearRect(0,0,cv.width,cv.height);c.setTransform(dpr*view.k,0,0,dpr*view.k,dpr*view.x,dpr*view.y);});
-  drawBg(bgCtx,cssW,cssH);
+  bgCtx.setTransform(1,0,0,1,0,0);bgCtx.clearRect(0,0,bgCv.width,bgCv.height);
+  bgCtx.setTransform(dpr,0,0,dpr,0,0);drawBg(bgCtx,cssW,cssH);
+  ctx.setTransform(1,0,0,1,0,0);ctx.clearRect(0,0,cv.width,cv.height);
+  ctx.setTransform(dpr*view.k,0,0,dpr*view.k,dpr*view.x,dpr*view.y);
   curPage().strokes.forEach(s=>drawStroke(ctx,s));
   if(sel&&curPage().strokes.includes(sel)){const b=strokeBBox(sel);
     ctx.save();ctx.strokeStyle='#4f7fd9';ctx.lineWidth=1.6/view.k;ctx.setLineDash([6/view.k,4/view.k]);
