@@ -155,14 +155,16 @@ body.viewer .liveBadge{display:block}
   .sizebox span{display:none}
 }
 @media (max-width:480px){
-  .topbar{gap:4px;padding:4px 6px}
+  .topbar{gap:4px;padding:4px 6px;-webkit-mask-image:linear-gradient(to left,transparent 0,#000 20px,#000 calc(100% - 20px),transparent 100%);mask-image:linear-gradient(to left,transparent 0,#000 20px,#000 calc(100% - 20px),transparent 100%)}
   .tbtn{min-width:30px;height:30px;padding:0 5px}
   svg.ic{width:20px;height:20px}
   .pagenav b{font-size:11px;min-width:44px}
   .pagenav button{width:24px;height:24px}
   .rail button{width:42px;min-height:42px}
-  .bottombar{gap:6px;padding:5px 8px}
-  .sw{width:22px;height:22px}
+  .bottombar{gap:4px;padding:5px 6px}
+  .sw{width:20px;height:20px}
+  #sizePreview{width:24px;height:24px}
+  input[type=range]{width:50px}
 }
 /* short screens: phone landscape */
 @media (max-height:480px){
