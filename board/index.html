@@ -235,12 +235,12 @@ html[dir=ltr] .widgetPanel{box-shadow:4px 0 18px rgba(0,0,0,.12)}
 </div>
 
 <div class="pop" id="shapesPop" style="left:50%;top:16vh;transform:translateX(-50%)">
-  <button class="popt" data-shape="line">خط</button>
-  <button class="popt" data-shape="arrow">سهم</button>
-  <button class="popt" data-shape="rect">مستطيل</button>
-  <button class="popt" data-shape="ellipse">دائرة</button>
-  <button class="popt" data-shape="triangle">مثلث</button>
-  <button class="popt" data-shape="star">نجمة</button>
+  <button class="popt" data-shape="line"><svg class="ic" viewBox="0 0 24 24" style="width:18px;height:18px"><path d="M4 18L20 6"/></svg> خط</button>
+  <button class="popt" data-shape="arrow"><svg class="ic" viewBox="0 0 24 24" style="width:18px;height:18px"><path d="M4 18L20 6M14 6h6v6"/></svg> سهم</button>
+  <button class="popt" data-shape="rect"><svg class="ic" viewBox="0 0 24 24" style="width:18px;height:18px"><rect x="4" y="6" width="16" height="12" rx="1"/></svg> مستطيل</button>
+  <button class="popt" data-shape="ellipse"><svg class="ic" viewBox="0 0 24 24" style="width:18px;height:18px"><ellipse cx="12" cy="12" rx="8" ry="6.5"/></svg> دائرة</button>
+  <button class="popt" data-shape="triangle"><svg class="ic" viewBox="0 0 24 24" style="width:18px;height:18px"><path d="M12 5l8 14H4z"/></svg> مثلث</button>
+  <button class="popt" data-shape="star"><svg class="ic" viewBox="0 0 24 24" style="width:18px;height:18px"><path d="M12 3l2.6 5.6 6 .7-4.5 4.1 1.2 5.9-5.3-3-5.3 3 1.2-5.9L3 9.3l6-.7L12 3z"/></svg> نجمة</button>
 </div>
 <div class="pop" id="bgPop" style="left:50%;top:12vh;transform:translateX(-50%);min-width:230px"><div class="bgGrid" id="bgGrid"></div></div>
 <div class="pop" id="stickerPop" style="left:50%;top:16vh;transform:translateX(-50%);min-width:240px"><div class="stickerGrid" id="stickerGrid"></div></div>
@@ -1022,18 +1022,20 @@ const POPS={shapes:'shapesPop',bg:'bgPop',stickers:'stickerPop',stamps:'stampPop
 function closePops(){Object.values(POPS).forEach(id=>document.getElementById(id).classList.remove('open'));}
 rail.querySelectorAll('button[data-tool]').forEach(b=>b.addEventListener('click',()=>{
   const t=b.dataset.tool;
-  if(POPS[t]){tool=t;rail.querySelectorAll('button[data-tool]').forEach(x=>x.classList.toggle('on',x===b));
+  if(POPS[t]){tool=t;smartOn=false;rail.querySelectorAll('button[data-tool]').forEach(x=>x.classList.toggle('on',x===b));
     if(sel){sel=null;redraw();}
     cv.style.cursor='crosshair';
     const was=document.getElementById(POPS[t]).classList.contains('open');closePops();if(!was)document.getElementById(POPS[t]).classList.add('open');return;}
   if(t==='quran'){closePops();openQuranPanel();return;}
   if(t==='books'){closePops();openBooksPanel();return;}
-  if(t==='smart'){smartOn=!smartOn;b.classList.toggle('on',smartOn);toast(smartOn?'الرسم الذكي يعمل':'الرسم الذكي متوقف');return;}
+  if(t==='smart'){smartOn=!smartOn;if(smartOn)tool='pen';closePops();
+    rail.querySelectorAll('button[data-tool]').forEach(x=>x.classList.toggle('on',x.dataset.tool===(smartOn?'smart':tool)));
+    toast(smartOn?tt('الرسم الذكي يعمل'):tt('الرسم الذكي متوقف'));return;}
   if(t==='image'){document.getElementById('imgInput').click();return;}
-  tool=t;rail.querySelectorAll('button[data-tool]').forEach(x=>x.classList.toggle('on',x===b));
+  tool=t;smartOn=false;rail.querySelectorAll('button[data-tool]').forEach(x=>x.classList.toggle('on',x===b));
   closePops();cv.style.cursor=t==='text'?'text':t==='hand'?'grab':'crosshair';if(t!=='hand'&&sel){sel=null;redraw();}}));
 document.querySelectorAll('#shapesPop .popt').forEach(b=>b.addEventListener('click',()=>{
-  shape=b.dataset.shape;tool='shapes';
+  shape=b.dataset.shape;tool='shapes';smartOn=false;
   document.querySelectorAll('#shapesPop .popt').forEach(x=>x.classList.toggle('on',x===b));
   rail.querySelectorAll('button[data-tool]').forEach(x=>x.classList.toggle('on',x.id==='shapesBtn'));
   closePops();}));
@@ -1053,14 +1055,14 @@ const bgGrid=document.getElementById('bgGrid');
 const stGrid=document.getElementById('stickerGrid');
 STICKERS.forEach(n=>{const b=document.createElement('button');const th=document.createElement('canvas');th.width=68;th.height=68;
   drawSticker(th.getContext('2d'),n,34,34,56);b.appendChild(th);
-  b.addEventListener('click',()=>{curSticker=n;tool='sticker';
+  b.addEventListener('click',()=>{curSticker=n;tool='sticker';smartOn=false;
     rail.querySelectorAll('button[data-tool]').forEach(x=>x.classList.toggle('on',x.id==='stickerBtn'));closePops();});
   stGrid.appendChild(b);});
 /* stamps picker */
 const stList=document.getElementById('stampList');
 STAMPS.forEach(st=>{const b=document.createElement('button');b.className='stampOpt';b.style.background=st[1];
   b.innerHTML='<svg class="ic fill" viewBox="0 0 24 24"><path d="M12 3l2.6 5.6 6 .7-4.5 4.1 1.2 5.9-5.3-3-5.3 3 1.2-5.9L3 9.3l6-.7L12 3z"/></svg><span>'+st[0]+'</span>';
-  b.addEventListener('click',()=>{curStamp=st;tool='stamp';
+  b.addEventListener('click',()=>{curStamp=st;tool='stamp';smartOn=false;
     rail.querySelectorAll('button[data-tool]').forEach(x=>x.classList.toggle('on',x.id==='stampBtn'));closePops();});
   stList.appendChild(b);});
 /* magnetic letters */
