@@ -252,7 +252,10 @@ body.viewer .liveBadge{display:block}
 </div>
 
 <div class="widgetPanel" id="wPanel">
-  <h3>أدوات الحصة</h3>
+  <div style="display:flex;align-items:center;justify-content:space-between;gap:6px;margin-bottom:4px">
+    <h3 style="margin:0;flex:1;text-align:center">أدوات الحصة</h3>
+    <button id="wPanelX" title="قفل" style="width:32px;height:32px;min-width:32px;border-radius:10px;border:2px solid var(--line);background:#fff;color:var(--rose-d);display:flex;align-items:center;justify-content:center"><svg class="ic" viewBox="0 0 24 24" style="width:16px;height:16px"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+  </div>
   <button class="witem" data-w="timer"><svg class="ic" viewBox="0 0 24 24"><path d="M6 3h12M6 21h12M8 3v4l4 4 4-4V3M8 21v-4l4-4 4 4v4"/></svg> مؤقِّت</button>
   <button class="witem" data-w="stopwatch"><svg class="ic" viewBox="0 0 24 24"><circle cx="12" cy="13" r="7"/><path d="M12 10v3l2 2M10 3h4M12 3v3"/></svg> ساعة إيقاف</button>
   <button class="witem" data-w="wheel"><svg class="ic" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="2.5"/><path d="M12 3v6.5M12 14.5V21M3 12h6.5M14.5 12H21"/></svg> عجلة الأسماء</button>
@@ -681,6 +684,8 @@ function celebrate(){
 /* ================= widget cards ================= */
 const wPanel=document.getElementById('wPanel');
 document.getElementById('wPanelBtn').onclick=()=>wPanel.classList.toggle('open');
+document.getElementById('wPanelX').onclick=()=>wPanel.classList.remove('open');
+document.addEventListener('pointerdown',e=>{if(wPanel.classList.contains('open')&&!e.target.closest('#wPanel')&&!e.target.closest('#wPanelBtn'))wPanel.classList.remove('open');},true);
 let zTop=50;const cards={};
 function makeCard(id,title,build){
   const old=document.getElementById('fc-'+id);if(old){old.style.zIndex=++zTop;return;}
@@ -735,12 +740,22 @@ function buildWheel(body){
   const ta=body.querySelector('textarea'),wc=body.querySelector('#wheelCv'),res=body.querySelector('.wres');
   const c=wc.getContext('2d');let angle=0,spinning=false;
   function names(){return ta.value.split('\n').map(s=>s.trim()).filter(Boolean);}
-  function paint(){const ns=names()||[];const N=Math.max(ns.length,1);
+  function paint(){const ns=names();const N=Math.max(ns.length,1);const step=2*Math.PI/N;
     c.clearRect(0,0,260,260);const cx=130,cy=130,R=124;
-    for(let i=0;i<N;i++){const a0=angle+i*2*Math.PI/N,a1=angle+(i+1)*2*Math.PI/N;
-      c.beginPath();c.moveTo(cx,cy);c.arc(cx,cy,R,a0,a1);c.closePath();c.fillStyle=WHEELCOLORS[i%8];c.fill();
-      c.save();c.translate(cx,cy);c.rotate((a0+a1)/2);c.fillStyle='#fff';c.font='700 17px Naskh, serif';c.textAlign='left';c.direction='rtl';
-      c.fillText(ns[i]||'؟',R-14,6);c.restore();}
+    for(let i=0;i<N;i++){const a0=angle+i*step,mid=a0+step/2;
+      c.beginPath();c.moveTo(cx,cy);c.arc(cx,cy,R,a0,a0+step);c.closePath();c.fillStyle=WHEELCOLORS[i%8];c.fill();
+      if(!ns[i])continue;
+      /* name written along the radius, upright, auto-shrunk to fit its segment */
+      c.save();c.translate(cx,cy);c.rotate(mid);
+      const flip=Math.cos(mid)<0;if(flip)c.rotate(Math.PI);
+      const rIn=30,rOut=R-10,span=rOut-rIn,rT=(rIn+rOut)/2;
+      let fs=Math.min(18,2*rT*Math.sin(Math.min(step,Math.PI)/2)*0.75);
+      c.fillStyle='#fff';c.textAlign='center';c.textBaseline='middle';c.direction='rtl';
+      while(fs>8){c.font='700 '+fs+'px Naskh, serif';if(c.measureText(ns[i]).width<=span)break;fs--;}
+      c.font='700 '+Math.max(8,fs)+'px Naskh, serif';
+      let label=ns[i];
+      if(c.measureText(label).width>span){while(label.length>1&&c.measureText(label+'…').width>span)label=label.slice(0,-1);label=label+'…';}
+      c.fillText(label,flip?-rT:rT,0);c.restore();}
     c.fillStyle='#7c2d49';c.beginPath();c.moveTo(cx-2,cy-R-6);c.lineTo(cx-14,cy-R+16);c.lineTo(cx+10,cy-R+16);c.closePath();c.fill();
     c.beginPath();c.arc(cx,cy,16,0,7);c.fillStyle='#fff';c.fill();c.strokeStyle='#7c2d49';c.lineWidth=3;c.stroke();}
   ta.addEventListener('input',paint);
