@@ -36,7 +36,7 @@ svg.ic.fill{fill:currentColor;stroke:none}
 #boardWrap canvas{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none}
 #bgCanvas{pointer-events:none}
 #drawCanvas{cursor:crosshair;z-index:2}
-.mascot{position:fixed;bottom:70px;inset-inline-end:8px;width:64px;pointer-events:none;filter:drop-shadow(0 3px 6px rgba(0,0,0,.2));z-index:5}
+.mascot{position:fixed;bottom:70px;inset-inline-end:10px;display:flex;align-items:center;gap:6px;pointer-events:none;z-index:5;background:rgba(255,255,255,.85);border:2px solid var(--line);border-radius:22px;padding:4px 12px;box-shadow:0 3px 8px rgba(124,45,73,.15)}.mascot img{width:24px;height:24px}.mascot span{font-family:'Naskh',serif;font-weight:700;font-size:19px;color:var(--rose-d);line-height:1}
 
 /* floating top bar */
 .topbar{position:fixed;top:8px;left:0;right:0;margin:0 auto;width:fit-content;max-width:calc(100vw - 16px);display:flex;align-items:center;gap:6px;padding:5px 8px;background:rgba(255,255,255,.94);border:2px solid var(--line);border-radius:30px;box-shadow:0 6px 20px rgba(124,45,73,.18);z-index:30;overflow-x:auto;scrollbar-width:none}
@@ -153,7 +153,7 @@ body.viewer .liveBadge{display:block}
   .rail button{width:46px;min-height:46px}
   .rail button span{font-size:8px}
   .widgetPanel{width:180px}
-  .mascot{width:48px;bottom:64px}
+  .mascot{bottom:64px;padding:3px 9px}.mascot span{font-size:16px}.mascot img{width:20px;height:20px}
   .sw{width:24px;height:24px}
   input[type=range]{width:64px}
   .sizebox span{display:none}
@@ -200,7 +200,7 @@ html[dir=ltr] .widgetPanel{box-shadow:4px 0 18px rgba(0,0,0,.12)}
   <canvas id="bgCanvas"></canvas>
   <canvas id="drawCanvas"></canvas>
 </div>
-<img class="mascot" src="teacher-full.png" alt="">
+<div class="mascot"><img src="https://fatmasamehedu-cyber.github.io/lisanura/favicon.svg" alt=""><span>ليسانورا</span></div>
 
 <div class="topbar">
   <button class="tbtn" id="backBtn" title="الصفحة الرئيسية" style="gap:4px;padding-inline:10px"><svg class="ic" viewBox="0 0 24 24"><path d="M4 11l8-7 8 7"/><path d="M6.5 9.5V20h11V9.5"/></svg><b style="font-family:Naskh;font-size:15px">الرئيسية</b></button>
