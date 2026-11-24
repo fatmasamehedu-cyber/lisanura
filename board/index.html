@@ -1076,7 +1076,9 @@ function buildAcct(body){
 
 /* merge local guest pages into the cloud board instead of dropping them */
 function mergeBoards(cloudState,localState){
-  const sig=p=>JSON.stringify(p);
+  /* canonical signature: jsonb reorders keys and runtime keys (_img) must not affect identity */
+  const canon=o=>Array.isArray(o)?o.map(canon):(o&&typeof o==='object'?Object.keys(o).filter(k=>k[0]!=='_').sort().reduce((a,k)=>(a[k]=canon(o[k]),a),{}):o);
+  const sig=p=>JSON.stringify(canon(p));
   const cloudSigs=new Set((cloudState.pages||[]).map(sig));
   const extra=(localState.pages||[]).filter(p=>p.strokes&&p.strokes.length&&!cloudSigs.has(sig(p)));
   if(extra.length)cloudState.pages=(cloudState.pages||[]).concat(extra);
