@@ -42,7 +42,8 @@ html[lang=en] .mascot .wm-ar{display:none}
 html[lang=en] .mascot .wm-en{display:inline-block;padding-bottom:2px}
 
 /* floating top bar */
-.topbar{position:fixed;top:8px;left:56px;right:8px;margin:0 auto;width:fit-content;max-width:calc(100vw - 16px);display:flex;align-items:center;gap:6px;padding:5px 8px;background:rgba(255,255,255,.94);border:2px solid var(--line);border-radius:30px;box-shadow:0 6px 20px rgba(124,45,73,.18);z-index:30;overflow-x:auto;scrollbar-width:none}
+.topwrap{position:fixed;top:8px;left:8px;right:8px;display:flex;direction:ltr;align-items:flex-start;gap:6px;z-index:30}
+.topbar{position:static;margin:0;flex:1;min-width:0;display:flex;align-items:center;gap:6px;padding:5px 8px;background:rgba(255,255,255,.94);border:2px solid var(--line);border-radius:30px;box-shadow:0 6px 20px rgba(124,45,73,.18);overflow-x:auto;scrollbar-width:none}
 .topbar::-webkit-scrollbar{display:none}
 .topbar .title{display:flex;align-items:center;gap:6px;white-space:nowrap;font-family:'Naskh',serif;font-weight:700;font-size:19px;color:var(--rose-d)}
 .topbar .title img{width:32px;height:32px;border-radius:50%;background:#fff;border:2px solid var(--line);object-fit:cover}
@@ -97,7 +98,7 @@ input[type=range]{accent-color:var(--rose);width:90px}
 #magTray{min-height:44px;width:100%;border:2px dashed var(--line);border-radius:10px;font-family:'Naskh',serif;font-size:30px;text-align:center;color:var(--maroon);padding:2px 6px}
 
 /* widget panel */
-.menubtn{position:fixed;top:8px;left:8px;z-index:31}
+.menubtn{flex:none}
 .widgetPanel{position:fixed;top:0;bottom:0;inset-inline-end:0;width:210px;background:#fffdf8;border-inline-start:2px solid var(--gold);box-shadow:-4px 0 18px rgba(0,0,0,.12);z-index:35;padding:14px 10px;display:none;flex-direction:column;gap:7px;overflow-y:auto}
 .widgetPanel.open{display:flex}
 .widgetPanel h3{color:var(--rose-d);font-size:19px;text-align:center;margin-bottom:4px}
@@ -189,8 +190,7 @@ html[dir=ltr] .widgetPanel{box-shadow:4px 0 18px rgba(0,0,0,.12)}
 }
 /* short screens: phone landscape */
 @media (max-height:480px){
-  .topbar{top:4px}
-  .menubtn{top:4px}
+  .topwrap{top:4px}
   .rail{top:58px;bottom:62px}
   .rail button{min-height:38px}
   .bottombar{bottom:4px;padding:4px 10px}
@@ -207,6 +207,8 @@ html[dir=ltr] .widgetPanel{box-shadow:4px 0 18px rgba(0,0,0,.12)}
 </div>
 <div class="mascot"><svg viewBox="0 0 24 24"><g transform="translate(8.6,12) scale(0.52) rotate(-20)"><path d="M14,-16 A18,18 0 1,0 14,16 A22,22 0 0,1 14,-16 Z" fill="#d9a44f"/></g><path d="M0,-12 C1.5,-3.5 3.5,-1.5 12,0 C3.5,1.5 1.5,3.5 0,12 C-1.5,3.5 -3.5,1.5 -12,0 C-3.5,-1.5 -1.5,-3.5 0,-12 Z" transform="translate(17.5,6.5) scale(0.42)" fill="#d9a44f"/></svg><span class="wm-ar">لِيسَانُورَا</span><span class="wm-en">Lisanura</span></div>
 
+<div class="topwrap">
+<button class="tbtn gold menubtn" id="wPanelBtn" title="أدوات الحصة"><svg class="ic" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
 <div class="topbar">
   <button class="tbtn" id="backBtn" title="الصفحة الرئيسية" style="gap:4px;padding-inline:10px"><svg class="ic" viewBox="0 0 24 24"><path d="M4 11l8-7 8 7"/><path d="M6.5 9.5V20h11V9.5"/></svg><b style="font-family:Naskh;font-size:15px">الرئيسية</b></button>
   <div class="title"><img src="teacher-point.png" alt=""><b>سَبُّورَةُ لِيسَانُورَا</b></div>
@@ -227,7 +229,7 @@ html[dir=ltr] .widgetPanel{box-shadow:4px 0 18px rgba(0,0,0,.12)}
   <button class="tbtn" id="fsBtn" title="ملء الشاشة"><svg class="ic" viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button>
   <button class="tbtn" id="acctBtn" title="حسابي"><svg class="ic" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 5-6 8-6s6.5 2 8 6"/></svg></button>
 </div>
-<button class="tbtn gold menubtn" id="wPanelBtn" title="أدوات الحصة"><svg class="ic" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+</div>
 
 <div class="rail" id="rail">
   <button data-tool="hand"><svg class="ic" viewBox="0 0 24 24"><path d="M8 12V5.8a1.4 1.4 0 0 1 2.8 0V10m0-4.8v-.9a1.4 1.4 0 0 1 2.8 0V10m0-4.2a1.4 1.4 0 0 1 2.8 0v5.7m0-2.8a1.4 1.4 0 0 1 2.8 0v4.8c0 3.8-2.4 6.5-6.2 6.5s-5.2-2.4-6.5-5.3l-1.4-3.2c-.6-1.2.9-2.2 1.8-1.2L8 12.5z"/></svg><span>تحريك</span></button>
