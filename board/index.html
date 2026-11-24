@@ -662,7 +662,13 @@ function snapshotLink(){
 function loadFromHash(){
   const h=location.hash;const liveM=h.match(/[#&]live=([A-Za-z0-9-]+)/);const sM=h.match(/[#&]s=([A-Za-z0-9+/%$()-]+)/);
   if(liveM){joinLive(liveM[1]);return true;}
-  if(sM){try{const s=JSON.parse(LZString.decompressFromEncodedURIComponent(decodeURIComponent(sM[1])));
+  if(sM){const v=decodeURIComponent(sM[1]);
+    if(/^[A-Za-z0-9]{6,12}$/.test(v)&&window.LN&&LN.configured()){ /* short cloud share id */
+      LN.init().then(()=>LN.loadShared(v)).then(s=>{
+        if(s&&s.pages){state=s;readOnly=false;rehydrate();fit();syncPageUI();toast('فتحتِ سبورة مشارَكة');}
+        else toast('رابط المشاركة غير صالح');});
+      return true;}
+    try{const s=JSON.parse(LZString.decompressFromEncodedURIComponent(v));
     if(s&&s.pages){state=s;readOnly=false;rehydrate();toast('فتحتِ سبورة مشارَكة');}}catch(e){}return true;}
   return false;}
 
@@ -965,7 +971,13 @@ function buildShare(body){
     +'<div id="shOut" style="width:100%;font-size:12px;word-break:break-all;color:var(--rose-d);text-align:center;direction:ltr"></div>'
     +'<div id="shSt" style="font-size:13px;font-weight:700;color:var(--maroon)"></div>';
   const out=body.querySelector('#shOut'),st=body.querySelector('#shSt');
-  body.querySelector('#goSnap').onclick=async()=>{const link=snapshotLink();
+  body.querySelector('#goSnap').onclick=async()=>{
+    let link=null;
+    if(window.LN&&LN.configured()&&LN.user){ /* signed in: short cloud link */
+      st.textContent='جاري تجهيز الرابط...';
+      try{const id=await LN.shareBoard(JSON.parse(JSON.stringify(state,(k,v)=>k==='_img'?undefined:v)));
+        link=location.origin+location.pathname+'#s='+id;}catch(e){}}
+    if(!link)link=snapshotLink(); /* guest fallback: long encoded link */
     try{await navigator.clipboard.writeText(link);st.textContent='اتنسخ الرابط، ابعتيه للطالب';}
     catch(e){st.textContent='انسخي الرابط يدويًا';}
     out.textContent=link;};

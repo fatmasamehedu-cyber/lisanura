@@ -210,9 +210,25 @@ window.LN=(()=>{
       goEl.disabled=false;};
     refresh();}
 
+  /* ---------------- short share links (shared snapshots) ---------------- */
+  function makeShareId(){const abc='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    const a=new Uint8Array(8);
+    if(window.crypto&&crypto.getRandomValues)crypto.getRandomValues(a);else for(let i=0;i<8;i++)a[i]=Math.floor(Math.random()*256);
+    let s='';for(let i=0;i<8;i++)s+=abc[a[i]%62];return s;}
+  async function shareBoard(state){ /* teacher: store snapshot, return short id */
+    await init();if(!user)throw new Error('سجلي الدخول الأول');
+    const id=makeShareId();
+    const {error}=await sb.from('shared_boards').insert({id,state});
+    if(error)throw new Error('تعذر حفظ المشاركة');
+    return id;}
+  async function loadShared(id){ /* anyone with the link may read */
+    await init();
+    try{const {data}=await sb.from('shared_boards').select('state').eq('id',id).maybeSingle();
+      return data?data.state:null;}catch(e){return null;}}
+
   return {init,configured,renderAuth,
     signUpTeacher,signUpStudent,signIn,signOut,
-    saveBoard,loadBoard,
+    saveBoard,loadBoard,shareBoard,loadShared,
     uploadBook,listBooks,downloadBook,deleteBook,
     saveProgress,loadProgress,listStudents,myTeacher,
     liveStart,livePush,liveJoin,liveStop,liveLeave,
