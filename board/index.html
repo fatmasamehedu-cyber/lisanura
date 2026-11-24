@@ -12,6 +12,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/peerjs/1.5.4/peerjs.min.js"></script>
+<script src="https://fatmasamehedu-cyber.github.io/lisanura/assets/supa-config.js"></script>
+<script src="https://fatmasamehedu-cyber.github.io/lisanura/assets/supa.js"></script>
 <style>
 @font-face{font-family:'Naskh';src:url('https://fatmasamehedu-cyber.github.io/lisanura/fonts/NotoNaskhArabic-Regular.ttf') format('truetype');font-weight:400}
 @font-face{font-family:'Naskh';src:url('https://fatmasamehedu-cyber.github.io/lisanura/fonts/NotoNaskhArabic-Bold.ttf') format('truetype');font-weight:700}
@@ -176,6 +178,7 @@ body.viewer .liveBadge{display:block}
   <button class="tbtn" id="shareBtn" title="مشاركة مع الطالب برابط"><svg class="ic" viewBox="0 0 24 24"><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="6" r="2.5"/><circle cx="18" cy="18" r="2.5"/><path d="M8.2 10.8l7.5-3.6M8.2 13.2l7.5 3.6"/></svg></button>
   <button class="tbtn" id="fsBtn" title="ملء الشاشة"><svg class="ic" viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button>
   <button class="tbtn gold" id="wPanelBtn" title="أدوات الحصة"><svg class="ic" viewBox="0 0 24 24"><rect x="3" y="8" width="18" height="12" rx="2"/><path d="M9 8V6a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/></svg></button>
+  <button class="tbtn" id="acctBtn" title="حسابي"><svg class="ic" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 5-6 8-6s6.5 2 8 6"/></svg></button>
 </div>
 
 <div class="rail" id="rail">
@@ -235,6 +238,7 @@ body.viewer .liveBadge{display:block}
 </div>
 
 <div id="textEntry"><textarea id="textArea" rows="1"></textarea></div>
+<div id="authGate" style="position:fixed;inset:0;background:#fdeef4;z-index:60;display:none;align-items:center;justify-content:center;overflow:auto"></div>
 <div class="toast" id="toast"></div>
 <input type="file" id="imgInput" accept="image/*" style="display:none">
 <input type="file" id="pdfInput" accept="application/pdf" style="display:none">
@@ -258,7 +262,8 @@ const LS='lisanura-board-v2';
 function curPage(){return state.pages[state.cur];}
 let saveT=null;
 function save(){if(readOnly)return;try{const d=JSON.stringify(state,p=>(typeof p==='object'&&p&&p._img)?{...p,_img:undefined}:p);
-  if(d.length<4.5e6)localStorage.setItem(LS,d);flashSave();}catch(e){}}
+  if(d.length<4.5e6)localStorage.setItem(LS,d);flashSave();}catch(e){}
+  if(window.LN&&LN.configured())try{LN.saveBoard(JSON.parse(JSON.stringify(state,(k,v)=>k==='_img'?undefined:v)));}catch(e){}}
 function flashSave(){const el=document.getElementById('saveState');el.textContent='حُفظ';clearTimeout(saveT);saveT=setTimeout(()=>el.textContent='',1200);}
 function migrate(o){ /* v1: world 1600x1000, sizes in px */
   o.pages.forEach(p=>p.strokes.forEach(s=>{
@@ -840,6 +845,18 @@ async function buildBooks(body){
   body.innerHTML='<button class="abtn gold" id="bUp">رفع كتاب PDF</button><div id="bList" style="width:100%;display:flex;flex-direction:column;gap:6px"></div>';
   body.querySelector('#bUp').onclick=()=>document.getElementById('pdfInput').click();
   const list=body.querySelector('#bList');
+  if(window.LN&&LN.configured()&&LN.user){
+    list.innerHTML='<div style="font-size:13px;color:#a4748a;text-align:center">جاري تحميل كتبي...</div>';
+    let books=[];try{books=await LN.listBooks();}catch(e){}
+    list.innerHTML='';
+    if(!books.length)list.innerHTML='<div style="font-size:13px;color:#a4748a;text-align:center">لسه مفيش كتب، ارفعي أول كتاب</div>';
+    books.forEach(b=>{const row=document.createElement('div');row.className='bookrow';
+      row.innerHTML='<b></b><button class="abtn" style="padding:5px 12px;font-size:13px">افتحي</button><button class="abtn ghost" style="padding:5px 10px;font-size:13px">✕</button>';
+      row.querySelector('b').textContent=b.name;
+      row.querySelectorAll('button')[0].onclick=async()=>{try{toast('جاري فتح الكتاب...');const buf=await LN.downloadBook(b.path);closeCard('books');openBook({name:b.name,data:buf,page:1});}catch(e){toast(e.message);}};
+      row.querySelectorAll('button')[1].onclick=async()=>{try{await LN.deleteBook(b.path);}catch(e){}row.remove();};
+      list.appendChild(row);});
+    return;}
   const books=await dbAll();
   if(!books.length)list.innerHTML='<div style="font-size:13px;color:#a4748a;text-align:center">لسه مفيش كتب، ارفعي أول كتاب</div>';
   books.forEach(b=>{const row=document.createElement('div');row.className='bookrow';
@@ -850,8 +867,12 @@ async function buildBooks(body){
     list.appendChild(row);});}
 document.getElementById('pdfInput').addEventListener('change',async e=>{
   const f=e.target.files[0];e.target.value='';if(!f)return;
-  const buf=await f.arrayBuffer();const id=await dbAdd(f.name.replace(/\.pdf$/i,''),buf);
-  toast('اتحفظ في كتبي');openBook({id,name:f.name.replace(/\.pdf$/i,''),data:buf,page:1});});
+  const buf=await f.arrayBuffer();const name=f.name.replace(/\.pdf$/i,'');
+  if(window.LN&&LN.configured()&&LN.user){
+    try{toast('جاري رفع الكتاب...');await LN.uploadBook(name,buf);toast('اتحفظ في كتبي');}catch(e2){toast(e2.message);}
+    openBook({name,data:buf,page:1});return;}
+  const id=await dbAdd(name,buf);
+  toast('اتحفظ في كتبي');openBook({id,name,data:buf,page:1});});
 async function openBook(book){
   makeCard('bookv',book.name,async body=>{
     body.innerHTML='<div style="font-size:13px;color:#a4748a">جاري فتح الكتاب...</div>';
@@ -871,13 +892,16 @@ async function openBook(book){
         const img=new Image();img.src=off.toDataURL('image/jpeg',.9);
         img.onload=()=>{pushUndo();const b=fitImageBox(img);
           curPage().strokes.push({kind:'image',x:.5-b.w/2,y:.5-b.h/2,w:b.w,h:b.h,_img:img,src:img.src});
-          book.page=p;dbPut(book);redraw();save();liveDirty();toast('الصفحة على السبورة');};}
+          book.page=p;if(book.id)dbPut(book);redraw();save();liveDirty();toast('الصفحة على السبورة');};}
       catch(e){toast('تعذر عرض الصفحة');}};
     show();});}
 
 /* ================= share: live + snapshot ================= */
 let peer=null,conns=[],liveId=null,liveTimer=null;
-function liveDirty(){if(!peer||!conns.length)return;
+let liveTimerLN=null;
+function liveDirty(){
+  if(window.LN_LIVE&&window.LN&&LN.configured()){clearTimeout(liveTimerLN);liveTimerLN=setTimeout(()=>{try{LN.livePush(LZString.compressToEncodedURIComponent(JSON.stringify(state,(k,v)=>k==='_img'?undefined:v)));}catch(e){}},400);}
+  if(!peer||!conns.length)return;
   clearTimeout(liveTimer);liveTimer=setTimeout(()=>{
     const data=LZString.compressToEncodedURIComponent(JSON.stringify(state,(k,v)=>k==='_img'?undefined:v));
     conns.forEach(cn=>{try{cn.send({t:'full',data});}catch(e){}});},500);}
@@ -894,7 +918,21 @@ function buildShare(body){
     try{await navigator.clipboard.writeText(link);st.textContent='اتنسخ الرابط، ابعتيه للطالب';}
     catch(e){st.textContent='انسخي الرابط يدويًا';}
     out.textContent=link;};
-  body.querySelector('#goLive').onclick=()=>{
+  body.querySelector('#goLive').onclick=async()=>{
+    if(window.LN&&LN.configured()){
+      if(!LN.user){st.textContent='سجلي الدخول من زر حسابي الأول، وبعدين ابدئي البث';return;}
+      if(window.LN_LIVE){st.textContent='البث شغال بالفعل';return;}
+      st.textContent='جاري تجهيز البث...';
+      try{
+        await LN.liveStart(n=>{st.textContent=n>0?'متصل: '+arNum(n)+' طالب':'البث شغال، في انتظار الطلاب';});
+        window.LN_LIVE=true;
+        const link=location.origin+location.pathname+'#live='+LN.teacherCode();
+        out.textContent=link;
+        try{await navigator.clipboard.writeText(link);st.textContent='البث شغال - الرابط اتنسخ، ابعتيه للطالب';}
+        catch(e){st.textContent='البث شغال - انسخي الرابط';}
+        liveDirty();
+      }catch(e){st.textContent=e.message;}
+      return;}
     if(peer){st.textContent='البث شغال: '+liveId;return;}
     if(!window.Peer){st.textContent='تعذر تحميل مكتبة البث';return;}
     st.textContent='جاري تجهيز البث...';
@@ -914,6 +952,11 @@ function buildShare(body){
 function joinLive(hostId){
   readOnly=true;document.body.classList.add('viewer');
   const badge=document.createElement('div');badge.className='liveBadge';badge.textContent='بث مباشر من المعلمة...';document.body.appendChild(badge);
+  if(window.LN&&LN.configured()){
+    LN.init().then(()=>LN.liveJoin(hostId,
+      data=>{try{state=JSON.parse(LZString.decompressFromEncodedURIComponent(data));rehydrate();syncPageUI();}catch(e){}},
+      stt=>{badge.textContent=stt==='live'?'متصلة بالمعلمة':stt==='offline'?'المعلمة لسه ما بدأتش البث':'مشكلة اتصال، جاري المحاولة';}));
+    return;}
   let p;
   const connect=()=>{try{p=new Peer();}catch(e){badge.textContent='تعذر الاتصال بالبث';return;}
     p.on('open',()=>{const cn=p.connect(hostId,{reliable:true});
@@ -925,12 +968,57 @@ function joinLive(hostId){
       if(e.type==='peer-unavailable'||e.type==='network'||e.type==='server-error')setTimeout(()=>{try{p.destroy();}catch(_){}connect();},4000);});};
   connect();}
 
+/* ================= account ================= */
+document.getElementById('acctBtn').onclick=()=>makeCard('acct','حسابي',buildAcct);
+function buildAcct(body){
+  if(!window.LN||!LN.configured()){body.innerHTML='<div style="color:var(--maroon);font-size:14px;text-align:center">الحسابات غير مفعّلة بعد</div>';return;}
+  body.innerHTML='<div id="acctIn" style="width:100%"></div>';
+  LN.init().then(()=>{
+    const w=body.querySelector('#acctIn');
+    if(!LN.user){LN.renderAuth(w,{onAuth:()=>{closeCard('acct');location.reload();}});return;}
+    const p=LN.profile||{};const roleAr=p.role==='teacher'?'معلمة':'طالبة';
+    let html='<div style="text-align:center;color:var(--maroon)"><b style="font-size:17px"></b><div style="font-size:13px;color:#a4748a">'+roleAr+'</div></div>';
+    if(p.role==='teacher')html+='<div style="font-size:12px;color:#a4748a;text-align:center;margin-top:8px">كود المعلمة (تشاركيه مع الطلاب عند تسجيلهم):</div>'
+      +'<div id="acCode" style="direction:ltr;font-size:11px;word-break:break-all;background:#fdf3f7;border-radius:8px;padding:6px;color:var(--rose-d)"></div>'
+      +'<button class="abtn" id="acCopy" style="margin-top:6px">نسخ الكود</button>'
+      +'<div id="acStudents" style="margin-top:8px;font-size:13px;color:var(--maroon);text-align:center">...</div>';
+    html+='<button class="abtn ghost" id="acOut" style="margin-top:10px">تسجيل خروج</button>';
+    w.innerHTML=html;
+    w.querySelector('b').textContent=p.display_name||'';
+    const codeEl=w.querySelector('#acCode');if(codeEl)codeEl.textContent=LN.teacherCode();
+    const cp=w.querySelector('#acCopy');
+    if(cp)cp.onclick=async()=>{try{await navigator.clipboard.writeText(LN.teacherCode());toast('اتنسخ الكود');}catch(e){}};
+    const stEl=w.querySelector('#acStudents');
+    if(stEl)LN.listStudents().then(ss=>{stEl.textContent='الطلاب المرتبطين: '+arNum(ss.length);});
+    w.querySelector('#acOut').onclick=async()=>{await LN.signOut();location.reload();};});}
+function showAuthGate(){
+  const g=document.getElementById('authGate');g.style.display='flex';
+  g.innerHTML='<div><div id="agBox"></div><div style="text-align:center;margin-top:12px"><button id="agSkip" style="background:none;border:none;color:#a4748a;font-family:Naskh;font-size:14px;text-decoration:underline;cursor:pointer">أو تابعي بدون حساب (الحفظ على هذا الجهاز فقط)</button></div></div>';
+  LN.renderAuth(g.querySelector('#agBox'),{onAuth:async()=>{g.style.display='none';
+    if(LN.profile&&LN.profile.role==='teacher'){
+      const cloud=await LN.loadBoard();
+      if(cloud&&cloud.state&&cloud.state.pages&&cloud.state.pages.length){
+        state=cloud.state;rehydrate();fit();syncPageUI();toast('رجعنا آخر سبورة محفوظة');}
+      else toast('أهلاً بيكِ يا معلمة');}
+    else toast('أهلاً بيكِ');}});
+  g.querySelector('#agSkip').onclick=()=>{g.style.display='none';};}
+
 /* ================= boot ================= */
-load();
-const fromHash=loadFromHash();
-rehydrate();fit();syncPageUI();
-document.fonts&&document.fonts.load&&document.fonts.load('40px "Amiri Quran"');
-if(!fromHash&&matchMedia('(orientation: portrait)').matches&&innerWidth<760)setTimeout(()=>toast('لفّي الموبايل بالعرض لسبورة أكبر'),1200);
+(async()=>{
+  load();
+  const fromHash=loadFromHash();
+  rehydrate();fit();syncPageUI();
+  try{if(window.LN&&LN.configured()){
+    await LN.init();
+    if(!LN.user&&!fromHash)showAuthGate();
+    else if(LN.user&&LN.profile&&LN.profile.role==='teacher'&&!fromHash){
+      const cloud=await LN.loadBoard();
+      if(cloud&&cloud.state&&cloud.state.pages&&cloud.state.pages.length){
+        state=cloud.state;rehydrate();fit();syncPageUI();}}}
+  }catch(e){}
+  document.fonts&&document.fonts.load&&document.fonts.load('40px "Amiri Quran"');
+  if(!fromHash&&matchMedia('(orientation: portrait)').matches&&innerWidth<760)setTimeout(()=>toast('لفّي الموبايل بالعرض لسبورة أكبر'),1200);
+})();
 </script>
 </body>
 </html>
