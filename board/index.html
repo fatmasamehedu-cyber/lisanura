@@ -551,8 +551,10 @@ function translateDOM(root,toEn){
     ['title','placeholder'].forEach(a=>{const v=el.getAttribute(a);if(v&&map[v]!==undefined)el.setAttribute(a,map[v]);});
     const dl=el.getAttribute('data-l');if(dl&&map[dl]!==undefined)el.setAttribute('data-l',map[dl]);
     if(el.tagName==='INPUT'&&el.value&&map[el.value]!==undefined)el.value=map[el.value];});}
+function siteLang(){try{const v=localStorage.getItem('letters-city:lang.v1');if(v){const p=JSON.parse(v);if(p==='ar'||p==='en')return p;}}catch(e){}return null;}
 function applyLang(l,skipSave){
   lang=l;
+  try{localStorage.setItem('letters-city:lang.v1',JSON.stringify(l));}catch(e){}
   document.documentElement.lang=l;
   document.documentElement.dir=l==='en'?'ltr':'rtl';
   translateDOM(document.body,l==='en');
@@ -1956,13 +1958,13 @@ async function restoreFromCloud(){
       toast('شغلك اتسجل في حسابك');
     }
   }catch(e){}
-  applyLang((state.settings&&state.settings.lang)||'ar',true);
+  applyLang(siteLang()||(state.settings&&state.settings.lang)||'ar',true);
   setSaveState();}
 
 /* ================= boot ================= */
 (async()=>{
   load();
-  applyLang((state.settings&&state.settings.lang)||'ar',true);
+  applyLang(siteLang()||(state.settings&&state.settings.lang)||'ar',true);
   const fromHash=loadFromHash();
   rehydrate();fit();syncPageUI();
   /* no forced login here: sign-in lives on the site home page; the session is shared site-wide.
