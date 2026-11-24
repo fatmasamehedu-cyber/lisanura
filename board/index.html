@@ -127,7 +127,7 @@ input[type=range]{accent-color:var(--rose);width:90px}
 #wheelCv{max-width:100%}
 .qres{font-family:'Amiri Quran','Naskh',serif;font-size:20px;color:var(--maroon);background:#fffdf6;border:2px solid var(--gold);border-radius:12px;padding:10px;max-height:150px;overflow-y:auto;text-align:center;line-height:2}
 body.viewer .rail,body.viewer .bottombar{display:none}
-body.viewer .topbar .tbtn:not(#fsBtn),body.viewer .pagenav button,body.viewer #saveState{display:none}
+body.viewer .topbar .tbtn:not(#fsBtn):not(#backBtn),body.viewer .pagenav button,body.viewer #saveState{display:none}
 body.viewer .pagenav{border:none}
 .liveBadge{position:fixed;top:64px;left:50%;transform:translateX(-50%);background:var(--maroon);color:#fff;padding:6px 18px;border-radius:20px;font-size:13px;font-weight:700;z-index:28;display:none}
 body.viewer .liveBadge{display:block}
@@ -160,7 +160,7 @@ body.viewer .liveBadge{display:block}
 <img class="mascot" src="teacher-full.png" alt="">
 
 <div class="topbar">
-  <button class="tbtn" id="backBtn" title="رجوع"><svg class="ic" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></button>
+  <button class="tbtn" id="backBtn" title="الصفحة الرئيسية" style="gap:4px;padding-inline:10px"><svg class="ic" viewBox="0 0 24 24"><path d="M4 11l8-7 8 7"/><path d="M6.5 9.5V20h11V9.5"/></svg><b style="font-family:Naskh;font-size:15px">الرئيسية</b></button>
   <div class="title"><img src="teacher-point.png" alt=""><b>سَبُّورَةُ لِيسَانُورَا</b></div>
   <div class="pagenav">
     <button id="pgPrev" title="الصفحة السابقة"><svg class="ic" viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg></button>
@@ -993,7 +993,7 @@ function buildAcct(body){
     w.querySelector('#acOut').onclick=async()=>{await LN.signOut();location.reload();};});}
 function showAuthGate(){
   const g=document.getElementById('authGate');g.style.display='flex';
-  g.innerHTML='<div><div id="agBox"></div><div style="text-align:center;margin-top:12px"><button id="agSkip" style="background:none;border:none;color:#a4748a;font-family:Naskh;font-size:14px;text-decoration:underline;cursor:pointer">أو تابعي بدون حساب (الحفظ على هذا الجهاز فقط)</button></div></div>';
+  g.innerHTML='<div><div style="text-align:right;margin-bottom:8px"><button id="agHome" style="display:inline-flex;align-items:center;gap:6px;background:#fff;border:2px solid #d16a92;color:#7c2d49;border-radius:14px;padding:7px 14px;font-family:Naskh;font-size:15px;font-weight:700;cursor:pointer"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11l8-7 8 7"/><path d="M6.5 9.5V20h11V9.5"/></svg>الرئيسية</button></div><div id="agBox"></div><div style="text-align:center;margin-top:12px"><button id="agSkip" style="background:none;border:none;color:#a4748a;font-family:Naskh;font-size:14px;text-decoration:underline;cursor:pointer">أو تابعي بدون حساب (الحفظ على هذا الجهاز فقط)</button></div></div>';
   LN.renderAuth(g.querySelector('#agBox'),{onAuth:async()=>{g.style.display='none';
     if(LN.profile&&LN.profile.role==='teacher'){
       const cloud=await LN.loadBoard();
@@ -1001,7 +1001,8 @@ function showAuthGate(){
         state=cloud.state;rehydrate();fit();syncPageUI();toast('رجعنا آخر سبورة محفوظة');}
       else toast('أهلاً بيكِ يا معلمة');}
     else toast('أهلاً بيكِ');}});
-  g.querySelector('#agSkip').onclick=()=>{g.style.display='none';};}
+  g.querySelector('#agSkip').onclick=()=>{g.style.display='none';};
+  g.querySelector('#agHome').onclick=()=>{location.href='../';};}
 
 /* ================= boot ================= */
 (async()=>{
