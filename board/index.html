@@ -78,6 +78,7 @@ input[type=range]{accent-color:var(--rose);width:90px}
 #sizeDot{background:var(--rose-d);border-radius:50%}
 
 /* popovers */
+.popX{width:24px;height:24px;min-width:24px;border-radius:8px;border:1px solid var(--line);background:#fff;color:var(--rose-d);font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;padding:0}
 .pop{position:fixed;background:#fff;border:2px solid var(--line);border-radius:14px;box-shadow:0 8px 24px rgba(124,45,73,.25);padding:8px;display:none;z-index:40;flex-direction:column;gap:4px;min-width:140px;max-width:calc(100vw - 92px);max-height:80vh;overflow-y:auto;overflow-x:hidden}
 .pop.open{display:flex}
 .pop button.popt{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:10px;font-size:14px;font-weight:700;color:var(--maroon);text-align:start}
@@ -112,6 +113,7 @@ input[type=range]{accent-color:var(--rose);width:90px}
 .fcard .fhead .fx{margin-inline-start:auto;width:24px;height:24px;border-radius:8px;color:#fff;font-size:14px;display:flex;align-items:center;justify-content:center}
 .fcard .fhead .fx:hover{background:rgba(255,255,255,.25)}
 .fcard .fbody{padding:12px;display:flex;flex-direction:column;gap:8px;align-items:center;max-height:70vh;overflow-y:auto}
+.fcard .fbody>*{flex-shrink:0}
 .fcard textarea{width:100%;min-height:74px;border:2px solid var(--line);border-radius:10px;padding:6px;font-family:inherit;font-size:14px;resize:vertical;direction:rtl}
 .fcard select{width:100%;border:2px solid var(--line);border-radius:10px;padding:8px;font-family:'Naskh',serif;font-size:17px;background:#fff;color:var(--maroon)}
 .abtn{background:var(--rose);color:#fff;border-radius:12px;padding:8px 18px;font-size:15px;font-weight:700;transition:.15s;box-shadow:0 3px 0 var(--rose-d);display:inline-flex;align-items:center;gap:6px}
@@ -233,7 +235,7 @@ html[dir=ltr] .widgetPanel{box-shadow:4px 0 18px rgba(0,0,0,.12)}
 
 <div class="rail" id="rail">
   <button data-tool="hand"><svg class="ic" viewBox="0 0 24 24"><path d="M8 12V5.8a1.4 1.4 0 0 1 2.8 0V10m0-4.8v-.9a1.4 1.4 0 0 1 2.8 0V10m0-4.2a1.4 1.4 0 0 1 2.8 0v5.7m0-2.8a1.4 1.4 0 0 1 2.8 0v4.8c0 3.8-2.4 6.5-6.2 6.5s-5.2-2.4-6.5-5.3l-1.4-3.2c-.6-1.2.9-2.2 1.8-1.2L8 12.5z"/></svg><span>تحريك</span></button>
-  <button data-tool="pen" class="on"><svg class="ic" viewBox="0 0 24 24"><path d="M4 20l1-4L16.5 4.5a2.1 2.1 0 0 1 3 3L8 19l-4 1z"/><path d="M14.5 6.5l3 3"/></svg><span>قلم</span></button>
+  <button data-tool="pen"><svg class="ic" viewBox="0 0 24 24"><path d="M4 20l1-4L16.5 4.5a2.1 2.1 0 0 1 3 3L8 19l-4 1z"/><path d="M14.5 6.5l3 3"/></svg><span>قلم</span></button>
   <button data-tool="marker"><svg class="ic" viewBox="0 0 24 24"><path d="M5 15L14 6l4 4-9 9H5v-4z"/><path d="M3 21h8"/></svg><span>هايلايتر</span></button>
   <button data-tool="eraser"><svg class="ic" viewBox="0 0 24 24"><path d="M7 20l-4-4L14 5l5 5-8 8H7z"/><path d="M11 8l5 5"/><path d="M9 20h12"/></svg><span>مساحة</span></button>
   <div class="sep"></div>
@@ -252,7 +254,7 @@ html[dir=ltr] .widgetPanel{box-shadow:4px 0 18px rgba(0,0,0,.12)}
   <button data-tool="books" id="booksBtn"><svg class="ic" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V2H6.5A2.5 2.5 0 0 0 4 4.5v15z"/><path d="M4 19.5A2.5 2.5 0 0 0 6.5 22H20v-5"/></svg><span>كتبي</span></button>
 </div>
 
-<div class="pop" id="shapesPop" style="left:50%;top:16vh;transform:translateX(-50%)">
+<div class="pop" id="shapesPop" style="left:50%;top:16vh;transform:translateX(-50%)"><div style="display:flex;justify-content:flex-end;margin:-2px -2px 2px"><button class="popX" type="button" title="قفل">✕</button></div>
   <button class="popt" data-shape="line"><svg class="ic" viewBox="0 0 24 24" style="width:18px;height:18px"><path d="M4 18L20 6"/></svg> خط</button>
   <button class="popt" data-shape="arrow"><svg class="ic" viewBox="0 0 24 24" style="width:18px;height:18px"><path d="M4 18L20 6M14 6h6v6"/></svg> سهم</button>
   <button class="popt" data-shape="rect"><svg class="ic" viewBox="0 0 24 24" style="width:18px;height:18px"><rect x="4" y="6" width="16" height="12" rx="1"/></svg> مستطيل</button>
@@ -260,10 +262,10 @@ html[dir=ltr] .widgetPanel{box-shadow:4px 0 18px rgba(0,0,0,.12)}
   <button class="popt" data-shape="triangle"><svg class="ic" viewBox="0 0 24 24" style="width:18px;height:18px"><path d="M12 5l8 14H4z"/></svg> مثلث</button>
   <button class="popt" data-shape="star"><svg class="ic" viewBox="0 0 24 24" style="width:18px;height:18px"><path d="M12 3l2.6 5.6 6 .7-4.5 4.1 1.2 5.9-5.3-3-5.3 3 1.2-5.9L3 9.3l6-.7L12 3z"/></svg> نجمة</button>
 </div>
-<div class="pop" id="bgPop" style="left:50%;top:12vh;transform:translateX(-50%);min-width:230px"><div class="bgGrid" id="bgGrid"></div></div>
-<div class="pop" id="stickerPop" style="left:50%;top:16vh;transform:translateX(-50%);min-width:240px"><div class="stickerGrid" id="stickerGrid"></div></div>
-<div class="pop" id="stampPop" style="left:50%;top:16vh;transform:translateX(-50%)"><div class="stampList" id="stampList"></div></div>
-<div class="pop" id="magnetPop" style="left:50%;top:14vh;transform:translateX(-50%);min-width:0;width:min(300px,calc(100vw - 32px))">
+<div class="pop" id="bgPop" style="left:50%;top:12vh;transform:translateX(-50%);min-width:230px"><div style="display:flex;justify-content:flex-end;margin:-2px -2px 2px"><button class="popX" type="button" title="قفل">✕</button></div><div class="bgGrid" id="bgGrid"></div></div>
+<div class="pop" id="stickerPop" style="left:50%;top:16vh;transform:translateX(-50%);min-width:240px"><div style="display:flex;justify-content:flex-end;margin:-2px -2px 2px"><button class="popX" type="button" title="قفل">✕</button></div><div class="stickerGrid" id="stickerGrid"></div></div>
+<div class="pop" id="stampPop" style="left:50%;top:16vh;transform:translateX(-50%)"><div style="display:flex;justify-content:flex-end;margin:-2px -2px 2px"><button class="popX" type="button" title="قفل">✕</button></div><div class="stampList" id="stampList"></div></div>
+<div class="pop" id="magnetPop" style="left:50%;top:14vh;transform:translateX(-50%);min-width:0;width:min(300px,calc(100vw - 32px))"><div style="display:flex;justify-content:flex-end;margin:-2px -2px 2px"><button class="popX" type="button" title="قفل">✕</button></div>
   <div class="stickerGrid" id="magnetGrid" style="grid-template-columns:repeat(auto-fill,minmax(36px,1fr));width:100%"></div>
   <div style="display:flex;gap:6px;align-items:stretch;width:100%">
     <div id="magTray" style="flex:1"></div>
@@ -298,7 +300,7 @@ html[dir=ltr] .widgetPanel{box-shadow:4px 0 18px rgba(0,0,0,.12)}
 </div>
 
 <div id="textEntry">
-  <div id="textGrip"><select id="textFont"><option value="Naskh">نسخ</option><option value="SansAr">سانس</option><option value="Amiri Quran">أميري</option></select><button id="textBold" class="on" type="button">عريض</button></div>
+  <div id="textGrip"><select id="textFont"><option value="Naskh">نسخ</option><option value="SansAr">سانس</option><option value="Amiri Quran">أميري</option></select><button id="textBold" class="on" type="button">عريض</button><button id="textX" type="button" title="قفل">✕</button></div>
   <textarea id="textArea" rows="1"></textarea>
 </div>
 
@@ -320,7 +322,7 @@ function fit(){cssW=innerWidth;cssH=innerHeight;
 addEventListener('resize',fit);
 
 let state={pages:[{bg:'blank',strokes:[]}],cur:0};
-let tool='pen',shape='line',color='#7c2d49',penSize=6,smartOn=true,readOnly=false;
+let tool=null,shape='line',color='#7c2d49',penSize=6,smartOn=true,readOnly=false;
 const PALETTE=['#7c2d49','#d16a92','#d9a44f','#4f7fd9','#3aa77c','#e05c5c','#7a54c9','#222222','#ffffff','#8a5a2b'];
 const LS='lisanura-board-v2';
 
@@ -532,6 +534,7 @@ const T={"الرئيسية":"Home",
 "تعذر فتح الكتاب":"Could not open the book",
 "كتاب":"book",
 "التسجيل يحتاج تأكيد بريد — أطلبي من الدعم إيقاف تأكيد البريد":"Sign-up needs email confirmation, ask support to disable email confirmation",
+"أَحْسَنْتِ":"Well done","مُمْتَاز":"Excellent","رَائِع":"Wonderful","بْرَافُو":"Bravo","صَحِيح":"Correct","حَاوِلِي مَرَّةً أُخْرَى":"Try again","قفل":"Close",
 "الإعدادات":"Settings",
 "لغة السبورة":"Board language",
 "اختاري لغة السبورة":"Choose the board language"};
@@ -1109,7 +1112,7 @@ const STICKERS=['star','heart','mosque','flower','sun','butterfly','fish','apple
 const STAMPS=[['أَحْسَنْتِ','#d9a44f'],['مُمْتَاز','#d16a92'],['رَائِع','#7a54c9'],['بْرَافُو','#3aa77c'],['صَحِيح','#4f7fd9'],['حَاوِلِي مَرَّةً أُخْرَى','#e05c5c']];
 function drawStamp(c,s,x,y,h){
   c.save();c.translate(x,y);c.rotate(-.06);
-  c.font='700 '+h+'px Naskh, serif';c.textAlign='center';c.textBaseline='middle';c.direction='rtl';
+  c.font='700 '+h+'px Naskh, serif';c.textAlign='center';c.textBaseline='middle';c.direction=/[\u0600-\u06FF]/.test(s.text)?'rtl':'ltr';
   const w=c.measureText(s.text).width+h*1.7;
   c.fillStyle=s.color;c.globalAlpha=.92;
   c.beginPath();c.roundRect(-w/2,-h*.75,w,h*1.5,h*.75);c.fill();
@@ -1125,6 +1128,7 @@ function pfactor(e){return (tool==='pen'&&e.pointerType==='pen'&&e.pressure>0)?.
 cv.addEventListener('pointerdown',e=>{
   if(readOnly)return;
   if(tool==='hand'){e.preventDefault();handDown(e);return;}
+  if(!tool)return;
   if(activePtr!==null)return;
   if(e.pointerType==='touch'&&penActive)return;
   activePtr=e.pointerId;if(e.pointerType==='pen')penActive=true;
@@ -1132,7 +1136,7 @@ cv.addEventListener('pointerdown',e=>{
   const [x,y]=toWorld(e);
   if(tool==='text'){openTextEntry();activePtr=null;return;}
   if(tool==='sticker'){pushUndo();curPage().strokes.push({kind:'sticker',name:curSticker,x,y,size:.09});redraw();save();liveDirty();activePtr=null;return;}
-  if(tool==='stamp'){pushUndo();curPage().strokes.push({kind:'stamp',text:curStamp[0],color:curStamp[1],x,y,size:.05});redraw();save();liveDirty();activePtr=null;return;}
+  if(tool==='stamp'){pushUndo();curPage().strokes.push({kind:'stamp',text:tt(curStamp[0]),color:curStamp[1],x,y,size:.05});redraw();save();liveDirty();activePtr=null;return;}
   if(tool==='shapes'){shapeStart=[x,y];drawing=true;return;}
   drawing=true;cur={kind:'stroke',tool,color,size:penSize/1000,points:[[x,y,pfactor(e)]]};
   pushUndo();curPage().strokes.push(cur);});
@@ -1169,14 +1173,14 @@ function hitStroke(px,py){
   for(let i=st.length-1;i>=0;i--){const b=strokeBBox(st[i]);
     if(b&&wx>=b[0]&&wx<=b[2]&&wy>=b[1]&&wy<=b[3])return st[i];}
   return null;}
-function nearHandle(px,py){
+function nearHandle(px,py,touch){
   if(!sel)return false;const b=strokeBBox(sel);if(!b)return false;
   const hx=view.x+b[2]*view.k,hy=view.y+b[3]*view.k;
-  return Math.hypot(px-hx,py-hy)<28;}
-function nearDelete(px,py){
+  return Math.hypot(px-hx,py-hy)<(touch?46:28);}
+function nearDelete(px,py,touch){
   if(!sel)return false;const b=strokeBBox(sel);if(!b)return false;
   const hx=view.x+b[2]*view.k,hy=view.y+b[1]*view.k;
-  return Math.hypot(px-hx,py-hy)<28;}
+  return Math.hypot(px-hx,py-hy)<(touch?40:28);}
 function moveStroke(s,dx,dy){
   if(s.kind==='stroke')s.points.forEach(p=>{p[0]+=dx;p[1]+=dy;});
   else if(s.kind==='shape'){s.x0+=dx;s.x1+=dx;s.y0+=dy;s.y1+=dy;}
@@ -1198,14 +1202,15 @@ function handDown(e){
     handMode='pinch';
     handStart={d:Math.hypot(a.x-b.x,a.y-b.y),mx:(a.x+b.x)/2,my:(a.y+b.y)/2,k:view.k};
     return;}
-  if(sel&&nearDelete(e.clientX,e.clientY)){
+  const touch=e.pointerType==='touch';
+  if(sel&&nearDelete(e.clientX,e.clientY,touch)){
     pushUndo();const st=curPage().strokes;const ix=st.indexOf(sel);
     if(ix>=0)st.splice(ix,1);sel=null;handMode=null;delete handPts[e.pointerId];
     redraw();save();liveDirty();return;}
-  const hit=hitStroke(e.clientX,e.clientY);
-  if(hit&&sel===hit&&nearHandle(e.clientX,e.clientY)){
+  if(sel&&nearHandle(e.clientX,e.clientY,touch)){
     handMode='resize';pushUndo();
-    handStart={px:e.clientX,py:e.clientY,b:strokeBBox(hit),curF:1};return;}
+    handStart={px:e.clientX,py:e.clientY,b:strokeBBox(sel),curF:1};return;}
+  const hit=hitStroke(e.clientX,e.clientY);
   if(hit){sel=hit;handMode='move';pushUndo();
     handStart={px:e.clientX,py:e.clientY};redraw();return;}
   sel=null;handMode='pan';handStart={px:e.clientX,py:e.clientY,x:view.x,y:view.y};redraw();}
@@ -1384,6 +1389,7 @@ textArea.addEventListener('input',autoGrow);
 textFont.addEventListener('change',()=>{syncTextStyle();textArea.focus();});
 textBold.addEventListener('click',()=>{textBold.classList.toggle('on');syncTextStyle();textArea.focus();});
 textArea.addEventListener('keydown',e=>{if(e.key==='Escape'){textPos=null;textEntry.style.display='none';}});
+document.getElementById('textX').addEventListener('click',()=>{if(textPos)commitText();else textEntry.style.display='none';});
 textArea.addEventListener('blur',()=>{if(!textPos)return;
   if(uiTap){setTimeout(()=>{if(textPos)textArea.focus();},40);return;}
   commitText();});
@@ -1417,6 +1423,7 @@ document.getElementById('imgInput').addEventListener('change',e=>{insertImageFil
 const rail=document.getElementById('rail');
 const POPS={shapes:'shapesPop',bg:'bgPop',stickers:'stickerPop',stamps:'stampPop',magnet:'magnetPop'};
 function closePops(){Object.values(POPS).forEach(id=>document.getElementById(id).classList.remove('open'));}
+document.querySelectorAll('.popX').forEach(b=>b.addEventListener('click',()=>{const pp=b.closest('.pop');if(pp)pp.classList.remove('open');}));
 rail.querySelectorAll('button[data-tool]').forEach(b=>b.addEventListener('click',()=>{
   const t=b.dataset.tool;
   if(POPS[t]){tool=t;smartOn=false;rail.querySelectorAll('button[data-tool]').forEach(x=>x.classList.toggle('on',x===b));
