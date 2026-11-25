@@ -73,6 +73,7 @@ var dotsEl=document.getElementById('dots'),progEl=document.getElementById('prog'
 LETTERS.forEach(function(){var d=document.createElement('span');d.className='sb-dot';dotsEl.appendChild(d);});
 function buildTargets(){
   targets=[];
+  maskCtx.clearRect(0,0,W,H);
   var off=document.createElement('canvas');off.width=W;off.height=H;
   var o=off.getContext('2d');
   o.font='700 250px "Noto Naskh Arabic",serif';
@@ -90,24 +91,32 @@ function sparkle(x,y){
   for(var i=0;i<3;i++)parts.push({x:x+(Math.random()*16-8),y:y+(Math.random()*16-8),
     vx:(Math.random()-.5)*1.2,vy:-Math.random()*1.4-.2,t:0,col:Math.random()<.5?'#ffd964':'#f0a92e'});
 }
+var maskCv=document.createElement('canvas');maskCv.width=W;maskCv.height=H;
+var maskCtx=maskCv.getContext('2d');
+var goldCv=document.createElement('canvas');goldCv.width=W;goldCv.height=H;
+function paintGold(){
+  var g=goldCv.getContext('2d');
+  g.clearRect(0,0,W,H);
+  g.font='700 250px "Noto Naskh Arabic",serif';
+  g.textAlign='center';g.textBaseline='middle';
+  g.fillStyle='#f0b23e';
+  g.fillText(LETTERS[idx].ch,W/2,H/2+16);
+  g.globalCompositeOperation='destination-in';
+  g.drawImage(maskCv,0,0);
+  g.globalCompositeOperation='source-over';
+}
 function draw(){
   ctx.clearRect(0,0,W,H);
-  // ghost letter (dashed outline feel)
+  // ghost letter
   ctx.font='700 250px "Noto Naskh Arabic",serif';
   ctx.textAlign='center';ctx.textBaseline='middle';
   ctx.fillStyle='#e8d5ae';
   ctx.fillText(LETTERS[idx].ch,W/2,H/2+16);
-  // traced golden letter via hit targets
+  // traced golden letter (letter shape clipped to finger trail)
+  paintGold();
   ctx.save();
-  ctx.beginPath();
-  ctx.font='700 250px "Noto Naskh Arabic",serif';
-  ctx.fillStyle='#f0b23e';
-  ctx.shadowColor='#ffd964';ctx.shadowBlur=done?26:10;
-  for(var i=0;i<targets.length;i++){
-    var t=targets[i];
-    if(t.hit){ctx.moveTo(t.x+9,t.y);ctx.arc(t.x,t.y,9,0,Math.PI*2);}
-  }
-  ctx.fill();
+  ctx.shadowColor='#ffd964';ctx.shadowBlur=done?26:8;
+  ctx.drawImage(goldCv,0,0);
   ctx.restore();
   // sparkles
   for(var j=parts.length-1;j>=0;j--){
@@ -133,7 +142,9 @@ function trace(x,y){
   var any=false;
   for(var i=0;i<targets.length;i++){
     var t=targets[i];
-    if(!t.hit&&Math.abs(t.x-px)<20&&Math.abs(t.y-py)<20){t.hit=true;any=true;}
+    if(!t.hit&&Math.abs(t.x-px)<20&&Math.abs(t.y-py)<20){t.hit=true;any=true;
+      maskCtx.fillStyle='#000';
+      maskCtx.beginPath();maskCtx.arc(t.x,t.y,17,0,Math.PI*2);maskCtx.fill();}
   }
   if(any){
     sparkle(px,py);
