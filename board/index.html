@@ -38,7 +38,7 @@ svg.ic.fill{fill:currentColor;stroke:none}
 #boardWrap canvas{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none}
 #bgCanvas{pointer-events:none}
 #drawCanvas{cursor:crosshair;z-index:2}
-.mascot{position:fixed;bottom:70px;inset-inline-end:10px;display:flex;align-items:center;gap:6px;pointer-events:none;z-index:5;background:rgba(255,255,255,.85);border:2px solid var(--line);border-radius:22px;padding:4px 12px;box-shadow:0 3px 8px rgba(124,45,73,.15)}.mascot svg{width:22px;height:22px;flex:none}.mascot span{font-family:'Naskh',serif;font-weight:700;font-size:19px;line-height:1;background:linear-gradient(180deg,#d16a92,#7c2d49);-webkit-background-clip:text;background-clip:text;color:transparent}.mascot .wm-en{font-family:'Aime',serif;letter-spacing:.5px;display:none}
+.mascot{position:fixed;bottom:70px;inset-inline-end:10px;display:flex;align-items:center;gap:6px;pointer-events:none;z-index:5;background:rgba(255,255,255,.85);border:2px solid var(--line);border-radius:22px;padding:4px 12px;box-shadow:0 3px 8px rgba(124,45,73,.15)}.mascot svg{width:22px;height:22px;flex:none}.mascot img{height:30px;width:auto;display:block}.mascot span{font-family:'Naskh',serif;font-weight:700;font-size:19px;line-height:1;background:linear-gradient(180deg,#d16a92,#7c2d49);-webkit-background-clip:text;background-clip:text;color:transparent}.mascot .wm-en{font-family:'Aime',serif;letter-spacing:.5px;display:none}
 html[lang=en] .mascot .wm-ar{display:none}
 html[lang=en] .mascot .wm-en{display:inline-block;padding-bottom:2px}
 
@@ -161,7 +161,7 @@ body.viewer .liveBadge{display:block}
   .rail button{width:46px;min-height:46px}
   .rail button span{font-size:8px}
   .widgetPanel{width:180px}
-  .mascot{bottom:64px;padding:3px 9px}.mascot span{font-size:16px}.mascot svg{width:18px;height:18px}
+  .mascot{bottom:64px;padding:3px 9px}.mascot span{font-size:16px}.mascot svg{width:18px;height:18px}.mascot img{height:24px}
   .sw{width:24px;height:24px}
   input[type=range]{width:64px}
   .sizebox span{display:none}
@@ -198,7 +198,7 @@ html[dir=ltr] .widgetPanel{box-shadow:4px 0 18px rgba(0,0,0,.12)}
   .rail button{min-height:38px}
   .bottombar{bottom:4px;padding:4px 10px}
   .liveBadge{top:52px}
-  .mascot{bottom:58px;padding:2px 9px}.mascot span{font-size:14px}.mascot svg{width:16px;height:16px}
+  .mascot{bottom:58px;padding:2px 9px}.mascot span{font-size:14px}.mascot svg{width:16px;height:16px}.mascot img{height:20px}
   .toast{bottom:60px}
 }
 </style>
@@ -208,7 +208,7 @@ html[dir=ltr] .widgetPanel{box-shadow:4px 0 18px rgba(0,0,0,.12)}
   <canvas id="bgCanvas"></canvas>
   <canvas id="drawCanvas"></canvas>
 </div>
-<div class="mascot"><svg viewBox="0 0 24 24"><g transform="translate(8.6,12) scale(0.52) rotate(-20)"><path d="M14,-16 A18,18 0 1,0 14,16 A22,22 0 0,1 14,-16 Z" fill="#d9a44f"/></g><path d="M0,-12 C1.5,-3.5 3.5,-1.5 12,0 C3.5,1.5 1.5,3.5 0,12 C-1.5,3.5 -3.5,1.5 -12,0 C-3.5,-1.5 -1.5,-3.5 0,-12 Z" transform="translate(17.5,6.5) scale(0.42)" fill="#d9a44f"/></svg><span class="wm-ar">لِيسَانُورَا</span><span class="wm-en">Lisanura</span></div>
+<div class="mascot"><img class="wm-ar" src="../assets/logo-ar.png" alt="ليسانورا"><img class="wm-en" src="../assets/logo-en.png" alt="Lisanura"></div>
 
 <div class="topwrap">
 <button class="tbtn gold menubtn" id="wPanelBtn" title="أدوات الحصة"><svg class="ic" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
@@ -295,6 +295,7 @@ html[dir=ltr] .widgetPanel{box-shadow:4px 0 18px rgba(0,0,0,.12)}
   <button class="witem" data-w="traffic"><svg class="ic" viewBox="0 0 24 24"><rect x="8" y="3" width="8" height="18" rx="3"/><circle cx="12" cy="7.5" r="1.4"/><circle cx="12" cy="12" r="1.4"/><circle cx="12" cy="16.5" r="1.4"/></svg> إشارة المرور</button>
   <button class="witem" data-w="counter"><svg class="ic" viewBox="0 0 24 24"><path d="M4 9a8 8 0 0 1 14-3l2 2M20 15a8 8 0 0 1-14 3l-2-2"/><path d="M20 3v5h-5M4 21v-5h5"/></svg> عدّاد التكرار</button>
   <button class="witem" data-w="party"><svg class="ic" viewBox="0 0 24 24"><path d="M4 20l7-14 3 2-7 14-3-2z"/><path d="M14 4c1 1 2 1 3 0M17 8c1 1 2 1 3 0M18.5 2.5c.5 1 1.5 1.5 2.5 1.5"/></svg> احتفال</button>
+  <button class="witem" id="wStudents" data-w="students" style="display:none"><svg class="ic" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.4"/><circle cx="16.8" cy="10" r="2.5"/><path d="M3.6 20c.6-3.4 2.7-5 5.4-5s4.8 1.6 5.4 5"/><path d="M15.4 15.5c2.2.3 3.9 1.8 4.4 4.5"/></svg> طلابي</button>
   <div class="sep" style="width:100%;margin:4px 0"></div>
   <h3 style="margin:2px 0 0;font-size:16px">الإعدادات</h3>
   <button class="witem" data-w="lang"><svg class="ic" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.8 2.6 4 5.7 4 9s-1.2 6.4-4 9c-2.8-2.6-4-5.7-4-9s1.2-6.4 4-9z"/></svg> لغة السبورة</button>
@@ -536,6 +537,7 @@ const T={"الرئيسية":"Home",
 "كتاب":"book",
 "التسجيل يحتاج تأكيد بريد — أطلبي من الدعم إيقاف تأكيد البريد":"Sign-up needs email confirmation, ask support to disable email confirmation",
 "أَحْسَنْتِ":"Well done","مُمْتَاز":"Excellent","رَائِع":"Wonderful","بْرَافُو":"Bravo","صَحِيح":"Correct","حَاوِلِي مَرَّةً أُخْرَى":"Try again","قفل":"Close",
+"طلابي":"My students","للمعلمة فقط":"For the teacher only","لا توجد طالبات مرتبطات بعد":"No linked students yet","شاركي كود المعلمة من صفحة حسابي":"Share your teacher code from the My account page","انضمت":"Joined","لم تلعب بعد":"No games yet",
 "الإعدادات":"Settings",
 "لغة السبورة":"Board language",
 "اختاري لغة السبورة":"Choose the board language"};
@@ -1605,6 +1607,7 @@ document.querySelectorAll('.witem').forEach(b=>b.addEventListener('click',()=>{
   if(w==='traffic')makeCard('traffic','إشارة المرور',buildTraffic);
   if(w==='counter')makeCard('counter','عدّاد التكرار',buildCounter);
   if(w==='party')celebrate();
+  if(w==='students')makeCard('students','طلابي',buildStudents);
   if(w==='lang')makeCard('settings','الإعدادات',buildSettings);}));
 function buildTimer(body){
   body.innerHTML='<div class="bigtime">٥:٠٠</div>'
@@ -1916,6 +1919,51 @@ function joinLive(hostId){
       if(e.type==='peer-unavailable'||e.type==='network'||e.type==='server-error')setTimeout(()=>{try{p.destroy();}catch(_){}connect();},4000);});};
   connect();}
 
+/* ================= my students (teacher only) ================= */
+function syncStudentsEntry(){const b=document.getElementById('wStudents');if(b)b.style.display=isTeacherOnline()?'':'none';}
+document.addEventListener('ln-auth',syncStudentsEntry);
+function buildStudents(body){
+  body.innerHTML='<div style="text-align:center;color:#a4748a;font-size:13px">...</div>';
+  if(!window.LN||!LN.configured()){body.innerHTML='<div style="color:var(--maroon);text-align:center;font-size:14px">الحسابات غير مفعّلة بعد</div>';return;}
+  LN.init().then(async()=>{
+    if(!isTeacherOnline()){body.innerHTML='<div style="color:var(--maroon);text-align:center;font-size:14px">'+tt('للمعلمة فقط')+'</div>';return;}
+    let ss=[];
+    try{ss=LN.listStudentsProgress?await LN.listStudentsProgress():[];}catch(e){ss=[];}
+    if(!ss.length){
+      body.innerHTML='<div style="text-align:center;color:#a4748a;font-size:14px;line-height:2">'+tt('لا توجد طالبات مرتبطات بعد')+'<br>'+tt('شاركي كود المعلمة من صفحة حسابي')+'</div>';
+      if(lang==='en')translateDOM(body,true);return;}
+    body.innerHTML='';
+    ss.forEach(s=>{
+      const card=document.createElement('div');
+      card.style.cssText='width:100%;box-sizing:border-box;background:#fffdf6;border:2px solid var(--line);border-radius:14px;padding:10px 12px;text-align:start';
+      const head=document.createElement('div');
+      head.style.cssText='display:flex;align-items:center;gap:8px;color:var(--maroon);font-weight:700;font-size:15px';
+      head.innerHTML='<svg class="ic" viewBox="0 0 24 24" style="width:20px;height:20px;min-width:20px"><circle cx="12" cy="8" r="3.6"/><path d="M5.5 20c.7-3.8 3.2-5.6 6.5-5.6s5.8 1.8 6.5 5.6"/></svg><span></span>';
+      head.querySelector('span').textContent=s.display_name||tt('طالبة');
+      card.appendChild(head);
+      const sub=document.createElement('div');
+      sub.style.cssText='font-size:12px;color:#a4748a;margin:2px 0 6px';
+      sub.textContent=tt('انضمت')+' '+(s.created_at?new Date(s.created_at).toLocaleDateString(lang==='en'?'en-GB':'ar-EG',{day:'numeric',month:'long'}):'');
+      card.appendChild(sub);
+      const rows=(s.progress||[]).filter(r=>r.game&&r.game.indexOf('lc:')===0);
+      if(!rows.length){
+        const d=document.createElement('div');d.style.cssText='font-size:13px;color:#a4748a';d.textContent=tt('لم تلعب بعد');card.appendChild(d);}
+      rows.sort((a,b)=>String(b.updated_at||'').localeCompare(String(a.updated_at||'')));
+      rows.forEach(r=>{
+        const key=r.game.slice(3),g=(LN.GAME_TITLES||{})[key]||[key,key];
+        const n=(r.data&&r.data.plays)||1;
+        const last=r.data&&r.data.last?new Date(r.data.last):(r.updated_at?new Date(r.updated_at):null);
+        const d=document.createElement('div');
+        d.style.cssText='font-size:13px;color:var(--rose-d);display:flex;justify-content:space-between;gap:8px;padding:4px 0;border-top:1px dashed #f0d9e2';
+        const nm=document.createElement('span');nm.textContent=lang==='en'?(g[1]||g[0]):g[0];
+        const st=document.createElement('span');st.style.cssText='color:#a4748a;white-space:nowrap';
+        const plays=lang==='en'?('×'+n):(n===2?'مرتين':arNum(n)+' '+(n===1?'مرة':'مرات'));
+        st.textContent=plays+(last?' · '+last.toLocaleDateString(lang==='en'?'en-GB':'ar-EG',{day:'numeric',month:'short'}):'');
+        d.appendChild(nm);d.appendChild(st);card.appendChild(d);});
+      body.appendChild(card);});
+    if(lang==='en')translateDOM(body,true);
+  }).catch(()=>{});}
+
 /* ================= account ================= */
 document.getElementById('acctBtn').onclick=()=>makeCard('acct','حسابي',buildAcct);
 function buildAcct(body){
@@ -1980,7 +2028,7 @@ async function restoreFromCloud(){
   /* no forced login here: sign-in lives on the site home page; the session is shared site-wide.
      A signed-in teacher gets her cloud board back; a guest just uses the board (local save). */
   try{if(window.LN&&LN.configured()){
-    await LN.init();
+    await LN.init();syncStudentsEntry();
     if(!fromHash)await restoreFromCloud();
     else setSaveState();}
   else setSaveState();

@@ -133,6 +133,19 @@ window.LN=(()=>{
     try{let q=sb.from('progress').select('*').eq('student_id',user.id);
       if(game)q=q.eq('game',game);
       const {data}=await q;return data||[];}catch(e){return[];}}
+
+  /* game/route titles (extracted from the home app bundle) for progress display */
+  const GAME_TITLES={"arabic":["اللُّغَةُ الْعَرَبِيَّةُ","Arabic language"],"quran":["الْقُرْآنُ وَالتَّجْوِيدُ","Quran and Tajweed"],"islamic":["الْإِسْلَامِيَّاتُ","Islamic studies"],"letters":["مَدِينَةُ الْحُرُوفِ","Letters City"],"gender":["مُذَكَّرٌ أَمْ مُؤَنَّثٌ؟","Masculine or feminine?"],"prep":["حُرُوفُ الْجَرِّ","Prepositions"],"words":["تَكْوِينُ الْكَلِمَاتِ وَالْجُمَلِ","Building words and sentences"],"reading":["الْقِرَاءَةُ (نُورُ بَيَانٍ)","Reading"],"noon":["حُرُوفُ النُّونِ السَّاكِنَةِ","Noon sakinah: the letters"],"noonv":["أَمْثِلَةٌ مِنَ الْقُرْآنِ","Examples from the Quran"],"ghunna":["الْإِدْغَامُ: بِغُنَّةٍ أَمْ بِغَيْرِ غُنَّةٍ؟","Idgham: with or without ghunna?"],"shadda":["غُنَّةُ النُّونِ وَالْمِيمِ الْمُشَدَّدَتَيْنِ","Ghunna of doubled noon and meem"],"meem":["حُرُوفُ الْمِيمِ السَّاكِنَةِ","Meem sakinah: the letters"],"meemv":["أَمْثِلَةٌ مِنَ الْقُرْآنِ","Examples from the Quran"],"lam":["الْحُرُوفُ الْقَمَرِيَّةُ وَالشَّمْسِيَّةُ","Moon and sun letters"],"lamv":["أَمْثِلَةٌ مِنَ الْقُرْآنِ","Examples from the Quran"],"lamverb":["لَامُ الْفِعْلِ","Laam of the verb"],"mith":["نَوْعُ الْحَرْفَيْنِ","The kind of the two letters"],"mithv":["أَمْثِلَةٌ مِنَ الْقُرْآنِ","Examples from the Quran"],"madd":["كَمْ حَرَكَةً نَمُدُّ؟","How long do we hold it?"],"maddv":["أَمْثِلَةٌ مِنَ الْقُرْآنِ","Examples from the Quran"],"pillars":["أَرْكَانُ الْإِسْلَامِ وَالْإِيمَانِ","Pillars of Islam and faith"],"tf":["صَحٌّ أَمْ غَلَطٌ؟","True or false?"],"seerah":["تَرْتِيبُ أَحْدَاثِ السِّيرَةِ","Seerah timeline"],"hadith":["قِصَصُ الْأَحَادِيثِ","Hadith stories"],"adhkar":["الْأَذْكَارُ","Adhkar (daily supplications)"],"dots":["بَيْتُ النُّقَاطِ","The Dot House"],"elevator":["مِصْعَدُ الْحَرَكَاتِ","The Vowel Elevator"],"rain":["مَطَرُ الْحُرُوفِ","Letter Rain"],"shadow":["الظِّلُّ الصَّحِيحُ","The Right Shadow"],"sound":["صَائِدُ الْأَصْوَاتِ","The Sound Hunter"],"scale":["مِيزَانُ النُّقَاطِ","The Dot Scale"],"hidden":["الْحُرُوفُ الْخَفِيَّةُ","The Hidden Letters"],"train":["قِطَارُ الْأَبْجَدِيَّةِ","The Alphabet Train"]};
+
+  async function listStudentsProgress(){ /* teacher: linked students + their game progress rows */
+    await init();if(!user||!profile||profile.role!=='teacher')return[];
+    const {data:students}=await sb.from('profiles').select('id,display_name,created_at').eq('teacher_id',user.id);
+    if(!students||!students.length)return[];
+    const ids=students.map(s=>s.id);
+    const {data:rows}=await sb.from('progress').select('student_id,game,data,updated_at').in('student_id',ids);
+    return students.map(s=>({id:s.id,display_name:s.display_name,created_at:s.created_at,
+      progress:(rows||[]).filter(r=>r.student_id===s.id)}));}
+
   async function listStudents(){ /* teacher: her linked students + their progress */
     await init();if(!user||!profile||profile.role!=='teacher')return[];
     const {data:students}=await sb.from('profiles').select('id,display_name,created_at').eq('teacher_id',user.id);
@@ -175,9 +188,10 @@ window.LN=(()=>{
   function renderAuth(container,opts){
     opts=opts||{};
     const en=lang()==='en';
+    const lbase=location.pathname.indexOf('/board/')>-1?'../assets/':'assets/';
     container.innerHTML=
     '<div dir="'+(en?'ltr':'rtl')+'" style="font-family:Naskh,serif;max-width:340px;margin:0 auto;background:#fffdf6;border:2px solid #e9b7c9;border-radius:18px;padding:22px;box-shadow:0 8px 24px rgba(124,45,73,.15)">'
-    +'<h2 style="margin:0 0 4px;color:#7c2d49;text-align:center;font-size:22px">ليسانورا</h2>'
+    +'<div style="text-align:center;margin-bottom:6px"><img src="'+lbase+(en?'logo-en.png':'logo-ar.png')+'" alt="ليسانورا" style="height:64px;width:auto;max-width:100%"></div>'
     +'<div id="lnTabs" style="display:flex;gap:6px;margin:12px 0">'
     +'<button data-t="in" style="flex:1;padding:8px;border-radius:12px;border:2px solid #d16a92;background:#d16a92;color:#fff;font-weight:700;font-family:Naskh">'+L('تسجيل دخول','Log in')+'</button>'
     +'<button data-t="up" style="flex:1;padding:8px;border-radius:12px;border:2px solid #d16a92;background:#fff;color:#7c2d49;font-weight:700;font-family:Naskh">'+L('حساب جديد','New account')+'</button></div>'
@@ -239,7 +253,7 @@ window.LN=(()=>{
     signUpTeacher,signUpStudent,signIn,signOut,
     saveBoard,saveBoardNow,loadBoard,shareBoard,loadShared,
     uploadBook,listBooks,downloadBook,deleteBook,
-    saveProgress,loadProgress,listStudents,myTeacher,
+    saveProgress,loadProgress,listStudents,listStudentsProgress,myTeacher,GAME_TITLES,
     liveStart,livePush,liveJoin,liveStop,liveLeave,
     get user(){return user;},get profile(){return profile;},
     teacherCode(){return user?user.id:null;}};})();
