@@ -250,14 +250,14 @@ function buildOv(){
   var en=isEn(),rl=role(),p=window.LN&&LN.profile;
   var name=(p&&p.display_name)||'';
   var h='<div class="hn-wrap">';
-  h+='<div class="hn-logo"><img src="'+AB+(en?'logo-en.png?v=4':'logo-ar.png?v=4')+'" alt=""></div>';
+  h+='<div class="hn-logo"><img src="'+AB+(en?'logo-en.webp?v=1':'logo-ar.webp?v=1')+'" alt=""></div>';
   /* greeting */
   h+='<div class="hn-hello"><div class="hn-bub"><p class="hn-hi">'
     +(rl==='teacher'?(en?'Welcome, Teacher!':'أهلا بك يا معلمة!'):(en?('Welcome'+(name?', '+esc(stripT(name)):'')+'!'):('أهلا يا '+esc(stripT(name)||'صديقتي')+'!')))
     +'</p><p class="hn-sub">'
     +(rl==='teacher'?(en?'A happy day with your students.':'يوم سعيد مع طالباتك'):(en?'Let’s learn together today.':'هيا نتعلم معا اليوم'))
     +'</p></div>'
-    +'<img class="hn-teach" src="'+AB+'teacher-full-6VQNEAGQ.png" alt=""></div>';
+    +'<img class="hn-teach" src="'+AB+'teacher-full-6VQNEAGQ.webp?v=1" alt=""></div>';
   /* continue card */
   var lp=lastPlayed();
   h+='<div class="hn-cont"><p class="hn-cont-t">'+(en?'Continue where you left off':(gender()==='boy'?'اكمل من حيث وقفت':'اكملي من حيث وقفتي'))+'</p>';
@@ -511,7 +511,7 @@ function render(){
   showTab(tab||'home');
 }
 
-css+="body.hb-bg-girl,body.hb-bg-boy{background-color:#faf5f0!important;background-image:url("+AB+"assets/tile-neut-BA34HDQK.svg),url("+AB+"assets/arch-neut-TQCGQA43.svg)!important}"+".lc-backbtn,.lc-theme-boy .lc-backbtn{border-color:#c16a7e!important;color:#7e4150!important}"+".hn-set-card,.tb-acc-card{background:#fffaf3!important}";css+="@keyframes hnPop{from{transform:scale(.9);opacity:0}to{transform:scale(1);opacity:1}}";var st=d.createElement('style');st.textContent=css;d.head.appendChild(st);
+css+="body.hb-bg-girl,body.hb-bg-boy{background-color:#faf5f0!important;background-image:url("+AB+"tile-neut-BA34HDQK.svg),url("+AB+"arch-neut-TQCGQA43.svg)!important}"+".lc-backbtn,.lc-theme-boy .lc-backbtn{border-color:#c16a7e!important;color:#7e4150!important}"+".hn-set-card,.tb-acc-card{background:#fffaf3!important}";css+="@keyframes hnPop{from{transform:scale(.9);opacity:0}to{transform:scale(1);opacity:1}}";var st=d.createElement('style');st.textContent=css;d.head.appendChild(st);
 
 /* role becomes available after gate.js */
 var mo=new MutationObserver(function(muts){
