@@ -192,7 +192,7 @@ function imgFor(it){var g=gender();if(!g&&window.LN&&LN.profile&&LN.profile.role
 /* ---------- styles ---------- */
 var css=''
 +'.ak-door-heart{width:30px;height:30px}'
-+'.ak-ov{position:fixed;inset:0;z-index:80;background:linear-gradient(#fdf3f7,#fdeef4);overflow:auto;-webkit-overflow-scrolling:touch;padding:14px 14px 40px;box-sizing:border-box}'
++'.ak-ov{position:fixed;inset:0;z-index:200;overflow:auto;-webkit-overflow-scrolling:touch;padding:14px 14px 40px;box-sizing:border-box}'
 +'.ak-wrap{max-width:460px;margin:0 auto}'
 +'.ak-top{display:flex;align-items:center;gap:10px;margin:4px 0 12px}'
 +'.ak-back{display:inline-flex;align-items:center;gap:6px;border:2px solid #d16a92;background:#fff;color:#7c2d49;font-weight:700;font-size:15.5px;border-radius:999px;padding:6px 14px;min-height:44px;cursor:pointer;font-family:inherit}'
@@ -221,7 +221,7 @@ var css=''
 +'.ak-box-h.ak-rose{color:#d16a92}'
 +'.ak-box-p{margin:0;font-size:16.5px;line-height:1.9;color:#4d3533}'
 +'.ak-note{text-align:center;color:#9a7b88;font-size:14px;margin:6px 0 0}'
-+'.ak-toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:#7c2d49;color:#fff;padding:10px 18px;border-radius:999px;font-size:14.5px;z-index:99;box-shadow:0 4px 14px #0003}';
++'.ak-toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:#7c2d49;color:#fff;padding:10px 18px;border-radius:999px;font-size:14.5px;z-index:210;box-shadow:0 4px 14px #0003}.ak-bg{position:fixed;inset:0;z-index:-1;pointer-events:none}.ak-ov.lc-theme-girl .ak-bg{background-color:#fdf3f7;background-image:url(assets/tile-girl-WL56SBA2.svg),url(assets/arch-girl-7KTCN4ZP.svg);background-repeat:repeat,no-repeat;background-size:96px 96px,340px auto;background-position:0 0,center 118px}.ak-ov.lc-theme-boy .ak-bg{background-color:#f2f8fd;background-image:url(assets/tile-boy-7ICPIOXA.svg),url(assets/arch-boy-6WFI7RY5.svg);background-repeat:repeat,no-repeat;background-size:96px 96px,340px auto;background-position:0 0,center 118px}/* app theme: same ornament pattern + boy/girl palette as the rest of the app */.ak-ov.lc-theme-girl{background-color:#fdf3f7;background-image:url(assets/tile-girl-WL56SBA2.svg),url(assets/arch-girl-7KTCN4ZP.svg);background-repeat:repeat,no-repeat;background-size:96px 96px,340px auto;background-position:0 0,center 118px}.ak-ov.lc-theme-boy{background-color:#f2f8fd;background-image:url(assets/tile-boy-7ICPIOXA.svg),url(assets/arch-boy-6WFI7RY5.svg);background-repeat:repeat,no-repeat;background-size:96px 96px,340px auto;background-position:0 0,center 118px}.ak-ov.lc-theme-boy .ak-back{border-color:#4f7fd9;color:#274a86}.ak-ov.lc-theme-boy .ak-h{color:#274a86}.ak-ov.lc-theme-boy .ak-card{border-color:#bcd6f5;box-shadow:0 3px 12px #274a8622}.ak-ov.lc-theme-boy .ak-card-t b{color:#274a86}.ak-ov.lc-theme-boy .ak-card-t small{color:#7a92b5}.ak-ov.lc-theme-boy .ak-go{background:#4f7fd9}.ak-ov.lc-theme-boy .ak-box{border-color:#bcd6f5}.ak-ov.lc-theme-boy .ak-box-h.ak-rose{color:#4f7fd9}.ak-ov.lc-theme-boy .ak-listen.ak-stop{background:linear-gradient(135deg,#4f7fd9,#274a86)}.ak-ov.lc-theme-boy .ak-toast{background:#274a86}';
 
 /* ---------- overlay ---------- */
 var ov=null,view='list',cur=null,aud=null;
@@ -273,11 +273,24 @@ function paintListen(btn,playing){
   btn.innerHTML=(playing?stopSvg():playSvg())+'<span>'+(playing?(isEn()?'Stop':'إيقاف'):(isEn()?'Listen and repeat':'اسْتَمِعِي وَرَدِّدِي'))+'</span>';
 }
 
+function themeOf(){try{var g=JSON.parse(localStorage.getItem('letters-city:gender.v1')||'"girl"');return g==='boy'?'boy':'girl';}catch(e){return 'girl';}}
+function applyTheme(){
+  if(!ov)return;
+  var g=themeOf();
+  ov.className='ak-ov lc-theme-'+g;
+  ov.style.backgroundColor=(g==='boy'?'#f2f8fd':'#fdf3f7');
+  ov.style.backgroundImage='url(assets/tile-'+g+'-'+(g==='boy'?'7ICPIOXA':'WL56SBA2')+'.svg),url(assets/arch-'+g+'-'+(g==='boy'?'6WFI7RY5':'7KTCN4ZP')+'.svg)';
+  ov.style.backgroundRepeat='repeat,no-repeat';
+  ov.style.backgroundSize='96px 96px,340px auto';
+  ov.style.backgroundPosition='0 0,center 118px';
+}
 function render(){
   if(!ov)return;
+  applyTheme();
   var en=isEn();
   ov.setAttribute('dir',en?'ltr':'rtl');
   var h='';
+  h+='<div class="ak-bg"></div>';
   h+='<div class="ak-top">';
   if(view==='detail'){
     h+='<button type="button" class="ak-back" data-ak="list">'+backSvg()+'<span>'+(en?'All adhkar':'كُلُّ الْأَذْكَارِ')+'</span></button>';
