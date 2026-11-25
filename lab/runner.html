@@ -98,6 +98,7 @@ function bg(){
   ctx.fillStyle='#17153a';
   ctx.beginPath();ctx.moveTo(0,HY);ctx.lineTo(CX-50,HY);ctx.lineTo(-120,H);ctx.lineTo(0,H);ctx.fill();
   ctx.beginPath();ctx.moveTo(W,HY);ctx.lineTo(CX+50,HY);ctx.lineTo(W+120,H);ctx.lineTo(W,H);ctx.fill();
+  for(var h=0;h<5;h++){var ph=((h/5+t*speed*0.5)%1),qh=P(ph,1);[-1,1].forEach(function(sd){var x=CX+sd*(120+330*ph),w=70*ph+10,hh=120*ph+14;ctx.fillStyle='#2a2860';ctx.fillRect(x-w/2,qh.y-hh,w,hh);ctx.fillStyle='#ffd97a';for(var r=0;r<3;r++){ctx.fillRect(x-w/3,qh.y-hh+hh*0.2+r*hh*0.25,w*0.22,hh*0.12);ctx.fillRect(x+w/12,qh.y-hh+hh*0.2+r*hh*0.25,w*0.22,hh*0.12);}});}
   // lane lines scrolling
   ctx.strokeStyle='#ffffff22';ctx.lineWidth=2;
   for(var l=0;l<4;l++){var e=l-1.5;ctx.beginPath();ctx.moveTo(CX+e*190*0.02,HY);ctx.lineTo(CX+e*190*1.1,HY+(BY-HY)*1.1);ctx.stroke();}
@@ -146,8 +147,10 @@ function hud(){
 var last=performance.now();
 function loop(n){var dt=Math.min(.05,(n-last)/1000);last=n;update(dt);
   ctx.clearRect(0,0,W,H);bg();
-  items.slice().sort(function(a,b){return a.p-b.p;}).forEach(drawItem);
+  var srt=items.slice().sort(function(a,b){return a.p-b.p;});
+  srt.filter(function(i){return i.p<0.9;}).forEach(drawItem);
   boat();
+  srt.filter(function(i){return i.p>=0.9;}).forEach(drawItem);
   parts.forEach(function(p){ctx.globalAlpha=Math.max(0,p.l);ctx.fillStyle=p.c;ctx.fillRect(p.x,p.y,5,5);});ctx.globalAlpha=1;
   if(flash>0){ctx.fillStyle='rgba(255,230,150,'+flash*.4+')';ctx.fillRect(0,0,W,H);}
   hud();requestAnimationFrame(loop);}
