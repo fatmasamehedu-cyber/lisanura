@@ -247,7 +247,7 @@ function buildOv(){
   var lp=lastPlayed();
   h+='<div class="hn-cont"><p class="hn-cont-t">'+(en?'Continue where you left off':(gender()==='boy'?'اكمل من حيث وقفت':'اكملي من حيث وقفتي'))+'</p>';
   if(lp){
-    h+='<p class="hn-cont-l">'+esc(stripT(lp.title))+(lp.plays>1?' · '+(en?lp.plays+' مرات':lp.plays+' مَرَّاتٍ'):'')+'</p>';
+    h+='<p class="hn-cont-l">'+esc(stripT(lp.title))+(lp.plays>1?' · '+(en?lp.plays+' plays':(lp.plays===2?'مرتين':(lp.plays>=3&&lp.plays<=10?lp.plays+' مرات':lp.plays+' مرة'))):'')+'</p>';
     if(lp.key==='letters'){var f=lettersFraction();if(f>0)h+='<div class="hn-cont-bar"><div class="hn-cont-f" style="width:'+Math.round(f*100)+'%"></div></div>';}
   }else{
     h+='<p class="hn-cont-l">'+(en?'Start your first lesson from the lessons tab.':'اِبْدَئِي أَوَّلَ دَرْسٍ مِنْ تَبْوِيبِ الدُّرُوسِ.')+'</p>';
