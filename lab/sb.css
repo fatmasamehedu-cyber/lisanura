@@ -22,7 +22,7 @@ body{font-family:Naskh,"Noto Naskh Arabic",serif;color:var(--sb-ink);overflow-x:
 .sb-sub{margin:8px 0 14px;font-size:16.5px;font-weight:700;color:#7a5b47;text-align:center;max-width:440px}
 .sb-panel{background:linear-gradient(#fffdf8,#fdf3df);border:3px solid var(--sb-gold);border-radius:22px;
   box-shadow:0 5px 0 #d9b878,0 12px 26px #7a5a2a26;padding:16px}
-.sb-teacher{position:absolute;bottom:0;left:2px;height:min(40vh,340px);z-index:1;pointer-events:none;
+.sb-teacher{position:fixed;bottom:0;left:2px;height:min(24vh,210px);z-index:1;pointer-events:none;
   filter:drop-shadow(0 6px 10px #4a304033)}
 .sb-stars{display:flex;gap:8px;justify-content:center;align-items:center}
 .sb-star{width:34px;height:34px;background:#e3d9c8;clip-path:polygon(50% 0,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%)}
@@ -63,6 +63,6 @@ body{font-family:Naskh,"Noto Naskh Arabic",serif;color:var(--sb-ink);overflow-x:
 .sb-dots{display:flex;gap:5px;flex-wrap:wrap;justify-content:center;max-width:440px}
 .sb-dot{width:11px;height:11px;border-radius:50%;background:#e3d3b8;border:2px solid #cfa962}
 .sb-dot.on{background:var(--sb-pink);border-color:var(--sb-pink-d)}
-@media (max-height:700px){.sb-teacher{height:32vh}}
+@media (max-height:700px){.sb-teacher{height:20vh}}
 @font-face{font-family:'Noto Naskh Arabic';src:url('../fonts/NotoNaskhArabic-Regular.woff2') format('woff2');font-weight:400;font-display:swap}
 @font-face{font-family:'Noto Naskh Arabic';src:url('../fonts/NotoNaskhArabic-Bold.woff2') format('woff2');font-weight:700;font-display:swap}
