@@ -35,7 +35,7 @@ var best=+(localStorage.getItem('lab-runner-best')||0);
 var audio=null;
 function say(){if(audio){try{audio.pause();}catch(e){}}audio=new Audio(A+WORDS[wi].a);audio.play().catch(function(){});}
 function word(){return WORDS[wi].w.split('');}
-function P(p,l){var s=0.12+0.88*p;return {x:CX+(l-1)*190*p,y:HY+(BY-HY)*p,s:s};}
+function P(p,l){var s=0.12+0.88*p;return {x:CX+(l-1)*150*p,y:HY+(BY-HY)*p,s:s};}
 function burst(x,y,col){for(var i=0;i<16;i++){var a=Math.random()*6.28,v=60+Math.random()*140;parts.push({x:x,y:y,vx:Math.cos(a)*v,vy:Math.sin(a)*v,l:.7,c:col});}}
 function beep(f){try{var ac=beep.ac||(beep.ac=new (window.AudioContext||window.webkitAudioContext)());var o=ac.createOscillator(),g=ac.createGain();o.frequency.value=f;o.type='sine';g.gain.setValueAtTime(.18,ac.currentTime);g.gain.exponentialRampToValueAtTime(.001,ac.currentTime+.25);o.connect(g);g.connect(ac.destination);o.start();o.stop(ac.currentTime+.26);}catch(e){}}
 function move(d){if(st!=='play')return;tl=Math.max(0,Math.min(2,tl+d));}
@@ -101,7 +101,7 @@ function bg(){
   for(var h=0;h<5;h++){var ph=((h/5+t*speed*0.5)%1),qh=P(ph,1);[-1,1].forEach(function(sd){var x=CX+sd*(120+330*ph),w=70*ph+10,hh=120*ph+14;ctx.fillStyle='#2a2860';ctx.fillRect(x-w/2,qh.y-hh,w,hh);ctx.fillStyle='#ffd97a';for(var r=0;r<3;r++){ctx.fillRect(x-w/3,qh.y-hh+hh*0.2+r*hh*0.25,w*0.22,hh*0.12);ctx.fillRect(x+w/12,qh.y-hh+hh*0.2+r*hh*0.25,w*0.22,hh*0.12);}});}
   // lane lines scrolling
   ctx.strokeStyle='#ffffff22';ctx.lineWidth=2;
-  for(var l=0;l<4;l++){var e=l-1.5;ctx.beginPath();ctx.moveTo(CX+e*190*0.02,HY);ctx.lineTo(CX+e*190*1.1,HY+(BY-HY)*1.1);ctx.stroke();}
+  for(var l=0;l<4;l++){var e=l-1.5;ctx.beginPath();ctx.moveTo(CX+e*150*0.02,HY);ctx.lineTo(CX+e*150*1.1,HY+(BY-HY)*1.1);ctx.stroke();}
   for(var s=0;s<8;s++){var pp=((s/8+t*speed*0.4)%1);var q=P(pp,1);ctx.globalAlpha=.25*pp;ctx.fillStyle='#9fd0ff';ctx.fillRect(q.x-120*pp,q.y,240*pp,2*pp+1);}
   ctx.globalAlpha=1;
   // bank lanterns
@@ -119,7 +119,7 @@ function drawItem(it){
   ctx.fillText(it.ch,q.x,q.y+3*q.s);ctx.globalAlpha=1;
 }
 function boat(){
-  var bx=CX+(lane-1)*190,by=BY,tilt=(tl-lane)*0.18;
+  var bx=CX+(lane-1)*150,by=BY,tilt=(tl-lane)*0.18;
   ctx.save();ctx.translate(bx,by);ctx.rotate(tilt);
   // wake glow
   ctx.fillStyle='#9fd0ff33';ctx.beginPath();ctx.ellipse(0,18,120,22,0,0,7);ctx.fill();
