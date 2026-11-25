@@ -181,6 +181,19 @@ var DUAS=[
   }
 ];
 
+/* ---------- daily dhikr pool (14, shared with the Home card) ---------- */
+var POOL=null,poolP=null;
+function loadPool(){
+  if(poolP)return poolP;
+  poolP=fetch('assets/dhikr-pool.json').then(function(r){return r.json();}).then(function(j){
+    POOL=j.map(function(it,n){return {id:'pool'+n,pool:true,titleAr:'ذِكْرُ الْيَوْمِ',titleEn:'Dhikr of the day',
+      ar:it.text,ref:it.source||'',virtue:it.virtue||'',condition:it.condition||'',audio:'assets/'+it.audio};});
+    if(ov&&view==='list')render();
+    return POOL;
+  }).catch(function(){POOL=[];return POOL;});
+  return poolP;
+}
+
 /* ---------- language ---------- */
 function lang(){try{var v=localStorage.getItem('letters-city:lang.v1');return (v===null?'ar':JSON.parse(v))==='en'?'en':'ar';}catch(e){return 'ar';}}
 function isEn(){return lang()==='en';}
@@ -221,7 +234,7 @@ var css=''
 +'.ak-box-h.ak-rose{color:#d16a92}'
 +'.ak-box-p{margin:0;font-size:16.5px;line-height:1.9;color:#4d3533}'
 +'.ak-note{text-align:center;color:#9a7b88;font-size:14px;margin:6px 0 0}'
-+'.ak-toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:#7c2d49;color:#fff;padding:10px 18px;border-radius:999px;font-size:14.5px;z-index:210;box-shadow:0 4px 14px #0003}.ak-bg{position:fixed;inset:0;z-index:-1;pointer-events:none}.ak-ov.lc-theme-girl .ak-bg{background-color:#fdf3f7;background-image:url(assets/tile-girl-WL56SBA2.svg),url(assets/arch-girl-7KTCN4ZP.svg);background-repeat:repeat,no-repeat;background-size:96px 96px,340px auto;background-position:0 0,center 118px}.ak-ov.lc-theme-boy .ak-bg{background-color:#f2f8fd;background-image:url(assets/tile-boy-7ICPIOXA.svg),url(assets/arch-boy-6WFI7RY5.svg);background-repeat:repeat,no-repeat;background-size:96px 96px,340px auto;background-position:0 0,center 118px}/* app theme: same ornament pattern + boy/girl palette as the rest of the app */.ak-ov.lc-theme-girl{background-color:#fdf3f7;background-image:url(assets/tile-girl-WL56SBA2.svg),url(assets/arch-girl-7KTCN4ZP.svg);background-repeat:repeat,no-repeat;background-size:96px 96px,340px auto;background-position:0 0,center 118px}.ak-ov.lc-theme-boy{background-color:#f2f8fd;background-image:url(assets/tile-boy-7ICPIOXA.svg),url(assets/arch-boy-6WFI7RY5.svg);background-repeat:repeat,no-repeat;background-size:96px 96px,340px auto;background-position:0 0,center 118px}.ak-ov.lc-theme-boy .ak-back{border-color:#4f7fd9;color:#274a86}.ak-ov.lc-theme-boy .ak-h{color:#274a86}.ak-ov.lc-theme-boy .ak-card{border-color:#bcd6f5;box-shadow:0 3px 12px #274a8622}.ak-ov.lc-theme-boy .ak-card-t b{color:#274a86}.ak-ov.lc-theme-boy .ak-card-t small{color:#7a92b5}.ak-ov.lc-theme-boy .ak-go{background:#4f7fd9}.ak-ov.lc-theme-boy .ak-box{border-color:#bcd6f5}.ak-ov.lc-theme-boy .ak-box-h.ak-rose{color:#4f7fd9}.ak-ov.lc-theme-boy .ak-listen.ak-stop{background:linear-gradient(135deg,#4f7fd9,#274a86)}.ak-ov.lc-theme-boy .ak-toast{background:#274a86}';
++'.ak-pool-h{font-family:Naskh,"Noto Naskh Arabic",serif;font-weight:700;font-size:15px;color:#b0486f;margin:14px 2px 8px}.ak-ov.lc-theme-boy .ak-pool-h{color:#274a86}.ak-virtue{font-size:12.5px;line-height:1.9;color:#9a7b88;margin:8px 0 0}.ak-cond{font-size:12.5px;color:#b8860b;margin:6px 0 0}.ak-toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:#7c2d49;color:#fff;padding:10px 18px;border-radius:999px;font-size:14.5px;z-index:210;box-shadow:0 4px 14px #0003}.ak-bg{position:fixed;inset:0;z-index:-1;pointer-events:none}.ak-ov.lc-theme-girl .ak-bg{background-color:#fdf3f7;background-image:url(assets/tile-girl-WL56SBA2.svg),url(assets/arch-girl-7KTCN4ZP.svg);background-repeat:repeat,no-repeat;background-size:96px 96px,340px auto;background-position:0 0,center 118px}.ak-ov.lc-theme-boy .ak-bg{background-color:#f2f8fd;background-image:url(assets/tile-boy-7ICPIOXA.svg),url(assets/arch-boy-6WFI7RY5.svg);background-repeat:repeat,no-repeat;background-size:96px 96px,340px auto;background-position:0 0,center 118px}/* app theme: same ornament pattern + boy/girl palette as the rest of the app */.ak-ov.lc-theme-girl{background-color:#fdf3f7;background-image:url(assets/tile-girl-WL56SBA2.svg),url(assets/arch-girl-7KTCN4ZP.svg);background-repeat:repeat,no-repeat;background-size:96px 96px,340px auto;background-position:0 0,center 118px}.ak-ov.lc-theme-boy{background-color:#f2f8fd;background-image:url(assets/tile-boy-7ICPIOXA.svg),url(assets/arch-boy-6WFI7RY5.svg);background-repeat:repeat,no-repeat;background-size:96px 96px,340px auto;background-position:0 0,center 118px}.ak-ov.lc-theme-boy .ak-back{border-color:#4f7fd9;color:#274a86}.ak-ov.lc-theme-boy .ak-h{color:#274a86}.ak-ov.lc-theme-boy .ak-card{border-color:#bcd6f5;box-shadow:0 3px 12px #274a8622}.ak-ov.lc-theme-boy .ak-card-t b{color:#274a86}.ak-ov.lc-theme-boy .ak-card-t small{color:#7a92b5}.ak-ov.lc-theme-boy .ak-go{background:#4f7fd9}.ak-ov.lc-theme-boy .ak-box{border-color:#bcd6f5}.ak-ov.lc-theme-boy .ak-box-h.ak-rose{color:#4f7fd9}.ak-ov.lc-theme-boy .ak-listen.ak-stop{background:linear-gradient(135deg,#4f7fd9,#274a86)}.ak-ov.lc-theme-boy .ak-toast{background:#274a86}';
 
 /* ---------- overlay ---------- */
 var ov=null,view='list',cur=null,aud=null;
@@ -310,13 +323,27 @@ function render(){
         +'<span class="ak-go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="'+(en?'M9 6l6 6-6 6':'M15 6l-6 6 6 6')+'"/></svg></span>'
         +'</span></button>';
     });
+    if(POOL&&POOL.length){
+      h+='<div class="ak-pool-h">'+(en?'More adhkar':'أَذْكَارٌ مُتَنَوِّعَةٌ')+'</div>';
+      POOL.forEach(function(it){
+        h+='<button type="button" class="ak-card" data-ak="open" data-id="'+it.id+'">'
+          +'<span class="ak-card-row"><span class="ak-card-t"><b dir="rtl">'+esc(it.ar)+'</b>'
+          +(it.condition?'<small dir="rtl">'+esc(it.condition)+'</small>':'')
+          +'</span>'
+          +'<span class="ak-go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="'+(en?'M9 6l6 6-6 6':'M15 6l-6 6 6 6')+'"/></svg></span>'
+          +'</span></button>';
+      });
+    }
     h+='</div>';
   }else{
-    h+='<img class="ak-hero" src="'+imgFor(cur)+'" alt="" onerror="this.style.display=\'none\'">'
-      +'<div class="ak-arbox"><p class="ak-ar" lang="ar" dir="rtl">'+esc(cur.ar)+'</p><p class="ak-ref">'+esc(cur.ref)+'</p></div>'
+    if(!cur.pool)h+='<img class="ak-hero" src="'+imgFor(cur)+'" alt="" onerror="this.style.display=\'none\'">';
+    h+='<div class="ak-arbox"><p class="ak-ar" lang="ar" dir="rtl">'+esc(cur.ar)+'</p>'
+      +(cur.condition?'<p class="ak-cond" dir="rtl">'+esc(cur.condition)+'</p>':'')
+      +(cur.virtue?'<p class="ak-virtue" dir="rtl">'+esc(cur.virtue)+'</p>':'')
+      +'<p class="ak-ref">'+esc(cur.ref)+'</p></div>'
       +'<button type="button" class="ak-listen" data-ak="listen"></button>'
-      +'<div class="ak-box"><h3 class="ak-box-h">'+(en?'What it means':'مَاذَا يَعْنِي؟')+'</h3><p class="ak-box-p">'+esc(en?cur.meaningEn:cur.meaningAr)+'</p></div>'
-      +(en?'<div class="ak-box"><h3 class="ak-box-h ak-rose">Pronunciation</h3><p class="ak-box-p" dir="ltr">'+esc(cur.translit)+'</p></div>':'');
+      +(cur.meaningAr?'<div class="ak-box"><h3 class="ak-box-h">'+(en?'What it means':'مَاذَا يَعْنِي؟')+'</h3><p class="ak-box-p">'+esc(en?cur.meaningEn:cur.meaningAr)+'</p></div>':'')
+      +(en&&cur.translit?'<div class="ak-box"><h3 class="ak-box-h ak-rose">Pronunciation</h3><p class="ak-box-p" dir="ltr">'+esc(cur.translit)+'</p></div>':'');
   }
   ov.innerHTML='<div class="ak-wrap">'+h+'</div>';
   if(view==='detail')paintListen(ov.querySelector('[data-ak=listen]'),false);
@@ -326,6 +353,7 @@ function open(){
   if(ov)return;
   ov=d.createElement('div');ov.className='ak-ov';
   view='list';cur=null;
+  loadPool();
   d.body.appendChild(ov);render();
   ov.addEventListener('click',function(e){
     var t=e.target.closest('[data-ak]');if(!t)return;
@@ -335,7 +363,7 @@ function open(){
     else if(k==='open'){
       stopAudio();
       var id=t.getAttribute('data-id');
-      cur=DUAS.filter(function(x){return x.id===id;})[0]||null;
+      cur=DUAS.concat(POOL||[]).filter(function(x){return x.id===id;})[0]||null;
       if(cur){view='detail';render();ov.scrollTop=0;}
     }
     else if(k==='listen'){
