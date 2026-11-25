@@ -1,8 +1,8 @@
 /* Lisanura lab - storybook shared helpers: teacher figure, level-up celebration, auto-advance */
 (function(){
 "use strict";
-var TEACHER_FULL='../board/teacher-full.png';
-var TEACHER_POINT='../board/teacher-point.png';
+var TEACHER_FULL='assets/teacher-full.png';
+var TEACHER_POINT='assets/teacher-point.png';
 var CHEER='../assets/cheer.mp3';
 function teacher(which,cls){
   var im=document.createElement('img');

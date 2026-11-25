@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>جسر الكلمات — عينة</title>
+<link rel="stylesheet" href="sb.css?v=2">
+<style>
+  .stage{width:100%;max-width:min(540px,94vw);box-sizing:border-box;background:linear-gradient(#fffdf8cc,#fdf3dfcc);
+    border:3px solid var(--sb-gold);border-radius:22px;box-shadow:0 5px 0 #d9b878,0 12px 26px #7a5a2a26;
+    padding:18px 14px 20px;min-height:300px}
+  #sentence{display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap;margin-bottom:26px}
+  .wplank{padding:12px 22px;font-size:23px;min-width:64px}
+  #slot{min-width:110px;height:52px;display:flex;align-items:center;justify-content:center;
+    font-size:23px;font-weight:800;color:#5d3a17}
+  #slot.filled{background:linear-gradient(#f0cd8d,#e2b168);border:2.5px solid #b5813c;border-style:solid;
+    box-shadow:0 4px 0 #b5813c}
+  #opts{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:8px}
+  .opt{padding:12px 24px;font-size:23px;cursor:grab;touch-action:none;position:relative;z-index:5}
+  .opt.drag{opacity:.9;cursor:grabbing;z-index:20;box-shadow:0 10px 18px #5d3c1555}
+  .opt.wrong{animation:sbShk .4s}
+  @keyframes sbShk{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+  #g2msg{text-align:center;min-height:30px;font-size:19px;font-weight:800;color:var(--sb-pink-d);margin-top:16px}
+  #rounds{display:flex;gap:8px;justify-content:center;margin-bottom:14px}
+  #rounds .sb-star{width:26px;height:26px}
+</style>
+</head>
+<body>
+<div class="sb-page" style="background-image:url('assets/sb/bg-bridge.jpg')">
+  <div class="sb-topbar">
+    <a class="sb-roundbtn" href="index.html" aria-label="كل العينات">🏠</a>
+    <div class="sb-plaque"><h1>جسر الكلمات</h1></div>
+    <span class="sb-roundbtn" aria-hidden="true">🔊</span>
+  </div>
+  <p class="sb-sub">اسحبي الكلمة الصح لمكانها في الجملة — كل إجابة صح بتبني لوح من الجسر</p>
+  <div class="stage">
+    <div id="rounds"><div class="sb-star"></div><div class="sb-star"></div><div class="sb-star"></div></div>
+    <div id="sentence">
+      <span class="sb-plank wplank" id="preW"></span>
+      <span class="sb-slot" id="slot"></span>
+      <span class="sb-plank wplank" id="postW"></span>
+    </div>
+    <div id="opts"></div>
+    <div id="g2msg"></div>
+  </div>
+</div>
+<script src="sb.js?v=2"></script>
+<script>
+SB.teacher('full');
+(function(){
+"use strict";
+var ROUNDS=[
+ {pre:'نرى',post:'في الليل',ans:'القمر',opts:['القمر','السيارة','الكتاب'],audio:'../assets/w-qamar-XEKXXEXQ.mp3'},
+ {pre:'آكل',post:'في الفطار',ans:'التفاحة',opts:['التفاحة','الكرة','البيت'],audio:'../assets/w-tuffaha-GZEF6Y6Z.mp3'},
+ {pre:'أقرأ',post:'كل يوم',ans:'الكتاب',opts:['الكتاب','القلم','الشجرة'],audio:'../assets/w-kitab-AFSSQR7N.mp3'}
+];
+var preW=document.getElementById('preW'),postW=document.getElementById('postW'),
+    slot=document.getElementById('slot'),optsEl=document.getElementById('opts'),
+    msg=document.getElementById('g2msg'),stars=document.querySelectorAll('#rounds .sb-star');
+var round=0,drag=null,dx=0,dy=0;
+function build(){
+  var R=ROUNDS[round];
+  preW.textContent=R.pre;postW.textContent=R.post;
+  slot.textContent='';slot.classList.remove('filled');
+  msg.textContent='';optsEl.innerHTML='';
+  R.opts.forEach(function(t){
+    var el=document.createElement('div');
+    el.className='sb-plank opt';el.textContent=t;el.dataset.w=t;
+    optsEl.appendChild(el);
+  });
+}
+optsEl.addEventListener('pointerdown',function(e){
+  var el=e.target.closest('.opt');if(!el)return;
+  drag=el;el.classList.add('drag');
+  var r=el.getBoundingClientRect();
+  dx=e.clientX-r.left;dy=e.clientY-r.top;
+  el.style.position='fixed';
+  el.style.left=(e.clientX-dx)+'px';el.style.top=(e.clientY-dy)+'px';
+  el.setPointerCapture&&el.setPointerCapture(e.pointerId);
+});
+window.addEventListener('pointermove',function(e){
+  if(!drag)return;
+  drag.style.left=(e.clientX-dx)+'px';drag.style.top=(e.clientY-dy)+'px';
+});
+window.addEventListener('pointerup',function(e){
+  if(!drag)return;
+  var el=drag;drag=null;el.classList.remove('drag');
+  var sr=slot.getBoundingClientRect();
+  if(e.clientX>sr.left-24&&e.clientX<sr.right+24&&e.clientY>sr.top-24&&e.clientY<sr.bottom+24){
+    if(el.dataset.w===ROUNDS[round].ans){
+      el.remove();
+      slot.textContent=ROUNDS[round].ans;slot.classList.add('filled');
+      stars[round].classList.add('on');
+      msg.textContent='صح! لوح جديد في الجسر';
+      var au=ROUNDS[round].audio;
+      if(au){try{new Audio(au).play().catch(function(){});}catch(e2){}}
+      round++;
+      if(round>=ROUNDS.length){
+        setTimeout(function(){SB.levelUp({stars:3,text:'كملتي الجسر كله',next:'g3.html'});},1100);
+      }else setTimeout(build,1100);
+    }else{
+      el.classList.add('wrong');msg.textContent='جربي تاني';
+      setTimeout(function(){el.classList.remove('wrong');home(el);},450);
+    }
+  }else home(el);
+});
+function home(el){el.style.position='';el.style.left='';el.style.top='';}
+build();
+})();
+</script>
+</body>
+</html>
