@@ -165,6 +165,17 @@ var css=''
 +'.tb-st-row{display:flex;justify-content:space-between;gap:8px;padding:5px 0;border-top:1px dashed #f0d9e2;font-size:14px;color:#9e4f62}'
 +'body.hb-bg-boy .tb-st-row{color:#7e4150;border-top-color:#f0ded6}'
 +'.tb-st-row span:last-child{color:#a98b7f;white-space:nowrap}'
++'.tb-chips{display:flex;gap:8px;margin:2px 0 14px}'
++'.tb-chip{flex:1;background:#fff;border:2px solid #eed3cd;border-radius:14px;padding:8px 6px;text-align:center;box-shadow:0 4px 12px #7e415012}'
++'.tb-chip b{display:block;font-size:19px;color:#7e4150;font-family:Naskh,"Noto Naskh Arabic",serif}'
++'.tb-chip span{font-size:11px;color:#a98b7f;font-weight:700}'
++'.tb-seg{display:flex;gap:6px;background:#f3e4de;border-radius:999px;padding:4px;margin:0 0 12px}'
++'.tb-seg button{flex:1;border:none;background:transparent;border-radius:999px;padding:8px 4px;font-weight:700;font-size:14px;color:#7e4150;cursor:pointer;font-family:inherit;min-height:40px}'
++'.tb-seg button.on{background:#fff;box-shadow:0 2px 8px #7e415022}'
++'.tb-role{font-size:10.5px;font-weight:800;padding:3px 9px;border-radius:999px;letter-spacing:.4px}'
++'.tb-role.t{background:#f6ead3;color:#8a6a1c}'
++'.tb-role.s{background:#e3efec;color:#3d7366}'
++'.tb-st-rowtop{display:flex;align-items:center;justify-content:space-between;gap:8px}'
 +'.tb-st-none{font-size:13.5px;color:#a98b7f}'
 +'body{padding-bottom:76px}';
 
@@ -401,6 +412,13 @@ function openAccount(){
 }
 
 /* ---------- my students overlay (teacher; never redirects) ---------- */
+function fmtWhen(ts,en){var t=new Date(ts),now=new Date();
+  var d0=new Date(now.getFullYear(),now.getMonth(),now.getDate()),d1=new Date(t.getFullYear(),t.getMonth(),t.getDate());
+  var diff=Math.round((d0-d1)/86400000);
+  if(diff<=0)return en?'today':'اليوم';
+  if(diff===1)return en?'yesterday':'أمس';
+  if(diff<7)return en?(diff+' days ago'):('منذ '+arNum(diff)+' أيام');
+  return t.toLocaleDateString(en?'en-GB':'ar-EG',{day:'numeric',month:'long'});}
 function openStudents(){
   var en=isEn();
   var old4=d.querySelector('.tb-st');if(old4)old4.remove();
@@ -417,33 +435,80 @@ function openStudents(){
   LN.init().then(function(){
     var isT=(LN.profile&&LN.profile.role==='teacher')||role()==='teacher';
     if(!isT){body.innerHTML='<div class="tb-st-msg">'+(en?'For teachers only':'للمعلمة فقط')+'</div>';return;}
-    return (LN.listStudentsProgress?LN.listStudentsProgress():Promise.resolve([])).then(function(ss){
-      ss=ss||[];
-      if(!ss.length){
-        body.innerHTML='<div class="tb-st-msg">'+(en?'You have no students yet':'ليس لديك طلاب بعد')+'<br>'+(en?'Share your teacher code with your students and they will appear here.':'شاركي كود المعلمة مع طالباتك ليظهرن هنا.')+'</div>'+codeBlock(en);
-        wireCode(body,en);
-        return;
-      }
-      body.innerHTML='';
-      ss.forEach(function(st){
-        var rows=(st.progress||[]).filter(function(r){return r.game&&r.game.indexOf('lc:')===0;});
-        rows.sort(function(a,b){return String(b.updated_at||'').localeCompare(String(a.updated_at||''));});
-        var h='<div class="tb-st-name">'+IC.account+'<span></span></div>'
-          +'<div class="tb-st-sub">'+(en?'Joined':'انضمت')+' '+(st.created_at?new Date(st.created_at).toLocaleDateString(en?'en-GB':'ar-EG',{day:'numeric',month:'long'}):'')+'</div>';
-        if(!rows.length)h+='<div class="tb-st-none">'+(en?'No games yet':'لم تلعب بعد')+'</div>';
-        rows.forEach(function(r){
-          var key=r.game.slice(3),g=(LN.GAME_TITLES||{})[key]||[key,key];
-          var n=(r.data&&r.data.plays)||1;
-          var last=r.data&&r.data.last?new Date(r.data.last):(r.updated_at?new Date(r.updated_at):null);
-          var plays=en?('×'+n):(n===2?'مرتين':arNum(n)+' '+(n===1?'مرة':'مرات'));
-          h+='<div class="tb-st-row"><span>'+esc(en?(g[1]||g[0]):g[0])+'</span><span>'+esc(plays+(last?' · '+last.toLocaleDateString(en?'en-GB':'ar-EG',{day:'numeric',month:'short'}):''))+'</span></div>';
+    return Promise.all([
+      LN.listStudentsProgress?LN.listStudentsProgress():Promise.resolve([]),
+      LN.myStudentsActivity?LN.myStudentsActivity():Promise.resolve(null),
+      LN.isAdmin?LN.isAdmin():Promise.resolve(false)
+    ]).then(function(res){
+      var ss=res[0]||[],act=res[1],adm=res[2]===true;
+      var actMap={};(act||[]).forEach(function(a){actMap[a.id]=a.last_active;});
+      function renderMine(){
+        if(!ss.length){
+          body.innerHTML='<div class="tb-st-msg">'+(en?'You have no students yet':'ليس لديك طلاب بعد')+'<br>'+(en?'Share your teacher code with your students and they will appear here.':'شاركي كود المعلمة مع طالباتك ليظهرن هنا.')+'</div>'+codeBlock(en);
+          wireCode(body,en);
+          return;
+        }
+        var h='';
+        if(act){
+          var week=Date.now()-7*86400000,actN=0;
+          ss.forEach(function(st){var la=actMap[st.id];if(la&&new Date(la).getTime()>week)actN++;});
+          h+='<div class="tb-chips"><div class="tb-chip"><b>'+ss.length+'</b><span>'+(en?'STUDENTS':'طالبات')+'</span></div>'
+            +'<div class="tb-chip"><b>'+actN+'</b><span>'+(en?'ACTIVE THIS WEEK':'نشيطات هذا الأسبوع')+'</span></div></div>';
+        }
+        body.innerHTML=h;
+        ss.forEach(function(st){
+          var rows=(st.progress||[]).filter(function(r){return r.game&&r.game.indexOf('lc:')===0;});
+          rows.sort(function(a,b){return String(b.updated_at||'').localeCompare(String(a.updated_at||''));});
+          var la=actMap[st.id];
+          var h2='<div class="tb-st-name">'+IC.account+'<span></span></div>'
+            +'<div class="tb-st-sub">'+(en?'Joined':'انضمت')+' '+(st.created_at?new Date(st.created_at).toLocaleDateString(en?'en-GB':'ar-EG',{day:'numeric',month:'long'}):'')
+            +(la?(' · '+(en?'Last active':'آخر نشاط')+' '+fmtWhen(la,en)):'')+'</div>';
+          if(!rows.length)h2+='<div class="tb-st-none">'+(en?'No games yet':'لم تلعب بعد')+'</div>';
+          rows.forEach(function(r){
+            var key=r.game.slice(3),g=(LN.GAME_TITLES||{})[key]||[key,key];
+            var n=(r.data&&r.data.plays)||1;
+            var last=r.data&&r.data.last?new Date(r.data.last):(r.updated_at?new Date(r.updated_at):null);
+            var plays=en?('×'+n):(n===2?'مرتين':arNum(n)+' '+(n===1?'مرة':'مرات'));
+            h2+='<div class="tb-st-row"><span>'+esc(en?(g[1]||g[0]):g[0])+'</span><span>'+esc(plays+(last?' · '+last.toLocaleDateString(en?'en-GB':'ar-EG',{day:'numeric',month:'short'}):''))+'</span></div>';
+          });
+          var card=d.createElement('div');card.className='tb-st-card';card.innerHTML=h2;
+          card.querySelector('.tb-st-name span').textContent=st.display_name||(en?'Student':'طالبة');
+          body.appendChild(card);
         });
-        var card=d.createElement('div');card.className='tb-st-card';card.innerHTML=h;
-        card.querySelector('.tb-st-name span').textContent=st.display_name||(en?'Student':'طالبة');
-        body.appendChild(card);
-      });
+      }
+      function renderAll(){
+        body.innerHTML='<div class="tb-st-msg">…</div>';
+        LN.adminWhoJoined().then(function(rows2){
+          rows2=rows2||[];
+          var tN=rows2.filter(function(r){return r.role==='teacher';}).length;
+          var h='<div class="tb-chips"><div class="tb-chip"><b>'+rows2.length+'</b><span>'+(en?'ACCOUNTS':'حساب')+'</span></div>'
+            +'<div class="tb-chip"><b>'+tN+'</b><span>'+(en?'TEACHERS':'معلمات')+'</span></div>'
+            +'<div class="tb-chip"><b>'+(rows2.length-tN)+'</b><span>'+(en?'STUDENTS':'طالبات')+'</span></div></div>';
+          rows2.forEach(function(r){
+            var isTr=r.role==='teacher';
+            h+='<div class="tb-st-card"><div class="tb-st-rowtop"><div class="tb-st-name">'+IC.account+'<span>'+esc(r.display_name||'—')+'</span></div>'
+              +'<span class="tb-role '+(isTr?'t':'s')+'">'+(isTr?(en?'TEACHER':'معلمة'):(en?'STUDENT':'طالبة'))+'</span></div>'
+              +'<div class="tb-st-sub">'+(en?'Joined':'انضمت')+' '+(r.created_at?new Date(r.created_at).toLocaleDateString(en?'en-GB':'ar-EG',{day:'numeric',month:'long',year:'numeric'}):'')
+              +(r.last_sign_in_at?(' · '+(en?'Last active':'آخر نشاط')+' '+fmtWhen(r.last_sign_in_at,en)):'')+'</div></div>';
+          });
+          body.innerHTML=h;
+        }).catch(function(e){console.warn(e);body.innerHTML='<div class="tb-st-msg">'+(en?'Could not load the list':'تعذر تحميل القائمة')+'</div>';});
+      }
+      if(adm){
+        var seg=d.createElement('div');seg.className='tb-seg';
+        seg.innerHTML='<button type="button" class="on" data-v="mine">'+(en?'My students':'طلابي')+'</button>'
+          +'<button type="button" data-v="all">'+(en?'All accounts':'كل الحسابات')+'</button>';
+        body.parentNode.insertBefore(seg,body);
+        seg.addEventListener('click',function(e){
+          var b=e.target.closest('button');if(!b)return;
+          var bs=seg.querySelectorAll('button');
+          for(var i=0;i<bs.length;i++)bs[i].classList.toggle('on',bs[i]===b);
+          if(b.getAttribute('data-v')==='all')renderAll();else renderMine();
+        });
+      }
+      renderMine();
     });
-  }).catch(function(){});
+  }).catch(function(e){console.warn(e);});
 }
 
 /* ---------- tab bar ---------- */

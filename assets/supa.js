@@ -253,11 +253,22 @@ window.LN=(()=>{
     try{const {data}=await sb.from('shared_boards').select('state').eq('id',id).maybeSingle();
       return data?data.state:null;}catch(e){return null;}}
 
+  async function isAdmin(){ /* true only for the site owner; false before the SQL exists */
+    await init();if(!user)return false;
+    try{const {data,error}=await sb.rpc('is_admin');return !error&&data===true;}catch(e){console.warn(e);return false;}}
+  async function adminWhoJoined(){ /* admin: every account + last sign-in */
+    await init();const {data,error}=await sb.rpc('admin_who_joined');
+    if(error)throw error;return data||[];}
+  async function myStudentsActivity(){ /* teacher: her students + last progress time; null when unavailable */
+    await init();if(!user)return null;
+    try{const {data,error}=await sb.rpc('my_students_activity');return error?null:(data||[]);}catch(e){console.warn(e);return null;}}
+
   return {init,configured,renderAuth,
     signUpTeacher,signUpStudent,signIn,signOut,
     saveBoard,saveBoardNow,loadBoard,shareBoard,loadShared,
     uploadBook,listBooks,downloadBook,deleteBook,
     saveProgress,loadProgress,listStudents,listStudentsProgress,myTeacher,GAME_TITLES,
+    isAdmin,adminWhoJoined,myStudentsActivity,
     liveStart,livePush,liveJoin,liveStop,liveLeave,
     get user(){return user;},get profile(){return profile;},
     teacherCode(){return user?user.id:null;}};})();
