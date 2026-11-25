@@ -306,7 +306,7 @@ function render(){
       h+='<button type="button" class="ak-card" data-ak="open" data-id="'+it.id+'">'
         +'<img class="ak-card-img" src="'+imgFor(it)+'" alt="" loading="lazy" onerror="this.style.display=\'none\'">'
         +'<span class="ak-card-row"><span class="ak-card-t"><b>'+(en?esc(it.titleEn):esc(it.titleAr))+'</b>'
-        +'<small>'+(en?esc(it.titleAr):esc(it.titleEn))+'</small></span>'
+        +(en?'<small>'+esc(it.titleAr)+'</small>':'')+'</span>'
         +'<span class="ak-go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="'+(en?'M9 6l6 6-6 6':'M15 6l-6 6 6 6')+'"/></svg></span>'
         +'</span></button>';
     });
@@ -316,7 +316,7 @@ function render(){
       +'<div class="ak-arbox"><p class="ak-ar" lang="ar" dir="rtl">'+esc(cur.ar)+'</p><p class="ak-ref">'+esc(cur.ref)+'</p></div>'
       +'<button type="button" class="ak-listen" data-ak="listen"></button>'
       +'<div class="ak-box"><h3 class="ak-box-h">'+(en?'What it means':'مَاذَا يَعْنِي؟')+'</h3><p class="ak-box-p">'+esc(en?cur.meaningEn:cur.meaningAr)+'</p></div>'
-      +'<div class="ak-box"><h3 class="ak-box-h ak-rose">'+(en?'Pronunciation':'النُّطْق')+'</h3><p class="ak-box-p" dir="ltr">'+esc(cur.translit)+'</p></div>';
+      +(en?'<div class="ak-box"><h3 class="ak-box-h ak-rose">Pronunciation</h3><p class="ak-box-p" dir="ltr">'+esc(cur.translit)+'</p></div>':'');
   }
   ov.innerHTML='<div class="ak-wrap">'+h+'</div>';
   if(view==='detail')paintListen(ov.querySelector('[data-ak=listen]'),false);
