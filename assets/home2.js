@@ -9,6 +9,7 @@
 (function(){
 var d=document;
 var onBoard=location.pathname.indexOf('/board/')>-1;
+if(onBoard)d.documentElement.classList.add('ln-onboard');
 var AB=onBoard?'../assets/':'assets/'; /* asset base */
 
 function lang(){try{var v=localStorage.getItem('letters-city:lang.v1');return (v===null?'en':JSON.parse(v))==='en'?'en':'ar';}catch(e){return 'en';}}
@@ -143,6 +144,7 @@ var css=''
 +'.ln-homebtn svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}'
 +'@media(min-width:480px){.ln-homebtn{width:auto;padding:0 12px}.ln-homebtn b{display:inline}}'
 +'body:has(.lc-backbtn) .ln-homebtn,body:has(.ak-back) .ln-homebtn{display:none!important}'
++'html.ln-onboard .ln-homebtn{display:none!important}'
 +'.tb-st{position:fixed;inset:0;z-index:65;overflow:auto;-webkit-overflow-scrolling:touch;padding:14px 14px 100px;box-sizing:border-box}'
 +'.tb-st-bg{position:fixed;inset:0;z-index:-1;pointer-events:none;background-color:#faf5f0;background-image:url('+AB+TILES.girl[0]+'.svg),url('+AB+TILES.girl[1]+'.svg);background-repeat:repeat,no-repeat;background-size:96px 96px,340px auto;background-position:0 0,center 118px}'
 +'body.hb-bg-boy .tb-st-bg{background-color:#faf5f0;background-image:url('+AB+TILES.boy[0]+'.svg),url('+AB+TILES.boy[1]+'.svg)}'
