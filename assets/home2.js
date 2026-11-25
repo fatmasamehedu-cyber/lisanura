@@ -188,6 +188,7 @@ function loadPool(){
 }
 
 /* ---------- progress (real, from progress.js recorder) ---------- */
+function stripT(t){return String(t).replace(/[\u064B-\u065F\u0670]/g,'');}
 function lastPlayed(){
   try{
     var u=window.LN&&LN.user&&LN.user.id;if(!u)return null;
@@ -244,23 +245,23 @@ function buildOv(){
     +'<img class="hn-teach" src="'+AB+'teacher-full-6VQNEAGQ.png" alt=""></div>';
   /* continue card */
   var lp=lastPlayed();
-  h+='<div class="hn-cont"><p class="hn-cont-t">'+(en?'Continue where you left off':(gender()==='boy'?'أَكْمِلْ مِنْ حَيْثُ وَقَفْتَ':'أَكْمِلِي مِنْ حَيْثُ وَقَفْتِ'))+'</p>';
+  h+='<div class="hn-cont"><p class="hn-cont-t">'+(en?'Continue where you left off':(gender()==='boy'?'اكمل من حيث وقفت':'اكملي من حيث وقفتي'))+'</p>';
   if(lp){
-    h+='<p class="hn-cont-l">'+esc(lp.title)+(lp.plays>1?' · '+(en?lp.plays+' plays':lp.plays+' مَرَّاتٍ'):'')+'</p>';
+    h+='<p class="hn-cont-l">'+esc(stripT(lp.title))+(lp.plays>1?' · '+(en?lp.plays+' مرات':lp.plays+' مَرَّاتٍ'):'')+'</p>';
     if(lp.key==='letters'){var f=lettersFraction();if(f>0)h+='<div class="hn-cont-bar"><div class="hn-cont-f" style="width:'+Math.round(f*100)+'%"></div></div>';}
   }else{
     h+='<p class="hn-cont-l">'+(en?'Start your first lesson from the lessons tab.':'اِبْدَئِي أَوَّلَ دَرْسٍ مِنْ تَبْوِيبِ الدُّرُوسِ.')+'</p>';
   }
-  h+='<button type="button" class="hn-cont-btn" data-hn="cont">'+(en?'Continue':'تَابِعِي')+'</button></div>';
+  h+='<button type="button" class="hn-cont-btn" data-hn="cont">'+(en?'Continue':'تابعي')+'</button></div>';
   /* dhikr card (filled by loadPool) */
-  h+='<div class="hn-card hn-card-click" data-hn="adhkar"><p class="hn-label">'+(en?'Dhikr of the day':'ذِكْرُ الْيَوْمِ')+'</p><div class="hn-dhikr-slot"></div></div>';
+  h+='<div class="hn-card hn-card-click" data-hn="adhkar"><p class="hn-label">'+(en?'Dhikr of the day':'ذكر اليوم')+'</p><div class="hn-dhikr-slot"></div></div>';
   /* game card */
   var GAMES=['letters','words','gender','prep','reading','noon','ghunna','shadda','meem','noonv'];
   var gk=GAMES[dayIdx(GAMES.length)];
   var gt=(window.LN&&LN.GAME_TITLES||{})[gk];
-  h+='<div class="hn-card"><p class="hn-label">'+(en?'Game of the day':'لُعْبَةُ الْيَوْمِ')+'</p>'
+  h+='<div class="hn-card"><p class="hn-label">'+(en?'Game of the day':'لعبة اليوم')+'</p>'
     +'<p class="hn-game-t">'+esc(gt?(en?gt[1]:gt[0]):gk)+'</p>'
-    +'<button type="button" class="hn-play" data-hn="play" data-g="'+gk+'">'+PLAY_SVG.replace('<svg','<svg style="width:15px;height:15px;fill:currentColor"')+'<span>'+(en?'Play':'اِلْعَبِي')+'</span></button></div>';
+    +'<button type="button" class="hn-play" data-hn="play" data-g="'+gk+'">'+PLAY_SVG.replace('<svg','<svg style="width:15px;height:15px;fill:currentColor"')+'<span>'+(en?'Play':(gender()==='boy'?'العب':'العبي'))+'</span></button></div>';
   h+='</div>';
   ov.innerHTML+= '<button type="button" class="hn-gear" data-hn="gear" aria-label="'+(en?'Settings':'الإعدادات')+'"><i></i></button>';
   var wrap=d.createElement('div');wrap.innerHTML=h;while(wrap.firstChild)ov.appendChild(wrap.firstChild);
@@ -285,15 +286,15 @@ function fillDhikr(){
     var it=j[dayIdx(j.length)];
     var h='<p class="hn-dhikr" dir="rtl">'+esc(it.text)+'</p>';
     if(it.condition)h+='<p class="hn-cond" dir="rtl">'+esc(it.condition)+'</p>';
-    h+='<button type="button" class="hn-listen" data-hn-listen="1">'+PLAY_SVG+'<span>'+(isEn()?'Listen':'اِسْتِمَاع')+'</span></button>';
+    h+='<button type="button" class="hn-listen" data-hn-listen="1">'+PLAY_SVG+'<span>'+(isEn()?'Listen':'استماع')+'</span></button>';
     if(it.virtue)h+='<p class="hn-virtue" dir="rtl">'+esc(it.virtue)+'</p>';
     if(it.source)h+='<p class="hn-src" dir="rtl">'+esc(it.source)+'</p>';
     slot.innerHTML=h;
     var btn=slot.querySelector('[data-hn-listen]');
     btn.onclick=function(){
-      if(aud){stopAudio();btn.innerHTML=PLAY_SVG+'<span>'+(isEn()?'Listen':'اِسْتِمَاع')+'</span>';return;}
+      if(aud){stopAudio();btn.innerHTML=PLAY_SVG+'<span>'+(isEn()?'Listen':'استماع')+'</span>';return;}
       aud=new Audio(AB+it.audio);
-      aud.onended=function(){stopAudio();btn.innerHTML=PLAY_SVG+'<span>'+(isEn()?'Listen':'اِسْتِمَاع')+'</span>';};
+      aud.onended=function(){stopAudio();btn.innerHTML=PLAY_SVG+'<span>'+(isEn()?'Listen':'استماع')+'</span>';};
       aud.onerror=aud.onended;
       var pr=aud.play();if(pr&&pr.then)pr.catch(function(){});
       btn.innerHTML=STOP_SVG+'<span>'+(isEn()?'Stop':'إِيقَاف')+'</span>';
