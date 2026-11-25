@@ -241,8 +241,8 @@ var css=''
 /* ---------- overlay ---------- */
 var ov=null,view='list',cur=null,aud=null;
 function stopAudio(){
-  try{if(window.speechSynthesis)speechSynthesis.cancel();}catch(e){}
-  if(aud){try{aud.pause();}catch(e){} aud=null;}
+  try{if(window.speechSynthesis)speechSynthesis.cancel();}catch(e){console.warn(e)}
+  if(aud){try{aud.pause();}catch(e){console.warn(e)} aud=null;}
 }
 function toast(m){
   var t=d.createElement('div');t.className='ak-toast';t.textContent=m;

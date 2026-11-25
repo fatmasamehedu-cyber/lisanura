@@ -22,7 +22,7 @@ window.LN=(()=>{
       await loadLib();
       sb=window.supabase.createClient(window.LN_CONFIG.url,window.LN_CONFIG.anon);
       try{const {data}=await sb.auth.getSession();
-        if(data&&data.session){user=data.session.user;await loadProfile();}}catch(e){}
+        if(data&&data.session){user=data.session.user;await loadProfile();}}catch(e){console.warn(e)}
       sb.auth.onAuthStateChange(async(ev,sess)=>{
         user=sess?sess.user:null;profile=null;
         if(user)await loadProfile();
@@ -60,9 +60,13 @@ window.LN=(()=>{
     if(!data.session)throw new Error(L('التسجيل يحتاج تأكيد بريد — أطلبي من الدعم إيقاف تأكيد البريد','Signup needs email confirmation. Ask support to turn off email confirmation'));
     user=data.session.user;await loadProfile();
     if(teacherCode&&teacherCode.trim()){
-      const {data:t}=await sb.from('profiles').select('id,display_name').eq('id',teacherCode.trim()).eq('role','teacher').maybeSingle();
+      let t=null;
+      const r=await sb.rpc('teacher_name_by_code',{code:teacherCode.trim()});
+      if(!r.error&&r.data)t=r.data[0]||null;
+      else{const q=await sb.from('profiles').select('id,display_name').eq('id',teacherCode.trim()).eq('role','teacher').maybeSingle();t=q.data;}
       if(!t)throw new Error(L('كود المعلمة غير صحيح','Teacher code is incorrect'));
-      await sb.from('profiles').update({teacher_id:t.id}).eq('id',user.id);
+      const lr=await sb.rpc('link_to_teacher',{code:t.id});
+      if(lr.error||lr.data===false){await sb.from('profiles').update({teacher_id:t.id}).eq('id',user.id);}
       await loadProfile();}
     return {user,profile};}
 
@@ -127,7 +131,7 @@ window.LN=(()=>{
   /* ---------------- student game progress ---------------- */
   async function saveProgress(game,data){
     await init();if(!user)return;
-    try{await sb.from('progress').upsert({student_id:user.id,game,data,updated_at:new Date().toISOString()});}catch(e){}}
+    try{await sb.from('progress').upsert({student_id:user.id,game,data,updated_at:new Date().toISOString()});}catch(e){console.warn(e)}}
   async function loadProgress(game){
     await init();if(!user)return null;
     try{let q=sb.from('progress').select('*').eq('student_id',user.id);
@@ -172,7 +176,7 @@ window.LN=(()=>{
   async function liveJoin(teacherId,onState,onStatus){
     await init();
     try{const {data:room}=await sb.from('live_rooms').select('live').eq('teacher_id',teacherId).maybeSingle();
-      if(!room||!room.live){onStatus&&onStatus('offline');return false;}}catch(e){}
+      if(!room||!room.live){onStatus&&onStatus('offline');return false;}}catch(e){console.warn(e)}
     liveJoinChan=sb.channel('live:'+teacherId);
     liveJoinChan.on('broadcast',{event:'state'},m=>onState&&onState(m.payload&&m.payload.data));
     await new Promise(res=>liveJoinChan.subscribe(st=>{if(st==='SUBSCRIBED'){onStatus&&onStatus('live');res();}if(st==='CHANNEL_ERROR'){onStatus&&onStatus('error');res();}}));
@@ -181,7 +185,7 @@ window.LN=(()=>{
     return true;}
   async function liveStop(){
     if(liveChan){await liveChan.unsubscribe();liveChan=null;}
-    if(sb&&user)try{await sb.from('live_rooms').upsert({teacher_id:user.id,live:false,updated_at:new Date().toISOString()});}catch(e){}}
+    if(sb&&user)try{await sb.from('live_rooms').upsert({teacher_id:user.id,live:false,updated_at:new Date().toISOString()});}catch(e){console.warn(e)}}
   function liveLeave(){if(liveJoinChan){liveJoinChan.unsubscribe();liveJoinChan=null;}}
 
   /* ---------------- auth UI (Arabic, lisanura style) ---------------- */

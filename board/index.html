@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>سبورة لسانورا</title>
 <meta name="description" content="سبورة تفاعلية للمعلمة فاطمة سامح - أدوات الحصة والرسم والشرح">
 <meta http-equiv="Cache-Control" content="no-cache">
@@ -13,9 +13,9 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/peerjs/1.5.4/peerjs.min.js"></script>
 <script src="https://fatmasamehedu-cyber.github.io/lisanura/assets/supa-config.js?v=4"></script>
-<script src="https://fatmasamehedu-cyber.github.io/lisanura/assets/supa.js?v=8"></script>
-<script src="https://fatmasamehedu-cyber.github.io/lisanura/assets/gate.js?v=7"></script>
-<script src="https://fatmasamehedu-cyber.github.io/lisanura/assets/home2.js?v=19"></script>
+<script src="https://fatmasamehedu-cyber.github.io/lisanura/assets/supa.js?v=9"></script>
+<script src="https://fatmasamehedu-cyber.github.io/lisanura/assets/gate.js?v=8"></script>
+<script src="https://fatmasamehedu-cyber.github.io/lisanura/assets/home2.js?v=20"></script>
 <style>
 @font-face{font-family:'Naskh';src:url('https://fatmasamehedu-cyber.github.io/lisanura/fonts/NotoNaskhArabic-Regular.ttf') format('truetype');font-weight:400}
 @font-face{font-family:'Naskh';src:url('https://fatmasamehedu-cyber.github.io/lisanura/fonts/NotoNaskhArabic-Bold.ttf') format('truetype');font-weight:700}
@@ -212,26 +212,26 @@ html[dir=ltr] .widgetPanel{box-shadow:4px 0 18px rgba(0,0,0,.12)}
 <div class="mascot"><img class="wm-ar" src="../assets/logo-ar.webp?v=3" alt="لسانورا"><img class="wm-en" src="../assets/logo-en.webp?v=3" alt="LisaNura"></div>
 
 <div class="topwrap">
-<button class="tbtn gold menubtn" id="wPanelBtn" title="أدوات الحصة"><svg class="ic" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+<button class="tbtn gold menubtn" id="wPanelBtn" title="أدوات الحصة" aria-label="أدوات الحصة"><svg class="ic" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
 <div class="topbar">
-  <button class="tbtn" id="backBtn" title="الصفحة الرئيسية" style="gap:4px;padding-inline:10px"><svg class="ic" viewBox="0 0 24 24"><path d="M4 11l8-7 8 7"/><path d="M6.5 9.5V20h11V9.5"/></svg><b style="font-family:Naskh;font-size:15px">الرئيسية</b></button>
+  <button class="tbtn" id="backBtn" title="الصفحة الرئيسية" aria-label="الصفحة الرئيسية" style="gap:4px;padding-inline:10px"><svg class="ic" viewBox="0 0 24 24"><path d="M4 11l8-7 8 7"/><path d="M6.5 9.5V20h11V9.5"/></svg><b style="font-family:Naskh;font-size:15px">الرئيسية</b></button>
   <div class="title"><img src="teacher-point.png" alt=""><b>سبورة لسانورا</b></div>
   <div class="pagenav">
-    <button id="pgPrev" title="الصفحة السابقة"><svg class="ic" viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg></button>
+    <button id="pgPrev" title="الصفحة السابقة" aria-label="الصفحة السابقة"><svg class="ic" viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg></button>
     <b id="pgLabel">صفحة ١ من ١</b>
-    <button id="pgNext" title="الصفحة التالية"><svg class="ic" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></button>
-    <button id="pgAdd" title="صفحة جديدة"><svg class="ic" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></button>
-    <button id="pgDel" title="حذف الصفحة"><svg class="ic" viewBox="0 0 24 24"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></svg></button>
+    <button id="pgNext" title="الصفحة التالية" aria-label="الصفحة التالية"><svg class="ic" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></button>
+    <button id="pgAdd" title="صفحة جديدة" aria-label="صفحة جديدة"><svg class="ic" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></button>
+    <button id="pgDel" title="حذف الصفحة" aria-label="حذف الصفحة"><svg class="ic" viewBox="0 0 24 24"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></svg></button>
   </div>
   <span id="saveState" style="font-size:11px;color:#a98b7f;white-space:nowrap"></span>
-  <button class="tbtn" id="undoBtn" title="تراجع"><svg class="ic" viewBox="0 0 24 24"><path d="M9 14L4 9l5-5"/><path d="M4 9h10a6 6 0 0 1 0 12h-3"/></svg></button>
-  <button class="tbtn" id="redoBtn" title="إعادة"><svg class="ic" viewBox="0 0 24 24"><path d="M15 14l5-5-5-5"/><path d="M20 9H10a6 6 0 0 0 0 12h3"/></svg></button>
-  <button class="tbtn" id="clearBtn" title="مسح الصفحة"><svg class="ic" viewBox="0 0 24 24"><path d="M4 20l2-9 4-2 2-5 3 3-2 4-4 3-5 6z"/><path d="M14 16l6 4M17 13l3 7"/></svg></button>
-  <button class="tbtn" id="pngBtn" title="تنزيل صورة للصفحة"><svg class="ic" viewBox="0 0 24 24"><path d="M12 4v11M6 10l6 6 6-6"/><path d="M4 20h16"/></svg></button>
-  <button class="tbtn" id="pdfBtn" title="تنزيل كل الصفحات PDF"><svg class="ic" viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 8h6M9 12h6M9 16h4"/></svg></button>
-  <button class="tbtn" id="shareBtn" title="مشاركة مع الطالب برابط"><svg class="ic" viewBox="0 0 24 24"><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="6" r="2.5"/><circle cx="18" cy="18" r="2.5"/><path d="M8.2 10.8l7.5-3.6M8.2 13.2l7.5 3.6"/></svg></button>
-  <button class="tbtn" id="fsBtn" title="ملء الشاشة"><svg class="ic" viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button>
-  <button class="tbtn" id="acctBtn" title="حسابي"><svg class="ic" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 5-6 8-6s6.5 2 8 6"/></svg></button>
+  <button class="tbtn" id="undoBtn" title="تراجع" aria-label="تراجع"><svg class="ic" viewBox="0 0 24 24"><path d="M9 14L4 9l5-5"/><path d="M4 9h10a6 6 0 0 1 0 12h-3"/></svg></button>
+  <button class="tbtn" id="redoBtn" title="إعادة" aria-label="إعادة"><svg class="ic" viewBox="0 0 24 24"><path d="M15 14l5-5-5-5"/><path d="M20 9H10a6 6 0 0 0 0 12h3"/></svg></button>
+  <button class="tbtn" id="clearBtn" title="مسح الصفحة" aria-label="مسح الصفحة"><svg class="ic" viewBox="0 0 24 24"><path d="M4 20l2-9 4-2 2-5 3 3-2 4-4 3-5 6z"/><path d="M14 16l6 4M17 13l3 7"/></svg></button>
+  <button class="tbtn" id="pngBtn" title="تنزيل صورة للصفحة" aria-label="تنزيل صورة للصفحة"><svg class="ic" viewBox="0 0 24 24"><path d="M12 4v11M6 10l6 6 6-6"/><path d="M4 20h16"/></svg></button>
+  <button class="tbtn" id="pdfBtn" title="تنزيل كل الصفحات PDF" aria-label="تنزيل كل الصفحات PDF"><svg class="ic" viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 8h6M9 12h6M9 16h4"/></svg></button>
+  <button class="tbtn" id="shareBtn" title="مشاركة مع الطالب برابط" aria-label="مشاركة مع الطالب برابط"><svg class="ic" viewBox="0 0 24 24"><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="6" r="2.5"/><circle cx="18" cy="18" r="2.5"/><path d="M8.2 10.8l7.5-3.6M8.2 13.2l7.5 3.6"/></svg></button>
+  <button class="tbtn" id="fsBtn" title="ملء الشاشة" aria-label="ملء الشاشة"><svg class="ic" viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button>
+  <button class="tbtn" id="acctBtn" title="حسابي" aria-label="حسابي"><svg class="ic" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 5-6 8-6s6.5 2 8 6"/></svg></button>
 </div>
 </div>
 
@@ -256,7 +256,7 @@ html[dir=ltr] .widgetPanel{box-shadow:4px 0 18px rgba(0,0,0,.12)}
   <button data-tool="books" id="booksBtn"><svg class="ic" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V2H6.5A2.5 2.5 0 0 0 4 4.5v15z"/><path d="M4 19.5A2.5 2.5 0 0 0 6.5 22H20v-5"/></svg><span>كتبي</span></button>
 </div>
 
-<div class="pop" id="shapesPop" style="left:50%;top:16vh;transform:translateX(-50%)"><div style="display:flex;justify-content:flex-end;margin:-2px -2px 2px"><button class="popX" type="button" title="قفل">✕</button></div>
+<div class="pop" id="shapesPop" style="left:50%;top:16vh;transform:translateX(-50%)"><div style="display:flex;justify-content:flex-end;margin:-2px -2px 2px"><button class="popX" type="button" title="قفل" aria-label="قفل">✕</button></div>
   <button class="popt" data-shape="line"><svg class="ic" viewBox="0 0 24 24" style="width:18px;height:18px"><path d="M4 18L20 6"/></svg> خط</button>
   <button class="popt" data-shape="arrow"><svg class="ic" viewBox="0 0 24 24" style="width:18px;height:18px"><path d="M4 18L20 6M14 6h6v6"/></svg> سهم</button>
   <button class="popt" data-shape="rect"><svg class="ic" viewBox="0 0 24 24" style="width:18px;height:18px"><rect x="4" y="6" width="16" height="12" rx="1"/></svg> مستطيل</button>
@@ -264,14 +264,14 @@ html[dir=ltr] .widgetPanel{box-shadow:4px 0 18px rgba(0,0,0,.12)}
   <button class="popt" data-shape="triangle"><svg class="ic" viewBox="0 0 24 24" style="width:18px;height:18px"><path d="M12 5l8 14H4z"/></svg> مثلث</button>
   <button class="popt" data-shape="star"><svg class="ic" viewBox="0 0 24 24" style="width:18px;height:18px"><path d="M12 3l2.6 5.6 6 .7-4.5 4.1 1.2 5.9-5.3-3-5.3 3 1.2-5.9L3 9.3l6-.7L12 3z"/></svg> نجمة</button>
 </div>
-<div class="pop" id="bgPop" style="left:50%;top:12vh;transform:translateX(-50%);min-width:230px"><div style="display:flex;justify-content:flex-end;margin:-2px -2px 2px"><button class="popX" type="button" title="قفل">✕</button></div><div class="bgGrid" id="bgGrid"></div></div>
-<div class="pop" id="stickerPop" style="left:50%;top:16vh;transform:translateX(-50%);min-width:240px"><div style="display:flex;justify-content:flex-end;margin:-2px -2px 2px"><button class="popX" type="button" title="قفل">✕</button></div><div class="stickerGrid" id="stickerGrid"></div></div>
-<div class="pop" id="stampPop" style="left:50%;top:16vh;transform:translateX(-50%)"><div style="display:flex;justify-content:flex-end;margin:-2px -2px 2px"><button class="popX" type="button" title="قفل">✕</button></div><div class="stampList" id="stampList"></div></div>
-<div class="pop" id="magnetPop" style="left:50%;top:14vh;transform:translateX(-50%);min-width:0;width:min(300px,calc(100vw - 32px))"><div style="display:flex;justify-content:flex-end;margin:-2px -2px 2px"><button class="popX" type="button" title="قفل">✕</button></div>
+<div class="pop" id="bgPop" style="left:50%;top:12vh;transform:translateX(-50%);min-width:230px"><div style="display:flex;justify-content:flex-end;margin:-2px -2px 2px"><button class="popX" type="button" title="قفل" aria-label="قفل">✕</button></div><div class="bgGrid" id="bgGrid"></div></div>
+<div class="pop" id="stickerPop" style="left:50%;top:16vh;transform:translateX(-50%);min-width:240px"><div style="display:flex;justify-content:flex-end;margin:-2px -2px 2px"><button class="popX" type="button" title="قفل" aria-label="قفل">✕</button></div><div class="stickerGrid" id="stickerGrid"></div></div>
+<div class="pop" id="stampPop" style="left:50%;top:16vh;transform:translateX(-50%)"><div style="display:flex;justify-content:flex-end;margin:-2px -2px 2px"><button class="popX" type="button" title="قفل" aria-label="قفل">✕</button></div><div class="stampList" id="stampList"></div></div>
+<div class="pop" id="magnetPop" style="left:50%;top:14vh;transform:translateX(-50%);min-width:0;width:min(300px,calc(100vw - 32px))"><div style="display:flex;justify-content:flex-end;margin:-2px -2px 2px"><button class="popX" type="button" title="قفل" aria-label="قفل">✕</button></div>
   <div class="stickerGrid" id="magnetGrid" style="grid-template-columns:repeat(auto-fill,minmax(36px,1fr));width:100%"></div>
   <div style="display:flex;gap:6px;align-items:stretch;width:100%">
     <div id="magTray" style="flex:1"></div>
-    <button id="magBack" title="حذف آخر حرف" style="min-width:44px;border-radius:10px;border:2px solid var(--line);background:#fff;color:var(--rose-d);display:flex;align-items:center;justify-content:center"><svg class="ic" viewBox="0 0 24 24" style="width:18px;height:18px"><path d="M9 5h11v14H9l-6-7 6-7z"/><path d="M12 10l5 5M17 10l-5 5"/></svg></button>
+    <button id="magBack" title="حذف آخر حرف" aria-label="حذف آخر حرف" style="min-width:44px;border-radius:10px;border:2px solid var(--line);background:#fff;color:var(--rose-d);display:flex;align-items:center;justify-content:center"><svg class="ic" viewBox="0 0 24 24" style="width:18px;height:18px"><path d="M9 5h11v14H9l-6-7 6-7z"/><path d="M12 10l5 5M17 10l-5 5"/></svg></button>
   </div>
   <button id="magAdd" class="abtn">أضيفي الكلمة للسبورة</button>
   <button id="magClear" class="abtn ghost">مسح</button>
@@ -286,7 +286,7 @@ html[dir=ltr] .widgetPanel{box-shadow:4px 0 18px rgba(0,0,0,.12)}
 <div class="widgetPanel" id="wPanel">
   <div style="display:flex;align-items:center;justify-content:space-between;gap:6px;margin-bottom:4px">
     <h3 style="margin:0;flex:1;text-align:center">أدوات الحصة</h3>
-    <button id="wPanelX" title="قفل" style="width:32px;height:32px;min-width:32px;border-radius:10px;border:2px solid var(--line);background:#fff;color:var(--rose-d);display:flex;align-items:center;justify-content:center"><svg class="ic" viewBox="0 0 24 24" style="width:16px;height:16px"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+    <button id="wPanelX" title="قفل" aria-label="قفل" style="width:32px;height:32px;min-width:32px;border-radius:10px;border:2px solid var(--line);background:#fff;color:var(--rose-d);display:flex;align-items:center;justify-content:center"><svg class="ic" viewBox="0 0 24 24" style="width:16px;height:16px"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
   </div>
   <button class="witem" data-w="timer"><svg class="ic" viewBox="0 0 24 24"><path d="M6 3h12M6 21h12M8 3v4l4 4 4-4V3M8 21v-4l4-4 4 4v4"/></svg> مؤقت</button>
   <button class="witem" data-w="stopwatch"><svg class="ic" viewBox="0 0 24 24"><circle cx="12" cy="13" r="7"/><path d="M12 10v3l2 2M10 3h4M12 3v3"/></svg> ساعة إيقاف</button>
@@ -303,7 +303,7 @@ html[dir=ltr] .widgetPanel{box-shadow:4px 0 18px rgba(0,0,0,.12)}
 </div>
 
 <div id="textEntry">
-  <div id="textGrip"><select id="textFont"><option value="Naskh">نسخ</option><option value="SansAr">سانس</option><option value="Amiri Quran">أميري</option></select><button id="textBold" class="on" type="button">عريض</button><button id="textX" type="button" title="قفل">✕</button></div>
+  <div id="textGrip"><select id="textFont"><option value="Naskh">نسخ</option><option value="SansAr">سانس</option><option value="Amiri Quran">أميري</option></select><button id="textBold" class="on" type="button">عريض</button><button id="textX" type="button" title="قفل" aria-label="قفل">✕</button></div>
   <textarea id="textArea" rows="1"></textarea>
 </div>
 
@@ -560,10 +560,10 @@ function translateDOM(root,toEn){
     ['title','placeholder'].forEach(a=>{const v=el.getAttribute(a);if(v&&map[v]!==undefined)el.setAttribute(a,map[v]);});
     const dl=el.getAttribute('data-l');if(dl&&map[dl]!==undefined)el.setAttribute('data-l',map[dl]);
     if(el.tagName==='INPUT'&&el.value&&map[el.value]!==undefined)el.value=map[el.value];});}
-function siteLang(){try{const v=localStorage.getItem('letters-city:lang.v1');if(v){const p=JSON.parse(v);if(p==='ar'||p==='en')return p;}}catch(e){}return null;}
+function siteLang(){try{const v=localStorage.getItem('letters-city:lang.v1');if(v){const p=JSON.parse(v);if(p==='ar'||p==='en')return p;}}catch(e){console.warn(e)}return null;}
 function applyLang(l,skipSave){
   lang=l;
-  try{localStorage.setItem('letters-city:lang.v1',JSON.stringify(l));}catch(e){}
+  try{localStorage.setItem('letters-city:lang.v1',JSON.stringify(l));}catch(e){console.warn(e)}
   document.documentElement.lang=l;
   document.documentElement.dir=l==='en'?'ltr':'rtl';
   document.title=l==='en'?'LisaNura Board':'سبورة لسانورا';
@@ -586,7 +586,7 @@ function setSaveState(s){const el=document.getElementById('saveState');if(!el)re
   if(s!==undefined){el.textContent=tt(s);return;}
   el.textContent=tt(isTeacherOnline()?'محفوظ في حسابك':'حفظ محلي على هذا الجهاز');}
 function save(){if(readOnly)return;try{const d=JSON.stringify(state,p=>(typeof p==='object'&&p&&p._img)?{...p,_img:undefined}:p);
-  if(d.length<4.5e6)localStorage.setItem(LS,d);}catch(e){}
+  if(d.length<4.5e6)localStorage.setItem(LS,d);}catch(e){console.warn(e)}
   if(window.LN&&LN.configured())try{
     LN.saveBoard(JSON.parse(JSON.stringify(state,(k,v)=>k==='_img'?undefined:v)),st=>{
       if(st==='saving')setSaveState('جاري الحفظ في حسابك...');
@@ -604,7 +604,7 @@ function migrate(o){ /* v1: world 1600x1000, sizes in px */
     else if(s.kind==='image'){s.x/=1600;s.w/=1600;s.y/=1000;s.h/=1000;}
   }));return o;}
 function load(){try{const d=localStorage.getItem(LS)||localStorage.getItem('lisanura-board-v1');
-  if(d){const s=JSON.parse(d);if(s&&s.pages&&s.pages.length)state=migrate(s);}}catch(e){}
+  if(d){const s=JSON.parse(d);if(s&&s.pages&&s.pages.length)state=migrate(s);}}catch(e){console.warn(e)}
   if(state.cur>=state.pages.length)state.cur=0;}
 function rehydrate(){state.pages.forEach(p=>p.strokes.forEach(s=>{if(s.kind==='image'&&s.src&&!s._img){const im=new Image();im.onload=redraw;im.src=s.src;s._img=im;}}));}
 
@@ -1509,7 +1509,7 @@ document.getElementById('undoBtn').onclick=()=>{if(!undoStack.length)return;redo
 document.getElementById('redoBtn').onclick=()=>{if(!redoStack.length)return;undoStack.push(JSON.stringify(curPage().strokes,(k,v)=>k==='_img'?undefined:v));
   curPage().strokes=JSON.parse(redoStack.pop());rehydrate();redraw();save();liveDirty();};
 document.getElementById('clearBtn').onclick=()=>{pushUndo();curPage().strokes=[];redraw();save();liveDirty();toast('اتمسحت الصفحة');};
-document.getElementById('backBtn').onclick=()=>{try{if(document.referrer&&new URL(document.referrer).origin===location.origin){history.back();return}}catch(e){}location.href='../';};
+document.getElementById('backBtn').onclick=()=>{try{if(document.referrer&&new URL(document.referrer).origin===location.origin){history.back();return}}catch(e){console.warn(e)}location.href='../';};
 document.getElementById('fsBtn').onclick=()=>{document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen&&document.documentElement.requestFullscreen();};
 
 /* ================= export ================= */
@@ -1548,13 +1548,13 @@ function loadFromHash(){
         else toast('رابط المشاركة غير صالح');});
       return true;}
     try{const s=JSON.parse(LZString.decompressFromEncodedURIComponent(v));
-    if(s&&s.pages){state=s;readOnly=false;rehydrate();toast('فتحت سبورة مشاركة');}}catch(e){}return true;}
+    if(s&&s.pages){state=s;readOnly=false;rehydrate();toast('فتحت سبورة مشاركة');}}catch(e){console.warn(e)}return true;}
   return false;}
 
 /* ================= toast / beep / confetti ================= */
 function toast(m){const t=document.getElementById('toast');t.textContent=tt(m);t.style.display='block';clearTimeout(t._x);t._x=setTimeout(()=>t.style.display='none',2200);}
 function beep(f,d){try{const ac=new (window.AudioContext||window.webkitAudioContext)();const o=ac.createOscillator(),g=ac.createGain();
-  o.frequency.value=f||880;o.connect(g);g.connect(ac.destination);g.gain.setValueAtTime(.16,ac.currentTime);o.start();o.stop(ac.currentTime+(d||.15));}catch(e){}}
+  o.frequency.value=f||880;o.connect(g);g.connect(ac.destination);g.gain.setValueAtTime(.16,ac.currentTime);o.start();o.stop(ac.currentTime+(d||.15));}catch(e){console.warn(e)}}
 /* ---- kids cheer sound (mobile-safe: preload + unlock on first tap, no overlap/cut) ---- */
 let cheerAud=null,cheerOK=false;
 function cheerSrc(){const t=document.createElement('audio');return(t.canPlayType&&t.canPlayType('audio/mpeg'))?'../assets/cheer.mp3':'../assets/cheer.ogg';}
@@ -1774,7 +1774,7 @@ function buildQuran(body){
   body.querySelector('#qAdd').onclick=async()=>{
     if(!curAyat.length)await loadPrev();
     if(!curAyat.length)return;
-    try{await document.fonts.load('40px "Amiri Quran"');}catch(e){}
+    try{await document.fonts.load('40px "Amiri Quran"');}catch(e){console.warn(e)}
     const size=.042,maxW=.72;
     const mc=document.createElement('canvas').getContext('2d');
     mc.font='400 '+(size*1000)+'px "Amiri Quran", Naskh, serif';
@@ -1808,14 +1808,14 @@ async function buildBooks(body){
   const list=body.querySelector('#bList');
   if(window.LN&&LN.configured()&&LN.user){
     list.innerHTML='<div style="font-size:13px;color:#a98b7f;text-align:center">جاري تحميل كتبي...</div>';
-    let books=[];try{books=await LN.listBooks();}catch(e){}
+    let books=[];try{books=await LN.listBooks();}catch(e){console.warn(e)}
     list.innerHTML='';
     /* books saved on this device as a guest: offer one-tap move into her account */
-    let localB=[];try{localB=await dbAll();}catch(e){}
+    let localB=[];try{localB=await dbAll();}catch(e){console.warn(e)}
     if(localB.length){const mv=document.createElement('button');mv.className='abtn gold';
       mv.textContent=tt('انقلي كتبك المحلية لحسابك (')+arNum(localB.length)+')';
       mv.onclick=async()=>{mv.disabled=true;mv.textContent=tt('جاري النقل...');
-        let ok=0;for(const b of localB){try{await LN.uploadBook(b.name,b.data);await dbDel(b.id);ok++;}catch(e){}}
+        let ok=0;for(const b of localB){try{await LN.uploadBook(b.name,b.data);await dbDel(b.id);ok++;}catch(e){console.warn(e)}}
         toast(tt('اتنقلت ')+arNum(ok)+tt(' كتاب لحسابك'));closeCard('books');openBooksPanel();};
       list.appendChild(mv);}
     if(!books.length&&!localB.length)list.innerHTML='<div style="font-size:13px;color:#a98b7f;text-align:center">لسه مفيش كتب، ارفعي أول كتاب</div>';
@@ -1823,7 +1823,7 @@ async function buildBooks(body){
       row.innerHTML='<b></b><button class="abtn" style="padding:5px 12px;font-size:13px">افتحي</button><button class="abtn ghost" style="padding:5px 10px;font-size:13px">✕</button>';
       row.querySelector('b').textContent=b.name;
       row.querySelectorAll('button')[0].onclick=async()=>{try{toast('جاري فتح الكتاب...');const buf=await LN.downloadBook(b.path);closeCard('books');openBook({name:b.name,data:buf,page:1});}catch(e){toast(e.message);}};
-      row.querySelectorAll('button')[1].onclick=async()=>{try{await LN.deleteBook(b.path);}catch(e){}row.remove();};
+      row.querySelectorAll('button')[1].onclick=async()=>{try{await LN.deleteBook(b.path);}catch(e){console.warn(e)}row.remove();};
       list.appendChild(row);});
     if(lang==='en')translateDOM(body,true);
     return;}
@@ -1870,11 +1870,11 @@ async function openBook(book){
 let peer=null,conns=[],liveId=null,liveTimer=null;
 let liveTimerLN=null;
 function liveDirty(){
-  if(window.LN_LIVE&&window.LN&&LN.configured()){clearTimeout(liveTimerLN);liveTimerLN=setTimeout(()=>{try{LN.livePush(LZString.compressToEncodedURIComponent(JSON.stringify(state,(k,v)=>k==='_img'?undefined:v)));}catch(e){}},400);}
+  if(window.LN_LIVE&&window.LN&&LN.configured()){clearTimeout(liveTimerLN);liveTimerLN=setTimeout(()=>{try{LN.livePush(LZString.compressToEncodedURIComponent(JSON.stringify(state,(k,v)=>k==='_img'?undefined:v)));}catch(e){console.warn(e)}},400);}
   if(!peer||!conns.length)return;
   clearTimeout(liveTimer);liveTimer=setTimeout(()=>{
     const data=LZString.compressToEncodedURIComponent(JSON.stringify(state,(k,v)=>k==='_img'?undefined:v));
-    conns.forEach(cn=>{try{cn.send({t:'full',data});}catch(e){}});},500);}
+    conns.forEach(cn=>{try{cn.send({t:'full',data});}catch(e){console.warn(e)}});},500);}
 function openSharePanel(){makeCard('share','مشاركة مع الطالب',buildShare);}
 function buildShare(body){
   body.innerHTML='<div style="font-size:13px;color:var(--maroon);text-align:center">بث مباشر: الطالب يشوف رسمك لحظة بلحظة</div>'
@@ -1889,7 +1889,7 @@ function buildShare(body){
     if(window.LN&&LN.configured()&&LN.user){ /* signed in: short cloud link */
       st.textContent=tt('جاري تجهيز الرابط...');
       try{const id=await LN.shareBoard(JSON.parse(JSON.stringify(state,(k,v)=>k==='_img'?undefined:v)));
-        link=location.origin+location.pathname+'#s='+id;}catch(e){}}
+        link=location.origin+location.pathname+'#s='+id;}catch(e){console.warn(e)}}
     if(!link)link=snapshotLink(); /* guest fallback: long encoded link */
     try{await navigator.clipboard.writeText(link);st.textContent=tt('اتنسخ الرابط، ابعتيه للطالب');}
     catch(e){st.textContent=tt('انسخي الرابط يدويا');}
@@ -1924,13 +1924,13 @@ function buildShare(body){
       cn.on('close',()=>{conns=conns.filter(x=>x!==cn);st.textContent=conns.length?tt('متصل: ')+arNum(conns.length)+tt(' طالب'):tt('البث شغال بدون طلاب');});
       cn.on('data',d=>{if(d&&d.t==='hello')liveDirty();});});
     peer.on('error',err=>{st.textContent=tt('خطأ في البث: ')+err.type;});
-    peer.on('disconnected',()=>{try{peer.reconnect();}catch(e){}});};}
+    peer.on('disconnected',()=>{try{peer.reconnect();}catch(e){console.warn(e)}});};}
 function joinLive(hostId){
   readOnly=true;document.body.classList.add('viewer');
   const badge=document.createElement('div');badge.className='liveBadge';badge.textContent=tt('بث مباشر من المعلمة...');document.body.appendChild(badge);
   if(window.LN&&LN.configured()){
     LN.init().then(()=>LN.liveJoin(hostId,
-      data=>{try{state=JSON.parse(LZString.decompressFromEncodedURIComponent(data));rehydrate();syncPageUI();}catch(e){}},
+      data=>{try{state=JSON.parse(LZString.decompressFromEncodedURIComponent(data));rehydrate();syncPageUI();}catch(e){console.warn(e)}},
       stt=>{badge.textContent=tt(stt==='live'?'متصلة بالمعلمة':stt==='offline'?'المعلمة لسه ما بدأتش البث':'مشكلة اتصال، جاري المحاولة');}));
     return;}
   let p;
@@ -1938,7 +1938,7 @@ function joinLive(hostId){
     p.on('open',()=>{const cn=p.connect(hostId,{reliable:true});
       cn.on('open',()=>{badge.textContent=tt('متصلة بالمعلمة');cn.send({t:'hello'});});
       cn.on('data',d=>{if(d&&d.t==='full'){try{state=JSON.parse(LZString.decompressFromEncodedURIComponent(d.data));
-        rehydrate();syncPageUI();}catch(e){}}});
+        rehydrate();syncPageUI();}catch(e){console.warn(e)}}});
       cn.on('close',()=>{badge.textContent=tt('انقطع البث، إعادة محاولة...');setTimeout(connect,4000);});});
     p.on('error',e=>{badge.textContent=tt(e.type==='peer-unavailable'?'المعلمة لسه ما بدأتش البث، جاري المحاولة...':'مشكلة اتصال، إعادة محاولة...');
       if(e.type==='peer-unavailable'||e.type==='network'||e.type==='server-error')setTimeout(()=>{try{p.destroy();}catch(_){}connect();},4000);});};
@@ -2009,7 +2009,7 @@ function buildAcct(body){
     w.querySelector('b').textContent=p.display_name||'';
     const codeEl=w.querySelector('#acCode');if(codeEl)codeEl.textContent=LN.teacherCode();
     const cp=w.querySelector('#acCopy');
-    if(cp)cp.onclick=async()=>{try{await navigator.clipboard.writeText(LN.teacherCode());toast('اتنسخ الكود');}catch(e){}};
+    if(cp)cp.onclick=async()=>{try{await navigator.clipboard.writeText(LN.teacherCode());toast('اتنسخ الكود');}catch(e){console.warn(e)}};
     const stEl=w.querySelector('#acStudents');
     if(stEl)LN.listStudents().then(ss=>{stEl.textContent=tt('الطلاب المرتبطين: ')+arNum(ss.length);});
     w.querySelector('#acOut').onclick=async()=>{await LN.signOut();location.reload();};});}
@@ -2040,7 +2040,7 @@ async function restoreFromCloud(){
       await LN.saveBoardNow(JSON.parse(JSON.stringify(state,(k,v)=>k==='_img'?undefined:v)));
       toast('شغلك اتسجل في حسابك');
     }
-  }catch(e){}
+  }catch(e){console.warn(e)}
   applyLang(siteLang()||(state.settings&&state.settings.lang)||'ar',true);
   setSaveState();}
 

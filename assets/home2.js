@@ -187,7 +187,7 @@ function tabs(){
 /* ---------- state ---------- */
 var ov=null,bar=null,tab='home',pool=null,poolP=null,aud=null,playing=false;
 
-function stopAudio(){if(aud){try{aud.pause();}catch(e){} aud=null;} playing=false;}
+function stopAudio(){if(aud){try{aud.pause();}catch(e){console.warn(e)} aud=null;} playing=false;}
 
 function loadPool(){
   if(poolP)return poolP;
@@ -321,8 +321,8 @@ function fillDhikr(){
 
 /* ---------- settings sheet ---------- */
 function setKey(k,v){
-  try{localStorage.setItem('letters-city:'+k,JSON.stringify(v));}catch(e){}
-  try{window.dispatchEvent(new CustomEvent('ls-sync',{detail:{key:k,value:v}}));}catch(e){}
+  try{localStorage.setItem('letters-city:'+k,JSON.stringify(v));}catch(e){console.warn(e)}
+  try{window.dispatchEvent(new CustomEvent('ls-sync',{detail:{key:k,value:v}}));}catch(e){console.warn(e)}
 }
 function openSettings(){
   var en=isEn(),g=gender();
@@ -357,7 +357,7 @@ function copyCode(btn,en){
   function done(){btn.textContent=en?'Copied ✓':'تم النسخ ✓';setTimeout(function(){btn.textContent=en?'Copy code':'نسخ الكود';},1600);}
   if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(code).then(done,done);return;}
   var ta=d.createElement('textarea');ta.value=code;ta.style.position='fixed';ta.style.opacity='0';d.body.appendChild(ta);ta.select();
-  try{d.execCommand('copy');}catch(e){}
+  try{d.execCommand('copy');}catch(e){console.warn(e)}
   ta.remove();done();
 }
 function codeBlock(en){
@@ -485,7 +485,7 @@ function buildBar(){
     b.onclick=function(){
       stopAudio();
       if(t.id==='home'){closeOverlays();if(onBoard)location.href='../';else{showTab('home');scrollTo({top:0,behavior:'smooth'});}}
-      else if(t.id==='lessons'){if(onBoard){try{sessionStorage.setItem('ln:tb-scroll','1');}catch(e){} location.href='../';}else{closeOverlays();showTab('lessons');scrollTo({top:0,behavior:'smooth'});}}
+      else if(t.id==='lessons'){if(onBoard){try{sessionStorage.setItem('ln:tb-scroll','1');}catch(e){console.warn(e)} location.href='../';}else{closeOverlays();showTab('lessons');scrollTo({top:0,behavior:'smooth'});}}
       else if(t.id==='board'){if(!onBoard)location.href='board/';}
       else if(t.id==='students'){openStudents();}
       else if(t.id==='account')openAccount();
@@ -529,7 +529,7 @@ d.addEventListener('ln-auth',function(){if(role())render();});
 /* board return intents (from the old tab bar) */
 try{
   if(!onBoard&&sessionStorage.getItem('ln:tb-scroll')){sessionStorage.removeItem('ln:tb-scroll');}
-}catch(e){}
+}catch(e){console.warn(e)}
 
 render();
 })();

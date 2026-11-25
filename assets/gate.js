@@ -56,7 +56,7 @@
     }
   }
   function hasStoredSession(){
-    try{for(var i=0;i<localStorage.length;i++){var k=localStorage.key(i);if(k&&/^sb-.*-auth-token$/.test(k))return true;}}catch(e){}
+    try{for(var i=0;i<localStorage.length;i++){var k=localStorage.key(i);if(k&&/^sb-.*-auth-token$/.test(k))return true;}}catch(e){console.warn(e)}
     return false;
   }
   function start(){

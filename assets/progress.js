@@ -5,7 +5,7 @@
 (function(){
   var cur=null,queue={},timer=null,uid=null;
   function titles(){return (window.LN&&LN.GAME_TITLES)||{};}
-  function store(){try{localStorage.setItem('lc:prog:'+uid,JSON.stringify(queue));}catch(e){}}
+  function store(){try{localStorage.setItem('lc:prog:'+uid,JSON.stringify(queue));}catch(e){console.warn(e)}}
   function load(){try{return JSON.parse(localStorage.getItem('lc:prog:'+uid)||'{}');}catch(e){return{};}}
   function flush(){
     if(!uid||!window.LN)return;
@@ -23,8 +23,8 @@
     if(!window.LN||!LN.loadProgress)return;
     LN.loadProgress().then(function(rows){
       if(!rows||!rows.length)return;
-      var done=[];try{done=JSON.parse(localStorage.getItem('hb-done.v1')||'[]');}catch(e){}
-      var worlds=[];try{worlds=JSON.parse(localStorage.getItem('letters-city:lc-worlds.v1')||'[]');}catch(e){}
+      var done=[];try{done=JSON.parse(localStorage.getItem('hb-done.v1')||'[]');}catch(e){console.warn(e)}
+      var worlds=[];try{worlds=JSON.parse(localStorage.getItem('letters-city:lc-worlds.v1')||'[]');}catch(e){console.warn(e)}
       rows.forEach(function(r){
         var g=r.game||'',d2=r.data||{};
         if(!d2.completed)return;
@@ -37,9 +37,9 @@
         if(done.indexOf(id)<0)done.push(id);
         if(id==='letters-city'&&done.indexOf('letters')<0)done.push('letters');
       });
-      try{localStorage.setItem('hb-done.v1',JSON.stringify(done));}catch(e){}
+      try{localStorage.setItem('hb-done.v1',JSON.stringify(done));}catch(e){console.warn(e)}
       worlds.sort(function(a,b){return a-b;});
-      try{localStorage.setItem('letters-city:lc-worlds.v1',JSON.stringify(worlds));}catch(e){}
+      try{localStorage.setItem('letters-city:lc-worlds.v1',JSON.stringify(worlds));}catch(e){console.warn(e)}
       rows.forEach(function(r){
         var g=r.game||'';if(g.indexOf('lc:')!==0)return;
         var k=g.slice(3),d2=r.data||{};
@@ -61,7 +61,7 @@
   function wrap(){
     var op=history.pushState;
     history.pushState=function(st){
-      try{if(st&&typeof st.lcw==='string')hit(st.lcw);}catch(e){}
+      try{if(st&&typeof st.lcw==='string')hit(st.lcw);}catch(e){console.warn(e)}
       return op.apply(this,arguments);};
     window.addEventListener('popstate',function(){cur=null;});
     /* going back to a door list then re-entering the same game counts as a new play */
