@@ -2,12 +2,19 @@ html,body,#root{margin:0;min-height:100%}body{background:var(--ds-page)}.lc-teac
 .ln-logo{height:54px;width:auto;max-width:72vw;display:inline-block;vertical-align:middle}
 
 /* Lisanura shared header: Lessons hub matches Home */
-header.file-header:has(.ln-logo){gap:0;text-align:center;margin:0 0 8px}
+header.file-header:has(.ln-logo){gap:0;text-align:center;margin:0 0 12px}
 header.file-header:has(.ln-logo) .file-title{margin:0}
 header.file-header:has(.ln-logo) .ln-logo{height:86px;max-width:78%}
 header.file-header:has(.ln-logo) .file-intro{font-family:Naskh,"Noto Naskh Arabic",serif;font-size:13.5px;color:#a98b7f;line-height:1.7;max-width:none;margin:2px 0 0}
 .lc-teacher-row.hb-hello{align-items:flex-end;gap:6px;margin:0 0 14px}
 .hb-teach{width:96px;height:auto;flex:none}
-.hb-hello .lc-speech{border:2px solid #eed3cd;border-radius:18px;border-start-start-radius:18px;box-shadow:0 3px 12px #7e415018;background:#fff;padding:10px 14px;font-family:Naskh,"Noto Naskh Arabic",serif}
+.hb-hello .lc-speech{flex:1;border:2px solid #eed3cd;border-radius:18px;border-start-start-radius:18px;box-shadow:0 3px 12px #7e415018;background:#fff;padding:10px 14px}
+.hb-hello .lc-speech .hb-hi{font-family:Naskh,"Noto Naskh Arabic",serif;font-size:21px;font-weight:700;margin:0;color:#7e4150}
+.hb-hello .lc-speech .hb-sub{font-size:13.5px;color:#a98b7f;margin:2px 0 0;line-height:1.25}
+header.file-header:has(.ln-logo) .file-intro{display:none}
+body:has(.ln-logo) main.file-card{padding:14px}
+body:has(.ln-logo) .hb-nav{position:absolute;top:10px;left:14px;right:14px;z-index:40;margin:0}
 body:has(.ln-logo) .hb-door,body:has(.ln-logo) .hb-game{font-family:Naskh,"Noto Naskh Arabic",serif}
 body:has(.ln-logo) .file-closing{font-family:Naskh,"Noto Naskh Arabic",serif}
+
+body:has(.ln-logo) main.file-card>[class*="lc-mode-"]{width:100%;max-width:430px;margin:0 auto}

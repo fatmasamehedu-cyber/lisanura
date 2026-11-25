@@ -187,7 +187,8 @@ function loadPool(){
   if(poolP)return poolP;
   poolP=fetch('assets/dhikr-pool.json').then(function(r){return r.json();}).then(function(j){
     POOL=j.map(function(it,n){return {id:'pool'+n,pool:true,titleAr:'ذكر اليوم',titleEn:'Dhikr of the day',
-      ar:it.text,ref:it.source||'',virtue:it.virtue||'',condition:it.condition||'',audio:'assets/'+it.audio};});
+      ar:it.text,ref:it.source||'',virtue:it.virtue||'',condition:it.condition||'',audio:'assets/'+it.audio,
+      meaningAr:it.meaningAr||'',meaningEn:it.meaningEn||'',translit:it.translit||''};});
     if(ov&&view==='list')render();
     return POOL;
   }).catch(function(){POOL=[];return POOL;});
@@ -213,6 +214,7 @@ var css=''
 +'.ak-h{font-family:"Noto Naskh Arabic",serif;font-weight:700;font-size:26px;color:#7e4150;margin:0;flex:1;text-align:center;line-height:1.5}'
 +'.ak-cards{display:grid;gap:16px;margin-top:8px}'
 +'.ak-card{border:0;padding:0;background:#fff;border-radius:22px;overflow:hidden;cursor:pointer;text-align:start;font-family:inherit;box-shadow:0 3px 12px #7e515022;border:2px solid #ecd5ce;display:block;width:100%}'
++'.ak-card.ak-hl{border-color:#d9a44f;box-shadow:0 0 0 3px #d9a44f55,0 3px 12px #7e515022;transition:box-shadow .3s,border-color .3s}'
 +'.ak-card:active{transform:scale(.985)}'
 +'.ak-card-img{display:block;width:100%;aspect-ratio:3/2;object-fit:cover;background:linear-gradient(135deg,#f9dce8,#faf5f0)}'
 +'.ak-card-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 16px 14px}'
@@ -359,7 +361,7 @@ function open(){
     var t=e.target.closest('[data-ak]');if(!t)return;
     var k=t.getAttribute('data-ak');
     if(k==='close'){close();}
-    else if(k==='list'){stopAudio();view='list';cur=null;render();}
+    else if(k==='list'){stopAudio();var back=cur?cur.id:null;view='list';cur=null;render();scrollToCard(back);}
     else if(k==='open'){
       stopAudio();
       var id=t.getAttribute('data-id');
@@ -373,6 +375,15 @@ function open(){
   });
 }
 function close(){stopAudio();if(ov){ov.remove();ov=null;}}
+function scrollToCard(id){
+  if(!ov)return;
+  if(!id)return;
+  var c=ov.querySelector('.ak-card[data-id="'+id+'"]');
+  if(!c)return;
+  c.scrollIntoView({block:'center'});
+  c.classList.add('ak-hl');
+  setTimeout(function(){if(c.isConnected)c.classList.remove('ak-hl');},2200);
+}
 
 /* ---------- door on the home page ---------- */
 var DOOR_C='#d9a44f';
