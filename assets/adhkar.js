@@ -185,7 +185,7 @@ var DUAS=[
 var POOL=null,poolP=null;
 function loadPool(){
   if(poolP)return poolP;
-  poolP=fetch('assets/dhikr-pool.json').then(function(r){return r.json();}).then(function(j){
+  poolP=fetch('assets/dhikr-pool.json?v=2').then(function(r){return r.json();}).then(function(j){
     POOL=j.map(function(it,n){return {id:'pool'+n,pool:true,titleAr:'ذكر اليوم',titleEn:'Dhikr of the day',
       ar:it.text,ref:it.source||'',virtue:it.virtue||'',condition:it.condition||'',audio:'assets/'+it.audio,
       meaningAr:it.meaningAr||'',meaningEn:it.meaningEn||'',translit:it.translit||''};});

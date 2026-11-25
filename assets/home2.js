@@ -189,7 +189,7 @@ function stopAudio(){if(aud){try{aud.pause();}catch(e){} aud=null;} playing=fals
 
 function loadPool(){
   if(poolP)return poolP;
-  poolP=fetch(AB+'dhikr-pool.json?v=1').then(function(r){return r.json();}).then(function(j){pool=j;return j;}).catch(function(){pool=[];return[];});
+  poolP=fetch(AB+'dhikr-pool.json?v=2').then(function(r){return r.json();}).then(function(j){pool=j;return j;}).catch(function(){pool=[];return[];});
   return poolP;
 }
 
