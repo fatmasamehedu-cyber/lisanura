@@ -588,7 +588,7 @@ function render(){
   showTab(tab||'home');
 }
 
-css+="body.hb-bg-girl,body.hb-bg-boy{background-color:#faf5f0!important;background-image:url("+AB+"tile-neut-BA34HDQK.svg),url("+AB+"arch-neut-TQCGQA43.svg)!important}"+".lc-backbtn,.lc-theme-boy .lc-backbtn{border-color:#c16a7e!important;color:#7e4150!important}"+".hn-set-card,.tb-acc-card{background:#fffaf3!important}";css+="@keyframes hnPop{from{transform:scale(.9);opacity:0}to{transform:scale(1);opacity:1}}";var st=d.createElement('style');st.textContent=css;d.head.appendChild(st);
+css+='html:not([data-ln-role="teacher"]) .lc-getcert{display:none!important}';css+="body.hb-bg-girl,body.hb-bg-boy{background-color:#faf5f0!important;background-image:url("+AB+"tile-neut-BA34HDQK.svg),url("+AB+"arch-neut-TQCGQA43.svg)!important}"+".lc-backbtn,.lc-theme-boy .lc-backbtn{border-color:#c16a7e!important;color:#7e4150!important}"+".hn-set-card,.tb-acc-card{background:#fffaf3!important}";css+="@keyframes hnPop{from{transform:scale(.9);opacity:0}to{transform:scale(1);opacity:1}}";var st=d.createElement('style');st.textContent=css;d.head.appendChild(st);
 
 /* role becomes available after gate.js */
 var mo=new MutationObserver(function(muts){
@@ -603,6 +603,15 @@ d.addEventListener('ln-auth',function(){if(role())render();});
 try{
   if(!onBoard&&sessionStorage.getItem('ln:tb-scroll')){sessionStorage.removeItem('ln:tb-scroll');}
 }catch(e){console.warn(e)}
+
+/* certificates: teacher accounts only - never visible to students */
+function guardCert(){
+  try{
+    if(role()!=='teacher'&&location.hash.indexOf('#/cert')===0){location.replace('#/');}
+  }catch(e){console.warn(e)}
+}
+window.addEventListener('hashchange',guardCert);
+guardCert();
 
 render();
 })();
