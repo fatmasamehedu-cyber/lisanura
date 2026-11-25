@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>كيمياء الحروف — عينة</title>
+<link rel="stylesheet" href="lab.css">
+</head>
+<body>
+<div class="lab-wrap">
+  <div class="lab-top">
+    <a class="lab-back" href="index.html">‹ كل العينات</a>
+    <span class="lab-badge">عينة ٢</span>
+  </div>
+  <h1 class="lab-title">كيمياء الحروف</h1>
+  <p class="lab-sub">دوسي على الجوهرة فيها الحرف الصح بالترتيب — كل حرف يطير في القدر والكلمة تطلع بالنجوم</p>
+  <div class="game-frame">
+    <canvas id="g6c" class="game" width="480" height="520"></canvas>
+    <p class="game-note">اسمعي الكلمة أو اقرئيها فوق، واجمعي حروفها واحد واحد</p>
+  </div>
+</div>
+<script>
+(function(){
+"use strict";
+var cv=document.getElementById('g6c'),ctx=cv.getContext('2d');
+var W=480,H=520;
+var WORDS=[
+ {ar:'قمر',letters:['ق','م','ر'],audio:'../assets/w-qamar-DVXILJUU.mp3'},
+ {ar:'بطة',letters:['ب','ط','ة'],audio:'../assets/w-batta-HFWN7BQY.mp3'},
+ {ar:'نجمة',letters:['ن','ج','م','ة'],audio:'../assets/w-najma-JW6VHFQV.mp3'}
+];
+var POOL='ب ت ج ح د ر س ش ص ع ف ق ك ل م ن ه و ي'.split(' ');
+var cheer=new Audio('../assets/cheer.mp3');
+var wi=0,li=0,gems=[],parts=[],flies=[],bubb=[],msgT=0,msg='',won=false,aud=null;
+function word(){return WORDS[wi];}
+function needed(){return word().letters[li];}
+function playWord(){try{if(aud)aud.pause();aud=new Audio(word().audio);aud.play().catch(function(){});}catch(e){}}
+function newGems(){
+  gems=[];
+  var set=[needed()];
+  while(set.length<5){
+    var c=POOL[Math.floor(Math.random()*POOL.length)];
+    if(set.indexOf(c)<0&&word().letters.slice(li).indexOf(c)<0||set.indexOf(c)<0&&Math.random()<0.4)set.push(c);
+  }
+  set=set.slice(0,5);
+  for(var i=set.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=set[i];set[i]=set[j];set[j]=t;}
+  set.forEach(function(ch,k){
+    gems.push({ch:ch,x:60+k*90,y:70+Math.random()*30,ph:Math.random()*6,fly:false,sh:0});
+  });
+}
+function burst(x,y,col,n){
+  for(var i=0;i<(n||16);i++){
+    var a=Math.random()*Math.PI*2,s=1+Math.random()*3;
+    parts.push({x:x,y:y,vx:Math.cos(a)*s,vy:Math.sin(a)*s-1.2,t:0,col:col});
+  }
+}
+cv.addEventListener('pointerdown',function(e){
+  if(won){restart();return;}
+  var r=cv.getBoundingClientRect();
+  var px=(e.clientX-r.left)*(W/r.width),py=(e.clientY-r.top)*(H/r.height);
+  for(var i=0;i<gems.length;i++){
+    var g=gems[i];
+    if(!g.fly&&Math.abs(g.x-px)<38&&Math.abs(g.y-py)<38){
+      if(g.ch===needed()){
+        g.fly=true;flies.push({g:g,t:0,x0:g.x,y0:g.y});
+      }else{g.sh=10;}
+      break;
+    }
+  }
+});
+function restart(){wi=0;li=0;won=false;parts=[];flies=[];newGems();playWord();}
+function step(){
+  for(var i=bubb.length;i<4;i++)bubb.push({x:190+Math.random()*100,y:470,r:2+Math.random()*4,s:0.4+Math.random()});
+  for(var i=0;i<bubb.length;i++){var b=bubb[i];b.y-=b.s;if(b.y<330){b.y=470;b.x=190+Math.random()*100;}}
+  for(var i=flies.length-1;i>=0;i--){
+    var f=flies[i];f.t+=0.045;
+    if(f.t>=1){
+      burst(240,360,'#f5c15c');
+      li++;
+      flies.splice(i,1);
+      gems.splice(gems.indexOf(f.g),1);
+      if(li>=word().letters.length){
+        msg='أحسنت! '+word().ar+' كاملة';msgT=100;
+        burst(240,300,'#f5c15c',40);
+        try{cheer.currentTime=0;cheer.play().catch(function(){});}catch(e){}
+        wi++;
+        if(wi>=WORDS.length){won=true;msg='برافو! خلصتي كل الكلمات';msgT=99999;}
+        else{li=0;setTimeout(function(){if(!won){newGems();playWord();}},1200);}
+      }else{
+        setTimeout(newGems,500);
+      }
+    }
+  }
+  for(var i=parts.length-1;i>=0;i--){
+    var p=parts[i];p.x+=p.vx;p.y+=p.vy;p.vy+=0.09;p.t++;
+    if(p.t>50)parts.splice(i,1);
+  }
+  for(var i=0;i<gems.length;i++)if(gems[i].sh>0)gems[i].sh--;
+  if(msgT>0)msgT--;
+}
+function gem(x,y,ch,sh){
+  ctx.save();ctx.translate(x+(sh?Math.sin(Date.now()/30)*sh*0.5:0),y);
+  var grd=ctx.createLinearGradient(0,-24,0,24);
+  grd.addColorStop(0,'#7fb3e8');grd.addColorStop(1,'#2f6fb5');
+  ctx.fillStyle=grd;
+  ctx.beginPath();
+  ctx.moveTo(0,-26);ctx.lineTo(20,-8);ctx.lineTo(14,20);ctx.lineTo(-14,20);ctx.lineTo(-20,-8);
+  ctx.closePath();ctx.fill();
+  ctx.fillStyle='rgba(255,255,255,.35)';
+  ctx.beginPath();ctx.moveTo(0,-26);ctx.lineTo(20,-8);ctx.lineTo(0,-2);ctx.lineTo(-20,-8);ctx.closePath();ctx.fill();
+  ctx.fillStyle='#fff';ctx.font='700 24px "Noto Naskh Arabic",serif';
+  ctx.textAlign='center';ctx.textBaseline='middle';
+  ctx.fillText(ch,0,4);
+  ctx.restore();
+}
+function cauldron(){
+  ctx.fillStyle='#3b3b55';
+  ctx.beginPath();ctx.ellipse(240,430,95,60,0,0,Math.PI);ctx.fill();
+  ctx.fillRect(145,430,190,18);
+  ctx.fillStyle='#2c2c42';
+  ctx.beginPath();ctx.ellipse(240,448,95,16,0,0,Math.PI);ctx.fill();
+  ctx.fillStyle='#7ed491';
+  ctx.beginPath();ctx.ellipse(240,436,80,12,0,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle='#2c2c42';
+  ctx.fillRect(160,466,14,26);ctx.fillRect(306,466,14,26);
+}
+function draw(){
+  ctx.clearRect(0,0,W,H);
+  ctx.fillStyle='#2f3a5f';ctx.fillRect(0,0,W,H);
+  ctx.fillStyle='#232a4a';
+  for(var i=0;i<30;i++){var sx=(i*167)%W,sy=(i*89)%200;ctx.fillRect(sx,sy,2,2);}
+  if(!won){
+    ctx.fillStyle='#232a4acc';ctx.fillRect(10,8,W-20,36);
+    ctx.fillStyle='#fff';ctx.font='700 18px "Noto Naskh Arabic",serif';
+    ctx.textAlign='center';ctx.textBaseline='middle';
+    ctx.fillText('الكلمة: '+word().ar,W/2-50,26);
+    ctx.font='700 20px "Noto Naskh Arabic",serif';
+    for(var k=0;k<word().letters.length;k++){
+      ctx.fillStyle=k<li?'#f5c15c':'#8a94c9';
+      ctx.fillText(word().letters[k],W/2+70-k*24,26);
+    }
+  }
+  for(var i=0;i<bubb.length;i++){var b=bubb[i];
+    ctx.fillStyle='rgba(126,212,145,.6)';
+    ctx.beginPath();ctx.arc(b.x,b.y,b.r,0,Math.PI*2);ctx.fill();}
+  cauldron();
+  for(var i=0;i<gems.length;i++){var g=gems[i];
+    if(!g.fly)gem(g.x,g.y+Math.sin(Date.now()/400+g.ph)*6,g.ch,g.sh);}
+  for(var i=0;i<flies.length;i++){var f=flies[i];
+    var x=f.x0+(240-f.x0)*f.t,y=f.y0+(360-f.y0)*f.t-60*Math.sin(f.t*Math.PI);
+    gem(x,y,f.g.ch,0);}
+  for(var i=0;i<parts.length;i++){var p=parts[i];
+    ctx.fillStyle=p.col;ctx.fillRect(p.x-2,p.y-2,4,4);}
+  if(msgT>0){
+    ctx.fillStyle='#232a4add';ctx.fillRect(30,180,W-60,60);
+    ctx.fillStyle='#f5c15c';ctx.font='700 24px "Noto Naskh Arabic",serif';
+    ctx.textAlign='center';ctx.textBaseline='middle';
+    ctx.fillText(msg,W/2,210);
+    if(won){ctx.fillStyle='#fff';ctx.font='18px "Noto Naskh Arabic",serif';
+      ctx.fillText('دوسي في أي حتة للعب تاني',W/2,260);}
+  }
+}
+(function loop(){step();draw();requestAnimationFrame(loop);})();
+newGems();
+cv.addEventListener('pointerdown',playWord,{once:true});
+})();
+</script>
+</body>
+</html>

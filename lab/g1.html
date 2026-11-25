@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>فوانيس الحروف — عينة</title>
+<link rel="stylesheet" href="lab.css">
+<style>
+  #g1c{touch-action:none;cursor:crosshair}
+  .g1-hud{display:flex;justify-content:space-between;align-items:center;margin:10px 2px}
+  .g1-dots{display:flex;gap:8px}
+  .g1-dot{width:16px;height:16px;border-radius:50%;background:#e6d3a8}
+  .g1-dot.on{background:#f5c15c;box-shadow:0 0 8px #f5c15c}
+</style>
+</head>
+<body>
+<div class="lab-wrap">
+  <div class="lab-top">
+    <a class="lab-back" href="index.html">‹ كل العينات</a>
+    <span class="lab-badge">عينة ١</span>
+  </div>
+  <h1 class="lab-title">فوانيس الحروف</h1>
+  <p class="lab-sub">ارسمي الحرف بإصبعك فوق النقط على الفانوس — لما تكمليه الفانوس ينور</p>
+  <div class="game-frame">
+    <canvas id="g1c" class="game" width="480" height="520"></canvas>
+    <div class="g1-hud">
+      <div class="g1-dots" id="dots"></div>
+      <div style="color:#a08a6d;font-size:14px" id="prog"></div>
+    </div>
+    <p class="game-note">صوت كلمة تبدأ بالحرف بيشتغل أول ما الفانوس ينور</p>
+  </div>
+</div>
+<script>
+(function(){
+"use strict";
+var cv=document.getElementById('g1c'),ctx=cv.getContext('2d');
+var W=480,H=520;
+var LETTERS=[
+ {ch:'ا',word:'أسد',audio:'../assets/w-asad-JATU37E5.mp3'},
+ {ch:'ب',word:'بطة',audio:'../assets/w-batta-HFWN7BQY.mp3'},
+ {ch:'ت',word:'تفاحة',audio:'../assets/w-tuffaha-GZFVHRN7.mp3'}
+];
+var cheer=new Audio('../assets/cheer.mp3');
+var idx=0,targets=[],done=false,winAll=false,lit=0;
+var dotsEl=document.getElementById('dots'),progEl=document.getElementById('prog');
+LETTERS.forEach(function(){var d=document.createElement('span');d.className='g1-dot';dotsEl.appendChild(d);});
+function buildTargets(){
+  targets=[];
+  var off=document.createElement('canvas');off.width=W;off.height=H;
+  var o=off.getContext('2d');
+  o.font='700 240px "Noto Naskh Arabic",serif';
+  o.textAlign='center';o.textBaseline='middle';
+  o.fillText(LETTERS[idx].ch,W/2,270);
+  var img=o.getImageData(0,0,W,H).data;
+  for(var y=0;y<H;y+=7)for(var x=0;x<W;x+=7){
+    if(img[(y*W+x)*4+3]>120)targets.push({x:x,y:y,hit:false});
+  }
+  done=false;
+}
+function lantern(litF){
+  var cx=W/2,cy=250;
+  var g=ctx.createRadialGradient(cx,cy,40,cx,cy,230);
+  if(litF>0){
+    g.addColorStop(0,'rgba(245,193,92,'+(0.65*litF)+')');
+    g.addColorStop(1,'rgba(245,193,92,0)');
+  }else{
+    g.addColorStop(0,'rgba(60,50,80,0.10)');
+    g.addColorStop(1,'rgba(60,50,80,0)');
+  }
+  ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+  ctx.strokeStyle='#8a7458';ctx.lineWidth=3;
+  ctx.beginPath();ctx.moveTo(cx,30);ctx.lineTo(cx,60);ctx.stroke();
+  ctx.fillStyle=litF>0.9?'#f5c15c':'#d9a44f';
+  ctx.beginPath();ctx.moveTo(cx-90,110);
+  ctx.quadraticCurveTo(cx-110,250,cx-70,390);
+  ctx.lineTo(cx+70,390);
+  ctx.quadraticCurveTo(cx+110,250,cx+90,110);
+  ctx.closePath();ctx.fill();
+  ctx.fillStyle='rgba(255,244,220,'+(0.25+0.65*litF)+')';
+  ctx.beginPath();ctx.moveTo(cx-70,130);
+  ctx.quadraticCurveTo(cx-88,250,cx-52,372);
+  ctx.lineTo(cx+52,372);
+  ctx.quadraticCurveTo(cx+88,250,cx+70,130);
+  ctx.closePath();ctx.fill();
+  ctx.fillStyle='#c9952f';
+  [150,210,270,330].forEach(function(y){
+    ctx.fillRect(cx-86,y,172,7);
+  });
+  ctx.fillStyle='#d9a44f';
+  ctx.beginPath();ctx.ellipse(cx,392,40,10,0,0,Math.PI*2);ctx.fill();
+  ctx.beginPath();ctx.ellipse(cx,110,30,9,0,0,Math.PI*2);ctx.fill();
+  ctx.fillRect(cx-14,60,28,52);
+}
+function draw(){
+  ctx.clearRect(0,0,W,H);
+  ctx.fillStyle='#fffaf0';ctx.fillRect(0,0,W,H);
+  lantern(done?1:lit);
+  if(!winAll){
+    ctx.font='700 240px "Noto Naskh Arabic",serif';
+    ctx.textAlign='center';ctx.textBaseline='middle';
+    ctx.fillStyle='rgba(142,47,71,0.12)';
+    ctx.fillText(LETTERS[idx].ch,W/2,270);
+    for(var i=0;i<targets.length;i++){
+      var t=targets[i];
+      ctx.fillStyle=t.hit?'#8e2f47':'rgba(217,164,79,0.85)';
+      ctx.beginPath();ctx.arc(t.x,t.y,t.hit?3.4:2.6,0,Math.PI*2);ctx.fill();
+    }
+  }else{
+    ctx.fillStyle='#8e2f47';ctx.font='700 44px "Noto Naskh Arabic",serif';
+    ctx.textAlign='center';
+    ctx.fillText('برافو! كل الفوانيس نورت',W/2,250);
+    ctx.font='22px "Noto Naskh Arabic",serif';ctx.fillStyle='#a08a6d';
+    ctx.fillText('دوسي هنا للعب تاني',W/2,300);
+  }
+}
+function coverage(){
+  var h=0;for(var i=0;i<targets.length;i++)if(targets[i].hit)h++;
+  return targets.length?h/targets.length:0;
+}
+function trace(x,y){
+  if(done||winAll)return;
+  var r=cv.getBoundingClientRect();
+  var px=(x-r.left)*(W/r.width),py=(y-r.top)*(H/r.height);
+  var any=false;
+  for(var i=0;i<targets.length;i++){
+    var t=targets[i];
+    if(!t.hit&&Math.abs(t.x-px)<20&&Math.abs(t.y-py)<20){t.hit=true;any=true;}
+  }
+  if(any){
+    var c=coverage();
+    lit=c;
+    progEl.textContent=Math.round(c*100)+'٪';
+    if(c>=0.85){
+      done=true;lit=1;
+      dotsEl.children[idx].classList.add('on');
+      try{var a=new Audio(LETTERS[idx].audio);a.play().catch(function(){});}catch(e){}
+      setTimeout(function(){
+        idx++;
+        if(idx>=LETTERS.length){winAll=true;try{cheer.currentTime=0;cheer.play().catch(function(){});}catch(e){}}
+        else{buildTargets();progEl.textContent='';}
+      },1400);
+    }
+  }
+}
+var drawing=false;
+cv.addEventListener('pointerdown',function(e){drawing=true;trace(e.clientX,e.clientY);});
+cv.addEventListener('pointermove',function(e){if(drawing)trace(e.clientX,e.clientY);});
+window.addEventListener('pointerup',function(){drawing=false;});
+cv.addEventListener('click',function(){if(winAll){idx=0;winAll=false;lit=0;
+  for(var i=0;i<dotsEl.children.length;i++)dotsEl.children[i].classList.remove('on');
+  buildTargets();}});
+buildTargets();
+(function loop(){draw();requestAnimationFrame(loop);})();
+})();
+</script>
+</body>
+</html>
