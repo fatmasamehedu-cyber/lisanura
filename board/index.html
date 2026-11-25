@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<title>سَبُّورَةُ لِسَانُورَا</title>
+<title>سبورة لسانورا</title>
 <meta name="description" content="سبورة تفاعلية للمعلمة فاطمة سامح - أدوات الحصة والرسم والشرح">
 <meta http-equiv="Cache-Control" content="no-cache">
 <meta name="theme-color" content="#c16a7e">
@@ -13,9 +13,9 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/peerjs/1.5.4/peerjs.min.js"></script>
 <script src="https://fatmasamehedu-cyber.github.io/lisanura/assets/supa-config.js?v=4"></script>
-<script src="https://fatmasamehedu-cyber.github.io/lisanura/assets/supa.js?v=6"></script>
-<script src="https://fatmasamehedu-cyber.github.io/lisanura/assets/gate.js?v=6"></script>
-<script src="https://fatmasamehedu-cyber.github.io/lisanura/assets/home2.js?v=11"></script>
+<script src="https://fatmasamehedu-cyber.github.io/lisanura/assets/supa.js?v=7"></script>
+<script src="https://fatmasamehedu-cyber.github.io/lisanura/assets/gate.js?v=7"></script>
+<script src="https://fatmasamehedu-cyber.github.io/lisanura/assets/home2.js?v=13"></script>
 <style>
 @font-face{font-family:'Naskh';src:url('https://fatmasamehedu-cyber.github.io/lisanura/fonts/NotoNaskhArabic-Regular.ttf') format('truetype');font-weight:400}
 @font-face{font-family:'Naskh';src:url('https://fatmasamehedu-cyber.github.io/lisanura/fonts/NotoNaskhArabic-Bold.ttf') format('truetype');font-weight:700}
@@ -209,13 +209,13 @@ html[dir=ltr] .widgetPanel{box-shadow:4px 0 18px rgba(0,0,0,.12)}
   <canvas id="bgCanvas"></canvas>
   <canvas id="drawCanvas"></canvas>
 </div>
-<div class="mascot"><img class="wm-ar" src="../assets/logo-ar.png?v=4" alt="لِسانورا"><img class="wm-en" src="../assets/logo-en.png?v=4" alt="LisaNura"></div>
+<div class="mascot"><img class="wm-ar" src="../assets/logo-ar.png?v=4" alt="لسانورا"><img class="wm-en" src="../assets/logo-en.png?v=4" alt="LisaNura"></div>
 
 <div class="topwrap">
 <button class="tbtn gold menubtn" id="wPanelBtn" title="أدوات الحصة"><svg class="ic" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
 <div class="topbar">
   <button class="tbtn" id="backBtn" title="الصفحة الرئيسية" style="gap:4px;padding-inline:10px"><svg class="ic" viewBox="0 0 24 24"><path d="M4 11l8-7 8 7"/><path d="M6.5 9.5V20h11V9.5"/></svg><b style="font-family:Naskh;font-size:15px">الرئيسية</b></button>
-  <div class="title"><img src="teacher-point.png" alt=""><b>سَبُّورَةُ لِسَانُورَا</b></div>
+  <div class="title"><img src="teacher-point.png" alt=""><b>سبورة لسانورا</b></div>
   <div class="pagenav">
     <button id="pgPrev" title="الصفحة السابقة"><svg class="ic" viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg></button>
     <b id="pgLabel">صفحة ١ من ١</b>
@@ -288,13 +288,13 @@ html[dir=ltr] .widgetPanel{box-shadow:4px 0 18px rgba(0,0,0,.12)}
     <h3 style="margin:0;flex:1;text-align:center">أدوات الحصة</h3>
     <button id="wPanelX" title="قفل" style="width:32px;height:32px;min-width:32px;border-radius:10px;border:2px solid var(--line);background:#fff;color:var(--rose-d);display:flex;align-items:center;justify-content:center"><svg class="ic" viewBox="0 0 24 24" style="width:16px;height:16px"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
   </div>
-  <button class="witem" data-w="timer"><svg class="ic" viewBox="0 0 24 24"><path d="M6 3h12M6 21h12M8 3v4l4 4 4-4V3M8 21v-4l4-4 4 4v4"/></svg> مؤقِّت</button>
+  <button class="witem" data-w="timer"><svg class="ic" viewBox="0 0 24 24"><path d="M6 3h12M6 21h12M8 3v4l4 4 4-4V3M8 21v-4l4-4 4 4v4"/></svg> مؤقت</button>
   <button class="witem" data-w="stopwatch"><svg class="ic" viewBox="0 0 24 24"><circle cx="12" cy="13" r="7"/><path d="M12 10v3l2 2M10 3h4M12 3v3"/></svg> ساعة إيقاف</button>
   <button class="witem" data-w="wheel"><svg class="ic" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="2.5"/><path d="M12 3v6.5M12 14.5V21M3 12h6.5M14.5 12H21"/></svg> عجلة الأسماء</button>
   <button class="witem" data-w="picker"><svg class="ic" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.2" fill="currentColor" stroke="none"/></svg> اختيار عشوائي</button>
   <button class="witem" data-w="score"><svg class="ic" viewBox="0 0 24 24"><path d="M8 4h8v5a4 4 0 0 1-8 0V4z"/><path d="M8 5H4a4 4 0 0 0 4 4M16 5h4a4 4 0 0 1-4 4"/><path d="M12 13v4M8 21h8M10 17h4"/></svg> لوحة النقاط</button>
   <button class="witem" data-w="traffic"><svg class="ic" viewBox="0 0 24 24"><rect x="8" y="3" width="8" height="18" rx="3"/><circle cx="12" cy="7.5" r="1.4"/><circle cx="12" cy="12" r="1.4"/><circle cx="12" cy="16.5" r="1.4"/></svg> إشارة المرور</button>
-  <button class="witem" data-w="counter"><svg class="ic" viewBox="0 0 24 24"><path d="M4 9a8 8 0 0 1 14-3l2 2M20 15a8 8 0 0 1-14 3l-2-2"/><path d="M20 3v5h-5M4 21v-5h5"/></svg> عدّاد التكرار</button>
+  <button class="witem" data-w="counter"><svg class="ic" viewBox="0 0 24 24"><path d="M4 9a8 8 0 0 1 14-3l2 2M20 15a8 8 0 0 1-14 3l-2-2"/><path d="M20 3v5h-5M4 21v-5h5"/></svg> عداد التكرار</button>
   <button class="witem" data-w="party"><svg class="ic" viewBox="0 0 24 24"><path d="M4 20l7-14 3 2-7 14-3-2z"/><path d="M14 4c1 1 2 1 3 0M17 8c1 1 2 1 3 0M18.5 2.5c.5 1 1.5 1.5 2.5 1.5"/></svg> احتفال</button>
   <button class="witem" id="wStudents" data-w="students" style="display:none"><svg class="ic" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.4"/><circle cx="16.8" cy="10" r="2.5"/><path d="M3.6 20c.6-3.4 2.7-5 5.4-5s4.8 1.6 5.4 5"/><path d="M15.4 15.5c2.2.3 3.9 1.8 4.4 4.5"/></svg> طلابي</button>
   <div class="sep" style="width:100%;margin:4px 0"></div>
@@ -331,7 +331,7 @@ const LS='lisanura-board-v2';
 
 /* ================= language (ar/en) ================= */
 const T={"الرئيسية":"Home",
-"سَبُّورَةُ لِسَانُورَا":"LisaNura Board",
+"سبورة لسانورا":"LisaNura Board",
 "الصفحة الرئيسية":"Home page",
 "الصفحة السابقة":"Previous page",
 "الصفحة التالية":"Next page",
@@ -369,20 +369,20 @@ const T={"الرئيسية":"Home",
 "خماسي":"Pentagon",
 "أضيفي الكلمة للسبورة":"Add the word to the board",
 "مسح":"Clear","حذف آخر حرف":"Delete last letter",
-"مؤقِّت":"Timer",
-"المؤقِّت":"The timer",
+"مؤقت":"Timer",
+"المؤقت":"The timer",
 "ساعة إيقاف":"Stopwatch",
 "ساعة الإيقاف":"The stopwatch",
 "عجلة الأسماء":"Name wheel",
 "اختيار عشوائي":"Random picker",
 "لوحة النقاط":"Scoreboard",
 "إشارة المرور":"Traffic light",
-"عدّاد التكرار":"Repeat counter",
+"عداد التكرار":"Repeat counter",
 "احتفال":"Celebration",
 "ابدأ":"Start",
 "وقف":"Pause",
 "صفر":"Reset",
-"عدّ":"Count",
+"عد":"Count",
 "خلص الوقت":"Time's up",
 "١ د":"1 min",
 "٣ د":"3 min",
@@ -437,7 +437,7 @@ const T={"الرئيسية":"Home",
 "نسخ رابط اللقطة":"Copy snapshot link",
 "جاري تجهيز الرابط...":"Preparing the link...",
 "اتنسخ الرابط، ابعتيه للطالب":"Link copied, send it to the student",
-"انسخي الرابط يدويًا":"Copy the link manually",
+"انسخي الرابط يدويا":"Copy the link manually",
 "سجلي الدخول من زر حسابي الأول، وبعدين ابدئي البث":"Sign in from My account first, then start the broadcast",
 "البث شغال بالفعل":"Already live",
 "جاري تجهيز البث...":"Preparing the broadcast...",
@@ -458,35 +458,35 @@ const T={"الرئيسية":"Home",
 "انقطع البث، إعادة محاولة...":"Broadcast cut, retrying...",
 "المعلمة لسه ما بدأتش البث، جاري المحاولة...":"The teacher hasn't started yet, retrying...",
 "مشكلة اتصال، إعادة محاولة...":"Connection problem, retrying...",
-"الحسابات غير مفعّلة بعد":"Accounts aren't enabled yet",
+"الحسابات غير مفعلة بعد":"Accounts aren't enabled yet",
 "تسجيل خروج":"Sign out",
 "نسخ الكود":"Copy code",
 "اتنسخ الكود":"Code copied",
 "كود المعلمة (تشاركيه مع الطلاب عند تسجيلهم):":"Teacher code (share it with students when they sign up):",
 "الطلاب المرتبطين: ":"Linked students: ",
 "طالبة":"student",
-"أهلاً بيكِ":"Welcome!",
+"أهلا بيك":"Welcome!",
 "محفوظ في حسابك":"Saved to your account",
 "حفظ محلي على هذا الجهاز":"Saved locally on this device",
 "جاري الحفظ في حسابك...":"Saving to your account...",
-"حُفظ محليًا":"Saved locally",
+"حفظ محليا":"Saved locally",
 "تعذر الحفظ السحابي":"Cloud save failed",
 "جاري التحميل...":"Loading...",
 "تعذر التحميل، تأكدي من الاتصال":"Could not load, check your connection",
 "رجعنا آخر سبورة محفوظة من حسابك":"We restored your last saved board from your account",
 "ضفنا شغلك المحلي كصفحات جديدة في حسابك":"We added your local work as new pages in your account",
 "شغلك اتسجل في حسابك":"Your work was saved to your account",
-"فتحتِ سبورة مشارَكة":"You opened a shared board",
+"فتحت سبورة مشاركة":"You opened a shared board",
 "رابط المشاركة غير صالح":"Invalid share link",
 "اتلصقت الصورة":"Image placed",
 "اتمسحت الصفحة":"Page cleared",
-"نزّلت الصفحات PDF":"Pages downloaded as PDF",
-"نزّلت الصفحة صورة":"Page downloaded as image",
+"نزلت الصفحات PDF":"Pages downloaded as PDF",
+"نزلت الصفحة صورة":"Page downloaded as image",
 "اسمحي بالنوافذ المنبثقة":"Please allow pop-ups",
-"لفّي الموبايل بالعرض لسبورة أكبر":"Rotate your phone for a bigger board",
+"لفي الموبايل بالعرض لسبورة أكبر":"Rotate your phone for a bigger board",
 "الرسم الذكي يعمل":"Smart drawing on",
 "الرسم الذكي متوقف":"Smart drawing off",
-"تحوّلت لشكل ":"Turned into ",
+"تحولت لشكل ":"Turned into ",
 "المصحف داخل السبورة":"Mushaf in the board",
 "اختاري السورة والآيات":"Choose the surah and verses",
 "من آية ":"From verse ",
@@ -496,10 +496,10 @@ const T={"الرئيسية":"Home",
 "استماع":"Listen",
 "أضيفي للسبورة":"Add to the board",
 "استماع للآيات...":"Playing verses...",
-"أُضيفت الآيات بِسْمِ الله":"Verses added, bismillah",
+"أضيفت الآيات بسم الله":"Verses added, bismillah",
 "صفحة ":"Page ",
 " من ":" of ",
-"لِسانورا":"LisaNura",
+"لسانورا":"LisaNura",
 "رجع العرض الأصلي":"View reset",
 "أنا طالبة":"I'm a student",
 "أنا معلمة":"I'm a teacher",
@@ -526,9 +526,9 @@ const T={"الرئيسية":"Home",
 "هذا الحساب موجود بالفعل، جربي تسجيل الدخول":"This account already exists, try signing in",
 "كلمة السر يجب أن تكون ٦ أحرف على الأقل":"Password must be at least 6 characters",
 "البريد الإلكتروني غير صحيح":"Invalid email",
-"محاولات كثيرة، انتظري قليلاً":"Too many attempts, wait a moment",
+"محاولات كثيرة، انتظري قليلا":"Too many attempts, wait a moment",
 "حدث خطأ: ":"Error: ",
-"سجلي الدخول أولاً":"Sign in first",
+"سجلي الدخول أولا":"Sign in first",
 "سجلي الدخول الأول":"Please sign in first",
 "تعذر بدء البث":"Could not start the broadcast",
 "تعذر تحميل مكتبة الاتصال":"Could not load the connection library",
@@ -537,7 +537,7 @@ const T={"الرئيسية":"Home",
 "تعذر فتح الكتاب":"Could not open the book",
 "كتاب":"book",
 "التسجيل يحتاج تأكيد بريد — أطلبي من الدعم إيقاف تأكيد البريد":"Sign-up needs email confirmation, ask support to disable email confirmation",
-"أَحْسَنْتِ":"Well done","مُمْتَاز":"Excellent","رَائِع":"Wonderful","بْرَافُو":"Bravo","صَحِيح":"Correct","حَاوِلِي مَرَّةً أُخْرَى":"Try again","قفل":"Close",
+"أحسنت":"Well done","ممتاز":"Excellent","رائع":"Wonderful","برافو":"Bravo","صحيح":"Correct","حاولي مرة أخرى":"Try again","قفل":"Close",
 "طلابي":"My students","للمعلمة فقط":"For the teacher only","لا توجد طالبات مرتبطات بعد":"No linked students yet","شاركي كود المعلمة من صفحة حسابي":"Share your teacher code from the My account page","انضمت":"Joined","لم تلعب بعد":"No games yet",
 "الإعدادات":"Settings",
 "لغة السبورة":"Board language",
@@ -566,7 +566,7 @@ function applyLang(l,skipSave){
   try{localStorage.setItem('letters-city:lang.v1',JSON.stringify(l));}catch(e){}
   document.documentElement.lang=l;
   document.documentElement.dir=l==='en'?'ltr':'rtl';
-  document.title=l==='en'?'LisaNura Board':'سَبُّورَةُ لِسَانُورَا';
+  document.title=l==='en'?'LisaNura Board':'سبورة لسانورا';
   translateDOM(document.body,l==='en');
   state.settings=Object.assign({},state.settings,{lang:l});
   syncPageUI();setSaveState();
@@ -592,8 +592,8 @@ function save(){if(readOnly)return;try{const d=JSON.stringify(state,p=>(typeof p
       if(st==='saving')setSaveState('جاري الحفظ في حسابك...');
       else if(st==='saved')setSaveState('محفوظ في حسابك');
       else setSaveState('تعذر الحفظ السحابي');});
-    if(!isTeacherOnline()){setSaveState('حُفظ محليًا');flashSave();}
-  }catch(e){setSaveState('حُفظ محليًا');flashSave();}}
+    if(!isTeacherOnline()){setSaveState('حفظ محليا');flashSave();}
+  }catch(e){setSaveState('حفظ محليا');flashSave();}}
 function flashSave(){clearTimeout(saveT);saveT=setTimeout(()=>setSaveState(),1600);}
 document.addEventListener('ln-auth',()=>setSaveState());
 function migrate(o){ /* v1: world 1600x1000, sizes in px */
@@ -1114,7 +1114,7 @@ function drawSticker(c,name,x,y,s){
   else if(name==='cloudS'){cloud(c,0,0,s*.28,'#eaf4fb');c.strokeStyle='#bcd6f5';c.lineWidth=2;cloud(c,0,0,s*.28,'rgba(255,255,255,0)');}
   c.restore();}
 const STICKERS=['star','heart','mosque','flower','sun','butterfly','fish','apple','crown'];
-const STAMPS=[['أَحْسَنْتِ','#d9a44f'],['مُمْتَاز','#c16a7e'],['رَائِع','#7a54c9'],['بْرَافُو','#3aa77c'],['صَحِيح','#4f7fd9'],['حَاوِلِي مَرَّةً أُخْرَى','#e05c5c']];
+const STAMPS=[['أحسنت','#d9a44f'],['ممتاز','#c16a7e'],['رائع','#7a54c9'],['برافو','#3aa77c'],['صحيح','#4f7fd9'],['حاولي مرة أخرى','#e05c5c']];
 function drawStamp(c,s,x,y,h){
   c.save();c.translate(x,y);c.rotate(-.06);
   c.font='700 '+h+'px Naskh, serif';c.textAlign='center';c.textBaseline='middle';c.direction=/[\u0600-\u06FF]/.test(s.text)?'rtl':'ltr';
@@ -1346,7 +1346,7 @@ function endStroke(e){
     const det=detectShape(cur.points);
     if(det){curPage().strokes.pop();undoStack.pop();
       pushUndo();curPage().strokes.push({kind:'shape',shape:det.shape,color,size:penSize/1000,x0:det.x0,y0:det.y0,x1:det.x1,y1:det.y1});
-      toast(tt('تحوّلت لشكل ')+tt(({line:'خط',arrow:'سهم',ellipse:'دائرة',rect:'مستطيل',triangle:'مثلث',pentagon:'خماسي',star:'نجمة'}[det.shape]||'')));}
+      toast(tt('تحولت لشكل ')+tt(({line:'خط',arrow:'سهم',ellipse:'دائرة',rect:'مستطيل',triangle:'مثلث',pentagon:'خماسي',star:'نجمة'}[det.shape]||'')));}
     else if(cur.points.length===1)cur.points.push([cur.points[0][0]+.0001,cur.points[0][1],1]);}
   cur=null;preview=null;shapeStart=null;redraw();save();liveDirty();}
 cv.addEventListener('pointerup',endStroke);
@@ -1522,16 +1522,16 @@ function renderPageToCanvas(page,W,H){
 document.getElementById('pngBtn').onclick=()=>{
   const off=renderPageToCanvas(curPage(),1600,Math.round(1600*cssH/cssW));
   const a=document.createElement('a');a.download='سبورة-صفحة-'+arNum(state.cur+1)+'.png';a.href=off.toDataURL('image/png');a.click();
-  toast('نزّلت الصفحة صورة');};
+  toast('نزلت الصفحة صورة');};
 document.getElementById('pdfBtn').onclick=async()=>{
   try{const {jsPDF}=window.jspdf;
     const W=1600,H=Math.round(1600*cssH/cssW);
     const pdf=new jsPDF({orientation:'landscape',unit:'px',format:[W,H],hotfixes:['px_scaling']});
     state.pages.forEach((p,i)=>{if(i)pdf.addPage([W,H],'landscape');pdf.addImage(renderPageToCanvas(p,W,H).toDataURL('image/jpeg',.92),'JPEG',0,0,W,H);});
-    pdf.save('سبورة-لِسانورا.pdf');toast('نزّلت الصفحات PDF');}
+    pdf.save('سبورة-لسانورا.pdf');toast('نزلت الصفحات PDF');}
   catch(e){const w=window.open('','_blank');if(!w){toast('اسمحي بالنوافذ المنبثقة');return;}
     const imgs=state.pages.map(p=>renderPageToCanvas(p,1600,Math.round(1600*cssH/cssW)).toDataURL('image/png'));
-    w.document.write('<html dir="rtl"><head><title>سَبُّورَةُ لِسَانُورَا</title><style>body{margin:0}img{width:100%;page-break-after:always;display:block}</style></head><body>'+imgs.map(s=>'<img src="'+s+'">').join('')+'<script>onload=()=>setTimeout(()=>print(),400)<\/script></body></html>');w.document.close();}};
+    w.document.write('<html dir="rtl"><head><title>سبورة لسانورا</title><style>body{margin:0}img{width:100%;page-break-after:always;display:block}</style></head><body>'+imgs.map(s=>'<img src="'+s+'">').join('')+'<script>onload=()=>setTimeout(()=>print(),400)<\/script></body></html>');w.document.close();}};
 
 /* ================= share: snapshot link ================= */
 document.getElementById('shareBtn').onclick=()=>{openSharePanel();};
@@ -1544,11 +1544,11 @@ function loadFromHash(){
   if(sM){const v=decodeURIComponent(sM[1]);
     if(/^[A-Za-z0-9]{6,12}$/.test(v)&&window.LN&&LN.configured()){ /* short cloud share id */
       LN.init().then(()=>LN.loadShared(v)).then(s=>{
-        if(s&&s.pages){state=s;readOnly=false;rehydrate();fit();syncPageUI();toast('فتحتِ سبورة مشارَكة');}
+        if(s&&s.pages){state=s;readOnly=false;rehydrate();fit();syncPageUI();toast('فتحت سبورة مشاركة');}
         else toast('رابط المشاركة غير صالح');});
       return true;}
     try{const s=JSON.parse(LZString.decompressFromEncodedURIComponent(v));
-    if(s&&s.pages){state=s;readOnly=false;rehydrate();toast('فتحتِ سبورة مشارَكة');}}catch(e){}return true;}
+    if(s&&s.pages){state=s;readOnly=false;rehydrate();toast('فتحت سبورة مشاركة');}}catch(e){}return true;}
   return false;}
 
 /* ================= toast / beep / confetti ================= */
@@ -1624,13 +1624,13 @@ function makeCard(id,title,build){
   card.style.left=left+'px';card.style.top=top+'px';}
 document.querySelectorAll('.witem').forEach(b=>b.addEventListener('click',()=>{
   const w=b.dataset.w;wPanel.classList.remove('open');
-  if(w==='timer')makeCard('timer','المؤقِّت',buildTimer);
+  if(w==='timer')makeCard('timer','المؤقت',buildTimer);
   if(w==='stopwatch')makeCard('stopwatch','ساعة الإيقاف',buildStopwatch);
   if(w==='wheel')makeCard('wheel','عجلة الأسماء',buildWheel);
   if(w==='picker')makeCard('picker','اختيار عشوائي',buildPicker);
   if(w==='score')makeCard('score','لوحة النقاط',buildScore);
   if(w==='traffic')makeCard('traffic','إشارة المرور',buildTraffic);
-  if(w==='counter')makeCard('counter','عدّاد التكرار',buildCounter);
+  if(w==='counter')makeCard('counter','عداد التكرار',buildCounter);
   if(w==='party')celebrate();
   if(w==='students')makeCard('students','طلابي',buildStudents);
   if(w==='lang')makeCard('settings','الإعدادات',buildSettings);}));
@@ -1716,11 +1716,11 @@ function buildTraffic(body){
     body.querySelectorAll('.bulb').forEach(x=>x.classList.remove('on'));
     b.classList.add('on');msg.textContent=b.dataset.l;beep(b.dataset.l[0]==='أ'?330:660,.15);});}
 function buildCounter(body){
-  body.innerHTML='<div class="bigtime" style="font-size:64px">٠</div><div class="row"><button class="abtn" style="font-size:22px;padding:10px 26px">عدّ</button><button class="abtn ghost">صفر</button></div>';
+  body.innerHTML='<div class="bigtime" style="font-size:64px">٠</div><div class="row"><button class="abtn" style="font-size:22px;padding:10px 26px">عد</button><button class="abtn ghost">صفر</button></div>';
   const d=body.querySelector('.bigtime');let n=0;
   body.querySelectorAll('.abtn')[0].onclick=()=>{n++;d.textContent=arNum(n);beep(700,.06);};
   body.querySelectorAll('.abtn')[1].onclick=()=>{n=0;d.textContent='٠';};}
-const SURAHS=[[1, "سُورَةُ ٱلْفَاتِحَةِ", 7], [2, "سُورَةُ البَقَرَةِ", 286], [3, "سُورَةُ آلِ عِمۡرَانَ", 200], [4, "سُورَةُ النِّسَاءِ", 176], [5, "سُورَةُ المَائـِدَةِ", 120], [6, "سُورَةُ الأَنۡعَامِ", 165], [7, "سُورَةُ الأَعۡرَافِ", 206], [8, "سُورَةُ الأَنفَالِ", 75], [9, "سُورَةُ التَّوۡبَةِ", 129], [10, "سُورَةُ يُونُسَ", 109], [11, "سُورَةُ هُودٍ", 123], [12, "سُورَةُ يُوسُفَ", 111], [13, "سُورَةُ الرَّعۡدِ", 43], [14, "سُورَةُ إِبۡرَاهِيمَ", 52], [15, "سُورَةُ الحِجۡرِ", 99], [16, "سُورَةُ النَّحۡلِ", 128], [17, "سُورَةُ الإِسۡرَاءِ", 111], [18, "سُورَةُ الكَهۡفِ", 110], [19, "سُورَةُ مَرۡيَمَ", 98], [20, "سُورَةُ طه", 135], [21, "سُورَةُ الأَنبِيَاءِ", 112], [22, "سُورَةُ الحَجِّ", 78], [23, "سُورَةُ المُؤۡمِنُونَ", 118], [24, "سُورَةُ النُّورِ", 64], [25, "سُورَةُ الفُرۡقَانِ", 77], [26, "سُورَةُ الشُّعَرَاءِ", 227], [27, "سُورَةُ النَّمۡلِ", 93], [28, "سُورَةُ القَصَصِ", 88], [29, "سُورَةُ العَنكَبُوتِ", 69], [30, "سُورَةُ الرُّومِ", 60], [31, "سُورَةُ لُقۡمَانَ", 34], [32, "سُورَةُ السَّجۡدَةِ", 30], [33, "سُورَةُ الأَحۡزَابِ", 73], [34, "سُورَةُ سَبَإٍ", 54], [35, "سُورَةُ فَاطِرٍ", 45], [36, "سُورَةُ يسٓ", 83], [37, "سُورَةُ الصَّافَّاتِ", 182], [38, "سُورَةُ صٓ", 88], [39, "سُورَةُ الزُّمَرِ", 75], [40, "سُورَةُ غَافِرٍ", 85], [41, "سُورَةُ فُصِّلَتۡ", 54], [42, "سُورَةُ الشُّورَىٰ", 53], [43, "سُورَةُ الزُّخۡرُفِ", 89], [44, "سُورَةُ الدُّخَانِ", 59], [45, "سُورَةُ الجَاثِيَةِ", 37], [46, "سُورَةُ الأَحۡقَافِ", 35], [47, "سُورَةُ مُحَمَّدٍ", 38], [48, "سُورَةُ الفَتۡحِ", 29], [49, "سُورَةُ الحُجُرَاتِ", 18], [50, "سُورَةُ قٓ", 45], [51, "سُورَةُ الذَّارِيَاتِ", 60], [52, "سُورَةُ الطُّورِ", 49], [53, "سُورَةُ النَّجۡمِ", 62], [54, "سُورَةُ القَمَرِ", 55], [55, "سُورَةُ الرَّحۡمَٰن", 78], [56, "سُورَةُ الوَاقِعَةِ", 96], [57, "سُورَةُ الحَدِيدِ", 29], [58, "سُورَةُ المُجَادلَةِ", 22], [59, "سُورَةُ الحَشۡرِ", 24], [60, "سُورَةُ المُمۡتَحنَةِ", 13], [61, "سُورَةُ الصَّفِّ", 14], [62, "سُورَةُ الجُمُعَةِ", 11], [63, "سُورَةُ المُنَافِقُونَ", 11], [64, "سُورَةُ التَّغَابُنِ", 18], [65, "سُورَةُ الطَّلَاقِ", 12], [66, "سُورَةُ التَّحۡرِيمِ", 12], [67, "سُورَةُ المُلۡكِ", 30], [68, "سُورَةُ القَلَمِ", 52], [69, "سُورَةُ الحَاقَّةِ", 52], [70, "سُورَةُ المَعَارِجِ", 44], [71, "سُورَةُ نُوحٍ", 28], [72, "سُورَةُ الجِنِّ", 28], [73, "سُورَةُ المُزَّمِّلِ", 20], [74, "سُورَةُ المُدَّثِّرِ", 56], [75, "سُورَةُ القِيَامَةِ", 40], [76, "سُورَةُ الإِنسَانِ", 31], [77, "سُورَةُ المُرۡسَلَاتِ", 50], [78, "سُورَةُ النَّبَإِ", 40], [79, "سُورَةُ النَّازِعَاتِ", 46], [80, "سُورَةُ عَبَسَ", 42], [81, "سُورَةُ التَّكۡوِيرِ", 29], [82, "سُورَةُ الانفِطَارِ", 19], [83, "سُورَةُ المُطَفِّفِينَ", 36], [84, "سُورَةُ الانشِقَاقِ", 25], [85, "سُورَةُ البُرُوجِ", 22], [86, "سُورَةُ الطَّارِقِ", 17], [87, "سُورَةُ الأَعۡلَىٰ", 19], [88, "سُورَةُ الغَاشِيَةِ", 26], [89, "سُورَةُ الفَجۡرِ", 30], [90, "سُورَةُ البَلَدِ", 20], [91, "سُورَةُ الشَّمۡسِ", 15], [92, "سُورَةُ اللَّيۡلِ", 21], [93, "سُورَةُ الضُّحَىٰ", 11], [94, "سُورَةُ الشَّرۡحِ", 8], [95, "سُورَةُ التِّينِ", 8], [96, "سُورَةُ العَلَقِ", 19], [97, "سُورَةُ القَدۡرِ", 5], [98, "سُورَةُ البَيِّنَةِ", 8], [99, "سُورَةُ الزَّلۡزَلَةِ", 8], [100, "سُورَةُ العَادِيَاتِ", 11], [101, "سُورَةُ القَارِعَةِ", 11], [102, "سُورَةُ التَّكَاثُرِ", 8], [103, "سُورَةُ العَصۡرِ", 3], [104, "سُورَةُ الهُمَزَةِ", 9], [105, "سُورَةُ الفِيلِ", 5], [106, "سُورَةُ قُرَيۡشٍ", 4], [107, "سُورَةُ المَاعُونِ", 7], [108, "سُورَةُ الكَوۡثَرِ", 3], [109, "سُورَةُ الكَافِرُونَ", 6], [110, "سُورَةُ النَّصۡرِ", 3], [111, "سُورَةُ المَسَدِ", 5], [112, "سُورَةُ الإِخۡلَاصِ", 4], [113, "سُورَةُ الفَلَقِ", 5], [114, "سُورَةُ النَّاسِ", 6]];
+const SURAHS=[[1, "سورة الفاتحة", 7], [2, "سورة البقرة", 286], [3, "سورة ال عمۡران", 200], [4, "سورة النساء", 176], [5, "سورة المائـدة", 120], [6, "سورة الأنۡعام", 165], [7, "سورة الأعۡراف", 206], [8, "سورة الأنفال", 75], [9, "سورة التوۡبة", 129], [10, "سورة يونس", 109], [11, "سورة هود", 123], [12, "سورة يوسف", 111], [13, "سورة الرعۡد", 43], [14, "سورة إبۡراهيم", 52], [15, "سورة الحجۡر", 99], [16, "سورة النحۡل", 128], [17, "سورة الإسۡراء", 111], [18, "سورة الكهۡف", 110], [19, "سورة مرۡيم", 98], [20, "سورة طه", 135], [21, "سورة الأنبياء", 112], [22, "سورة الحج", 78], [23, "سورة المؤۡمنون", 118], [24, "سورة النور", 64], [25, "سورة الفرۡقان", 77], [26, "سورة الشعراء", 227], [27, "سورة النمۡل", 93], [28, "سورة القصص", 88], [29, "سورة العنكبوت", 69], [30, "سورة الروم", 60], [31, "سورة لقۡمان", 34], [32, "سورة السجۡدة", 30], [33, "سورة الأحۡزاب", 73], [34, "سورة سبإ", 54], [35, "سورة فاطر", 45], [36, "سورة يس", 83], [37, "سورة الصافات", 182], [38, "سورة ص", 88], [39, "سورة الزمر", 75], [40, "سورة غافر", 85], [41, "سورة فصلتۡ", 54], [42, "سورة الشورى", 53], [43, "سورة الزخۡرف", 89], [44, "سورة الدخان", 59], [45, "سورة الجاثية", 37], [46, "سورة الأحۡقاف", 35], [47, "سورة محمد", 38], [48, "سورة الفتۡح", 29], [49, "سورة الحجرات", 18], [50, "سورة ق", 45], [51, "سورة الذاريات", 60], [52, "سورة الطور", 49], [53, "سورة النجۡم", 62], [54, "سورة القمر", 55], [55, "سورة الرحۡمن", 78], [56, "سورة الواقعة", 96], [57, "سورة الحديد", 29], [58, "سورة المجادلة", 22], [59, "سورة الحشۡر", 24], [60, "سورة الممۡتحنة", 13], [61, "سورة الصف", 14], [62, "سورة الجمعة", 11], [63, "سورة المنافقون", 11], [64, "سورة التغابن", 18], [65, "سورة الطلاق", 12], [66, "سورة التحۡريم", 12], [67, "سورة الملۡك", 30], [68, "سورة القلم", 52], [69, "سورة الحاقة", 52], [70, "سورة المعارج", 44], [71, "سورة نوح", 28], [72, "سورة الجن", 28], [73, "سورة المزمل", 20], [74, "سورة المدثر", 56], [75, "سورة القيامة", 40], [76, "سورة الإنسان", 31], [77, "سورة المرۡسلات", 50], [78, "سورة النبإ", 40], [79, "سورة النازعات", 46], [80, "سورة عبس", 42], [81, "سورة التكۡوير", 29], [82, "سورة الانفطار", 19], [83, "سورة المطففين", 36], [84, "سورة الانشقاق", 25], [85, "سورة البروج", 22], [86, "سورة الطارق", 17], [87, "سورة الأعۡلى", 19], [88, "سورة الغاشية", 26], [89, "سورة الفجۡر", 30], [90, "سورة البلد", 20], [91, "سورة الشمۡس", 15], [92, "سورة الليۡل", 21], [93, "سورة الضحى", 11], [94, "سورة الشرۡح", 8], [95, "سورة التين", 8], [96, "سورة العلق", 19], [97, "سورة القدۡر", 5], [98, "سورة البينة", 8], [99, "سورة الزلۡزلة", 8], [100, "سورة العاديات", 11], [101, "سورة القارعة", 11], [102, "سورة التكاثر", 8], [103, "سورة العصۡر", 3], [104, "سورة الهمزة", 9], [105, "سورة الفيل", 5], [106, "سورة قريۡش", 4], [107, "سورة الماعون", 7], [108, "سورة الكوۡثر", 3], [109, "سورة الكافرون", 6], [110, "سورة النصۡر", 3], [111, "سورة المسد", 5], [112, "سورة الإخۡلاص", 4], [113, "سورة الفلق", 5], [114, "سورة الناس", 6]];
 const SURAH_START=[];{let a=1;SURAHS.forEach(s=>{SURAH_START.push(a);a+=s[2];});}
 const RECITERS=[['ar.alafasy','مشاري العفاسي'],['ar.abdulbasitmurattal','عبد الباسط عبد الصمد'],['ar.husary','محمود خليل الحصري'],['ar.minshawi','محمد صديق المنشاوي'],['ar.mahermuaiqly','ماهر المعيقلي'],['ar.hudhaify','علي الحذيفي']];
 function drawQuranCard(c,s){
@@ -1786,7 +1786,7 @@ function buildQuran(body){
       if(line)lines.push(line);});
     pushUndo();
     curPage().strokes.push({kind:'quran',x:.5,y:.28,w:maxW,lines,ref:curAyat[0].surah.name+' - الآيات '+arNum(f)+' - '+arNum(f+curAyat.length-1),size});
-    closeCard('quran');redraw();save();liveDirty();toast('أُضيفت الآيات بِسْمِ الله');};
+    closeCard('quran');redraw();save();liveDirty();toast('أضيفت الآيات بسم الله');};
   loadPrev();}
 function closeCard(id){const c=document.getElementById('fc-'+id);if(c){delete cards[id];c.remove();}}
 
@@ -1892,7 +1892,7 @@ function buildShare(body){
         link=location.origin+location.pathname+'#s='+id;}catch(e){}}
     if(!link)link=snapshotLink(); /* guest fallback: long encoded link */
     try{await navigator.clipboard.writeText(link);st.textContent=tt('اتنسخ الرابط، ابعتيه للطالب');}
-    catch(e){st.textContent=tt('انسخي الرابط يدويًا');}
+    catch(e){st.textContent=tt('انسخي الرابط يدويا');}
     out.textContent=link;};
   body.querySelector('#goLive').onclick=async()=>{
     if(window.LN&&LN.configured()){
@@ -1949,7 +1949,7 @@ function syncStudentsEntry(){const b=document.getElementById('wStudents');if(b)b
 document.addEventListener('ln-auth',syncStudentsEntry);
 function buildStudents(body){
   body.innerHTML='<div style="text-align:center;color:#a98b7f;font-size:13px">...</div>';
-  if(!window.LN||!LN.configured()){body.innerHTML='<div style="color:var(--maroon);text-align:center;font-size:14px">الحسابات غير مفعّلة بعد</div>';return;}
+  if(!window.LN||!LN.configured()){body.innerHTML='<div style="color:var(--maroon);text-align:center;font-size:14px">الحسابات غير مفعلة بعد</div>';return;}
   LN.init().then(async()=>{
     if(!isTeacherOnline()){body.innerHTML='<div style="color:var(--maroon);text-align:center;font-size:14px">'+tt('للمعلمة فقط')+'</div>';return;}
     let ss=[];
@@ -1992,11 +1992,11 @@ function buildStudents(body){
 /* ================= account ================= */
 document.getElementById('acctBtn').onclick=()=>makeCard('acct','حسابي',buildAcct);
 function buildAcct(body){
-  if(!window.LN||!LN.configured()){body.innerHTML='<div style="color:var(--maroon);font-size:14px;text-align:center">الحسابات غير مفعّلة بعد</div>';return;}
+  if(!window.LN||!LN.configured()){body.innerHTML='<div style="color:var(--maroon);font-size:14px;text-align:center">الحسابات غير مفعلة بعد</div>';return;}
   body.innerHTML='<div id="acctIn" style="width:100%"></div>';
   LN.init().then(()=>{
     const w=body.querySelector('#acctIn');
-    if(!LN.user){LN.renderAuth(w,{onAuth:async()=>{closeCard('acct');await restoreFromCloud();toast('أهلاً بيكِ');}});if(lang==='en')translateDOM(w,true);return;}
+    if(!LN.user){LN.renderAuth(w,{onAuth:async()=>{closeCard('acct');await restoreFromCloud();toast('أهلا بيك');}});if(lang==='en')translateDOM(w,true);return;}
     const p=LN.profile||{};const roleAr=p.role==='teacher'?'معلمة':'طالبة';
     let html='<div style="text-align:center;color:var(--maroon)"><b style="font-size:17px"></b><div style="font-size:13px;color:#a98b7f">'+roleAr+'</div></div>';
     if(p.role==='teacher')html+='<div style="font-size:12px;color:#a98b7f;text-align:center;margin-top:8px">كود المعلمة (تشاركيه مع الطلاب عند تسجيلهم):</div>'
@@ -2059,7 +2059,7 @@ async function restoreFromCloud(){
   else setSaveState();
   }catch(e){setSaveState();}
   document.fonts&&document.fonts.load&&document.fonts.load('40px "Amiri Quran"');
-  if(!fromHash&&matchMedia('(orientation: portrait)').matches&&innerWidth<760)setTimeout(()=>toast('لفّي الموبايل بالعرض لسبورة أكبر'),1200);
+  if(!fromHash&&matchMedia('(orientation: portrait)').matches&&innerWidth<760)setTimeout(()=>toast('لفي الموبايل بالعرض لسبورة أكبر'),1200);
 })();
 </script>
 </body>

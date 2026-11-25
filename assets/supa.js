@@ -7,7 +7,7 @@ window.LN=(()=>{
   const STUDENT_DOMAIN='lisanura-students.app';
   const LIB='https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js';
   let sb=null,user=null,profile=null,readyPromise=null,liveChan=null,liveJoinChan=null;
-  function lang(){try{const v=localStorage.getItem('letters-city:lang.v1');const p=v===null?'ar':JSON.parse(v);return p==='en'?'en':'ar';}catch(e){return 'ar';}}
+  function lang(){try{const v=localStorage.getItem('letters-city:lang.v1');const p=v===null?'en':JSON.parse(v);return p==='en'?'en':'ar';}catch(e){return 'en';}}
   function L(ar,en){return lang()==='en'?en:ar;}
 
   function configured(){const c=window.LN_CONFIG||{};return !!(c.url&&c.anon&&c.url.indexOf('https://')===0);}
@@ -82,7 +82,7 @@ window.LN=(()=>{
     if(/already registered|already been registered/i.test(m))return L('هذا الحساب موجود بالفعل، جربي تسجيل الدخول','This account already exists. Try logging in');
     if(/at least 6/i.test(m))return L('كلمة السر يجب أن تكون ٦ أحرف على الأقل','Password must be at least 6 characters');
     if(/invalid email/i.test(m))return L('البريد الإلكتروني غير صحيح','Invalid email address');
-    if(/rate limit/i.test(m))return L('محاولات كثيرة، انتظري قليلاً','Too many attempts. Wait a little');
+    if(/rate limit/i.test(m))return L('محاولات كثيرة، انتظري قليلا','Too many attempts. Wait a little');
     return L('حدث خطأ: ','Error: ')+m;}
 
   /* ---------------- board autosave ---------------- */
@@ -135,7 +135,7 @@ window.LN=(()=>{
       const {data}=await q;return data||[];}catch(e){return[];}}
 
   /* game/route titles (extracted from the home app bundle) for progress display */
-  const GAME_TITLES={"arabic":["اللُّغَةُ الْعَرَبِيَّةُ","Arabic language"],"quran":["الْقُرْآنُ وَالتَّجْوِيدُ","Quran and Tajweed"],"islamic":["الْإِسْلَامِيَّاتُ","Islamic studies"],"letters":["مَدِينَةُ الْحُرُوفِ","Letters City"],"gender":["مذكر أم مؤنث؟","Masculine or feminine?"],"prep":["حُرُوفُ الْجَرِّ","Prepositions"],"words":["تَكْوِينُ الْكَلِمَاتِ وَالْجُمَلِ","Building words and sentences"],"reading":["الْقِرَاءَةُ (نُورُ بَيَانٍ)","Reading"],"noon":["حُرُوفُ النُّونِ السَّاكِنَةِ","Noon sakinah: the letters"],"noonv":["أَمْثِلَةٌ مِنَ الْقُرْآنِ","Examples from the Quran"],"ghunna":["الْإِدْغَامُ: بِغُنَّةٍ أَمْ بِغَيْرِ غُنَّةٍ؟","Idgham: with or without ghunna?"],"shadda":["غُنَّةُ النُّونِ وَالْمِيمِ الْمُشَدَّدَتَيْنِ","Ghunna of doubled noon and meem"],"meem":["حُرُوفُ الْمِيمِ السَّاكِنَةِ","Meem sakinah: the letters"],"meemv":["أَمْثِلَةٌ مِنَ الْقُرْآنِ","Examples from the Quran"],"lam":["الْحُرُوفُ الْقَمَرِيَّةُ وَالشَّمْسِيَّةُ","Moon and sun letters"],"lamv":["أَمْثِلَةٌ مِنَ الْقُرْآنِ","Examples from the Quran"],"lamverb":["لَامُ الْفِعْلِ","Laam of the verb"],"mith":["نَوْعُ الْحَرْفَيْنِ","The kind of the two letters"],"mithv":["أَمْثِلَةٌ مِنَ الْقُرْآنِ","Examples from the Quran"],"madd":["كَمْ حَرَكَةً نَمُدُّ؟","How long do we hold it?"],"maddv":["أَمْثِلَةٌ مِنَ الْقُرْآنِ","Examples from the Quran"],"pillars":["أَرْكَانُ الْإِسْلَامِ وَالْإِيمَانِ","Pillars of Islam and faith"],"tf":["صَحٌّ أَمْ غَلَطٌ؟","True or false?"],"seerah":["تَرْتِيبُ أَحْدَاثِ السِّيرَةِ","Seerah timeline"],"hadith":["قِصَصُ الْأَحَادِيثِ","Hadith stories"],"adhkar":["الْأَذْكَارُ","Adhkar (daily supplications)"],"dots":["بَيْتُ النُّقَاطِ","The Dot House"],"elevator":["مِصْعَدُ الْحَرَكَاتِ","The Vowel Elevator"],"rain":["مَطَرُ الْحُرُوفِ","Letter Rain"],"shadow":["الظِّلُّ الصَّحِيحُ","The Right Shadow"],"sound":["صَائِدُ الْأَصْوَاتِ","The Sound Hunter"],"scale":["مِيزَانُ النُّقَاطِ","The Dot Scale"],"hidden":["الْحُرُوفُ الْخَفِيَّةُ","The Hidden Letters"],"train":["قِطَارُ الْأَبْجَدِيَّةِ","The Alphabet Train"]};
+  const GAME_TITLES={"arabic":["اللغة العربية","Arabic language"],"quran":["القرآن والتجويد","Quran and Tajweed"],"islamic":["الإسلاميات","Islamic studies"],"letters":["مدينة الحروف","Letters City"],"gender":["مذكر أم مؤنث؟","Masculine or feminine?"],"prep":["حروف الجر","Prepositions"],"words":["تكوين الكلمات والجمل","Building words and sentences"],"reading":["القراءة (نور بيان)","Reading"],"noon":["حروف النون الساكنة","Noon sakinah: the letters"],"noonv":["أمثلة من القرآن","Examples from the Quran"],"ghunna":["الإدغام: بغنة أم بغير غنة؟","Idgham: with or without ghunna?"],"shadda":["غنة النون والميم المشددتين","Ghunna of doubled noon and meem"],"meem":["حروف الميم الساكنة","Meem sakinah: the letters"],"meemv":["أمثلة من القرآن","Examples from the Quran"],"lam":["الحروف القمرية والشمسية","Moon and sun letters"],"lamv":["أمثلة من القرآن","Examples from the Quran"],"lamverb":["لام الفعل","Laam of the verb"],"mith":["نوع الحرفين","The kind of the two letters"],"mithv":["أمثلة من القرآن","Examples from the Quran"],"madd":["كم حركة نمد؟","How long do we hold it?"],"maddv":["أمثلة من القرآن","Examples from the Quran"],"pillars":["أركان الإسلام والإيمان","Pillars of Islam and faith"],"tf":["صح أم غلط؟","True or false?"],"seerah":["ترتيب أحداث السيرة","Seerah timeline"],"hadith":["قصص الأحاديث","Hadith stories"],"adhkar":["الأذكار","Adhkar (daily supplications)"],"dots":["بيت النقاط","The Dot House"],"elevator":["مصعد الحركات","The Vowel Elevator"],"rain":["مطر الحروف","Letter Rain"],"shadow":["الظل الصحيح","The Right Shadow"],"sound":["صائد الأصوات","The Sound Hunter"],"scale":["ميزان النقاط","The Dot Scale"],"hidden":["الحروف الخفية","The Hidden Letters"],"train":["قطار الأبجدية","The Alphabet Train"]};
 
   async function listStudentsProgress(){ /* teacher: linked students + their game progress rows */
     await init();if(!user||!profile||profile.role!=='teacher')return[];
@@ -157,7 +157,7 @@ window.LN=(()=>{
 
   /* ---------------- live rooms (Realtime broadcast) ---------------- */
   async function liveStart(onViewers){
-    await init();if(!user)throw new Error(L('سجلي الدخول أولاً','Log in first'));
+    await init();if(!user)throw new Error(L('سجلي الدخول أولا','Log in first'));
     await sb.from('live_rooms').upsert({teacher_id:user.id,live:true,updated_at:new Date().toISOString()});
     liveChan=sb.channel('live:'+user.id);
     liveChan.on('broadcast',{event:'hello'},()=>{ /* a student joined */});
@@ -191,7 +191,7 @@ window.LN=(()=>{
     const lbase=location.pathname.indexOf('/board/')>-1?'../assets/':'assets/';
     container.innerHTML=
     '<div dir="'+(en?'ltr':'rtl')+'" style="font-family:Naskh,serif;max-width:340px;margin:0 auto;background:#fffdf6;border:2px solid #e8cfc0;border-radius:18px;padding:22px;box-shadow:0 8px 24px rgba(124,45,73,.15)">'
-    +'<div style="text-align:center;margin-bottom:6px"><img src="'+lbase+(en?'logo-en.png?v=4':'logo-ar.png?v=4')+'" alt="لِسانورا" style="height:64px;width:auto;max-width:100%"></div>'
+    +'<div style="text-align:center;margin-bottom:6px"><img src="'+lbase+(en?'logo-en.png?v=4':'logo-ar.png?v=4')+'" alt="لسانورا" style="height:64px;width:auto;max-width:100%"></div>'
     +'<div id="lnTabs" style="display:flex;gap:6px;margin:12px 0">'
     +'<button data-t="in" style="flex:1;padding:8px;border-radius:12px;border:2px solid #c16a7e;background:#c16a7e;color:#fff;font-weight:700;font-family:Naskh">'+L('تسجيل دخول','Log in')+'</button>'
     +'<button data-t="up" style="flex:1;padding:8px;border-radius:12px;border:2px solid #c16a7e;background:#fff;color:#7e4150;font-weight:700;font-family:Naskh">'+L('حساب جديد','New account')+'</button></div>'

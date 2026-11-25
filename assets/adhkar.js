@@ -13,168 +13,168 @@ var d=document;
 var DUAS=[
   {
     id:'waking',
-    titleAr:'الاسْتِيقاظُ مِنَ النَّوْمِ',
+    titleAr:'الاستيقاظ من النوم',
     titleEn:'Waking up',
     img:'assets/adhkar-waking.webp',
     imgGirl:'assets/adhkar-waking-girl.webp',
     imgBoy:'assets/adhkar-waking-boy.webp',
     ar:'الْحَمْدُ لِلَّهِ الَّذِي أَحْيَانَا بَعْدَ مَا أَمَاتَنَا وَإِلَيْهِ النُّشُورُ',
-    ref:'رَوَاهُ الْبُخَارِيُّ',
-    meaningAr:'نَحْمَدُ اللهَ أَنَّهُ أَعَادَ لَنَا الْحَيَاةَ بَعْدَ النَّوْمِ، وَإِلَيْهِ نَرْجِعُ يَوْمَ الْقِيَامَةِ.',
+    ref:'رواه البخاري',
+    meaningAr:'نحمد الله أنه أعاد لنا الحياة بعد النوم، وإليه نرجع يوم القيامة.',
     meaningEn:'Praise be to Allah Who gave us life after He caused us to die, and to Him is the resurrection.',
     translit:'Alhamdu lillaahil-lathee ahyaanaa ba’da maa amaatanaa wa ilayhin-nushoor.',
     audio:'assets/adhkar-waking.mp3'
   },
   {
     id:'sleep',
-    titleAr:'قَبْلَ النَّوْمِ',
+    titleAr:'قبل النوم',
     titleEn:'Before sleep',
     img:'assets/adhkar-sleep.webp',
     imgGirl:'assets/adhkar-sleep-girl.webp',
     imgBoy:'assets/adhkar-sleep-boy.webp',
     ar:'اللَّهُمَّ بِاسْمِكَ أَمُوتُ وَأَحْيَا',
-    ref:'رَوَاهُ الْبُخَارِيُّ',
-    meaningAr:'يَا اللهُ، بِذِكْرِكَ وَاسْمِكَ أَنَامُ وَأَسْتَيْقِظُ؛ فَالنَّوْمُ يُشْبِهُ الْمَوْتَ وَالاسْتِيقَاظُ يُشْبِهُ الْحَيَاةَ.',
+    ref:'رواه البخاري',
+    meaningAr:'يا الله، بذكرك واسمك أنام وأستيقظ؛ فالنوم يشبه الموت والاستيقاظ يشبه الحياة.',
     meaningEn:'O Allah, in Your name I die and I live. (Sleep is like a small death and waking up is like coming back to life.)',
     translit:'Allaahumma bismika amootu wa ahyaa.',
     audio:'assets/adhkar-sleep.mp3'
   },
   {
     id:'homeout',
-    titleAr:'الْخُرُوجُ مِنَ الْمَنْزِلِ',
+    titleAr:'الخروج من المنزل',
     titleEn:'Leaving home',
     img:'assets/adhkar-homeout.webp',
     imgGirl:'assets/adhkar-homeout-girl.webp',
     imgBoy:'assets/adhkar-homeout-boy.webp',
     ar:'بِسْمِ اللهِ، تَوَكَّلْتُ عَلَى اللهِ، وَلَا حَوْلَ وَلَا قُوَّةَ إِلَّا بِاللهِ',
-    ref:'رَوَاهُ أَبُو دَاوُدَ وَالتِّرْمِذِيُّ',
-    meaningAr:'أَبْدَأُ بِاسْمِ اللهِ وَأَتَوَكَّلُ عَلَيْهِ، وَلَا قُوَّةَ لِي إِلَّا بِهِ.',
+    ref:'رواه أبو داود والترمذي',
+    meaningAr:'أبدأ باسم الله وأتوكل عليه، ولا قوة لي إلا به.',
     meaningEn:'In the name of Allah, I put my trust in Allah, and there is no might nor power except with Allah.',
     translit:'Bismillaah, tawakkaltu ‘alallaah, wa laa hawla wa laa quwwata illaa billaah.',
     audio:'assets/adhkar-homeout.mp3'
   },
   {
     id:'homein',
-    titleAr:'دُخُولُ الْمَنْزِلِ',
+    titleAr:'دخول المنزل',
     titleEn:'Entering home',
     img:'assets/adhkar-homein.webp',
     imgGirl:'assets/adhkar-homein-girl.webp',
     imgBoy:'assets/adhkar-homein-boy.webp',
     ar:'بِسْمِ اللهِ وَلَجْنَا، وَبِسْمِ اللهِ خَرَجْنَا، وَعَلَى رَبِّنَا تَوَكَّلْنَا',
-    ref:'رَوَاهُ أَبُو دَاوُدَ',
-    meaningAr:'بِاسْمِ اللهِ دَخَلْنَا بَيْتَنَا، وَبِاسْمِهِ نَخْرُجُ مِنْهُ، وَعَلَيْهِ وَحْدَهُ نَعْتَمِدُ.',
+    ref:'رواه أبو داود',
+    meaningAr:'باسم الله دخلنا بيتنا، وباسمه نخرج منه، وعليه وحده نعتمد.',
     meaningEn:'In the name of Allah we enter, in the name of Allah we leave, and upon our Lord we rely.',
     translit:'Bismillaahi walajnaa, wa bismillaahi kharajnaa, wa ‘alaa rabbinaa tawakkalnaa.',
     audio:'assets/adhkar-homein.mp3'
   },
   {
     id:'mosquein',
-    titleAr:'دُخُولُ الْمَسْجِدِ',
+    titleAr:'دخول المسجد',
     titleEn:'Entering the mosque',
     img:'assets/adhkar-mosquein.webp',
     imgGirl:'assets/adhkar-mosquein-girl.webp',
     imgBoy:'assets/adhkar-mosquein-boy.webp',
     ar:'اللَّهُمَّ افْتَحْ لِي أَبْوَابَ رَحْمَتِكَ',
-    ref:'رَوَاهُ مُسْلِمٌ',
-    meaningAr:'يَا اللهُ، افْتَحْ لِي أَبْوَابَ رَحْمَتِكَ حِينَ أَدْخُلُ بَيْتَكَ.',
+    ref:'رواه مسلم',
+    meaningAr:'يا الله، افتح لي أبواب رحمتك حين أدخل بيتك.',
     meaningEn:'O Allah, open for me the doors of Your mercy.',
     translit:'Allaahummaf-tah lee abwaaba rahmatik.',
     audio:'assets/adhkar-mosquein.mp3'
   },
   {
     id:'mosqueout',
-    titleAr:'الْخُرُوجُ مِنَ الْمَسْجِدِ',
+    titleAr:'الخروج من المسجد',
     titleEn:'Leaving the mosque',
     img:'assets/adhkar-mosqueout.webp',
     imgGirl:'assets/adhkar-mosqueout-girl.webp',
     imgBoy:'assets/adhkar-mosqueout-boy.webp',
     ar:'اللَّهُمَّ إِنِّي أَسْأَلُكَ مِنْ فَضْلِكَ',
-    ref:'رَوَاهُ مُسْلِمٌ',
-    meaningAr:'يَا اللهُ، إِنِّي أَسْأَلُكَ مِنْ عَطَائِكَ وَخَيْرِكَ.',
+    ref:'رواه مسلم',
+    meaningAr:'يا الله، إني أسألك من عطائك وخيرك.',
     meaningEn:'O Allah, I ask You from Your bounty.',
     translit:'Allaahumma innee as’aluka min fadlik.',
     audio:'assets/adhkar-mosqueout.mp3'
   },
   {
     id:'toiletin',
-    titleAr:'دُخُولُ الْخَلَاءِ',
+    titleAr:'دخول الخلاء',
     titleEn:'Entering the restroom',
     img:'assets/adhkar-toiletin.webp',
     imgGirl:'assets/adhkar-toiletin-girl.webp',
     imgBoy:'assets/adhkar-toiletin-boy.webp',
     ar:'بِسْمِ اللهِ، اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنَ الْخُبُثِ وَالْخَبَائِثِ',
-    ref:'مُتَّفَقٌ عَلَيْهِ',
-    meaningAr:'بِاسْمِ اللهِ أَدْخُلُ، وَأَسْتَجِيرُ بِهِ مِنَ الشَّيَاطِينِ وَكُلِّ أَذًى.',
+    ref:'متفق عليه',
+    meaningAr:'باسم الله أدخل، وأستجير به من الشياطين وكل أذى.',
     meaningEn:'In the name of Allah. O Allah, I seek refuge in You from evil and all harm.',
     translit:'Bismillaah, allaahumma innee a’oothu bika minal-khubthi wal-khabaa’ith.',
     audio:'assets/adhkar-toiletin.mp3'
   },
   {
     id:'toiletout',
-    titleAr:'الْخُرُوجُ مِنَ الْخَلَاءِ',
+    titleAr:'الخروج من الخلاء',
     titleEn:'Leaving the restroom',
     img:'assets/adhkar-toiletout.webp',
     imgGirl:'assets/adhkar-toiletout-girl.webp',
     imgBoy:'assets/adhkar-toiletout-boy.webp',
     ar:'غُفْرَانَكَ',
-    ref:'رَوَاهُ أَبُو دَاوُدَ وَالتِّرْمِذِيُّ',
-    meaningAr:'أَسْأَلُكَ يَا اللهُ الْمَغْفِرَةَ.',
+    ref:'رواه أبو داود والترمذي',
+    meaningAr:'أسألك يا الله المغفرة.',
     meaningEn:'I ask Your forgiveness, O Allah.',
     translit:'Ghufraanak.',
     audio:'assets/adhkar-toiletout.mp3'
   },
   {
     id:'eatbefore',
-    titleAr:'قَبْلَ الطَّعَامِ',
+    titleAr:'قبل الطعام',
     titleEn:'Before eating',
     img:'assets/adhkar-eatbefore.webp',
     imgGirl:'assets/adhkar-eatbefore-girl.webp',
     imgBoy:'assets/adhkar-eatbefore-boy.webp',
     ar:'بِسْمِ اللهِ',
-    ref:'مُتَّفَقٌ عَلَيْهِ',
-    meaningAr:'نَبْدَأُ الطَّعَامَ بِاسْمِ اللهِ فَيُبَارِكُ لَنَا فِيهِ.',
+    ref:'متفق عليه',
+    meaningAr:'نبدأ الطعام باسم الله فيبارك لنا فيه.',
     meaningEn:'We start our food with the name of Allah.',
     translit:'Bismillaah.',
     audio:'assets/adhkar-eatbefore.mp3'
   },
   {
     id:'eatafter',
-    titleAr:'بَعْدَ الطَّعَامِ',
+    titleAr:'بعد الطعام',
     titleEn:'After eating',
     img:'assets/adhkar-eatafter.webp',
     imgGirl:'assets/adhkar-eatafter-girl.webp',
     imgBoy:'assets/adhkar-eatafter-boy.webp',
     ar:'الْحَمْدُ لِلَّهِ حَمْدًا كَثِيرًا طَيِّبًا مُبَارَكًا فِيهِ، غَيْرَ مَكْفِيٍّ وَلَا مُوَدَّعٍ وَلَا مُسْتَغْنًى عَنْهُ رَبَّنَا',
-    ref:'رَوَاهُ الْبُخَارِيُّ',
-    meaningAr:'نَحْمَدُ اللهَ حَمْدًا كَثِيرًا جَمِيلًا مُبَارَكًا؛ فَنَحْنُ لَا نَسْتَغْنِي عَنْ فَضْلِهِ أَبَدًا.',
+    ref:'رواه البخاري',
+    meaningAr:'نحمد الله حمدا كثيرا جميلا مباركا؛ فنحن لا نستغني عن فضله أبدا.',
     meaningEn:'Praise be to Allah, abundant, good and blessed praise. We can never do without our Lord’s favor.',
     translit:'Alhamdu lillaahi hamdan katheeran tayyiban mubaarakan feeh, ghayra makfiyyin wa laa muwadda‘in wa laa mustaghnan ‘anhu rabbanaa.',
     audio:'assets/adhkar-eatafter.mp3'
   },
   {
     id:'clothes',
-    titleAr:'لُبْسُ الثَّوْبِ',
+    titleAr:'لبس الثوب',
     titleEn:'Getting dressed',
     img:'assets/adhkar-clothes.webp',
     imgGirl:'assets/adhkar-clothes-girl.webp',
     imgBoy:'assets/adhkar-clothes-boy.webp',
     ar:'الْحَمْدُ لِلَّهِ الَّذِي كَسَانِي هَذَا الثَّوْبَ وَرَزَقَنِيهِ مِنْ غَيْرِ حَوْلٍ مِنِّي وَلَا قُوَّةَ',
-    ref:'رَوَاهُ أَبُو دَاوُدَ وَالتِّرْمِذِيُّ',
-    meaningAr:'الْحَمْدُ لِلَّهِ الَّذِي أَعْطَانِي هَذَا اللِّبَاسَ، وَلَمْ أَصْنَعْهُ بِقُوَّتِي.',
+    ref:'رواه أبو داود والترمذي',
+    meaningAr:'الحمد لله الذي أعطاني هذا اللباس، ولم أصنعه بقوتي.',
     meaningEn:'Praise be to Allah Who clothed me with this garment and provided it for me, without any might or power of my own.',
     translit:'Alhamdu lillaahil-lathee kasaanee haathath-thawba wa razaqaneehi min ghayri hawlin minnee wa laa quwwah.',
     audio:'assets/adhkar-clothes.mp3'
   },
   {
     id:'riding',
-    titleAr:'الرُّكُوبُ وَالسَّفَرُ',
+    titleAr:'الركوب والسفر',
     titleEn:'Riding and traveling',
     img:'assets/adhkar-riding.webp',
     imgGirl:'assets/adhkar-riding-girl.webp',
     imgBoy:'assets/adhkar-riding-boy.webp',
     ar:'بِسْمِ اللهِ وَالْحَمْدُ لِلَّهِ، ﴿سُبْحَانَ الَّذِي سَخَّرَ لَنَا هَذَا وَمَا كُنَّا لَهُ مُقْرِنِينَ * وَإِنَّا إِلَى رَبِّنَا لَمُنْقَلِبُونَ﴾',
-    ref:'رَوَاهُ مُسْلِمٌ',
-    meaningAr:'سُبْحَانَ اللهِ الَّذِي جَعَلَ لَنَا هَذِهِ الرَّاحِلَةَ وَلَمْ نَكُنْ لِنَقْدِرَ عَلَيْهَا بِأَنْفُسِنَا، وَإِلَى اللهِ نَعُودُ.',
+    ref:'رواه مسلم',
+    meaningAr:'سبحان الله الذي جعل لنا هذه الراحلة ولم نكن لنقدر عليها بأنفسنا، وإلى الله نعود.',
     meaningEn:'In the name of Allah, and praise be to Allah. Glory to Him Who made this ride possible for us; we could never have done it alone. And to our Lord we shall return.',
     translit:'Bismillaahi walhamdu lillaah. Subhaanal-lathee sakhkhara lanaa haathaa wa maa kunnaa lahu muqrineen, wa innaa ilaa rabbinaa lamunqaliboon.',
     audio:'assets/adhkar-riding.mp3'
@@ -186,7 +186,7 @@ var POOL=null,poolP=null;
 function loadPool(){
   if(poolP)return poolP;
   poolP=fetch('assets/dhikr-pool.json').then(function(r){return r.json();}).then(function(j){
-    POOL=j.map(function(it,n){return {id:'pool'+n,pool:true,titleAr:'ذِكْرُ الْيَوْمِ',titleEn:'Dhikr of the day',
+    POOL=j.map(function(it,n){return {id:'pool'+n,pool:true,titleAr:'ذكر اليوم',titleEn:'Dhikr of the day',
       ar:it.text,ref:it.source||'',virtue:it.virtue||'',condition:it.condition||'',audio:'assets/'+it.audio};});
     if(ov&&view==='list')render();
     return POOL;
@@ -195,7 +195,7 @@ function loadPool(){
 }
 
 /* ---------- language ---------- */
-function lang(){try{var v=localStorage.getItem('letters-city:lang.v1');return (v===null?'ar':JSON.parse(v))==='en'?'en':'ar';}catch(e){return 'ar';}}
+function lang(){try{var v=localStorage.getItem('letters-city:lang.v1');return (v===null?'en':JSON.parse(v))==='en'?'en':'ar';}catch(e){return 'en';}}
 function isEn(){return lang()==='en';}
 /* gender picked on the site: "girl" | "boy" | "" (letters-city:gender.v1).
    girl -> ponytail images, boy -> boy images, unset -> the original hijab images. */
@@ -283,7 +283,7 @@ function speak(item,btn){
 function paintListen(btn,playing){
   if(!btn||!btn.isConnected)return;
   btn.classList.toggle('ak-stop',!!playing);
-  btn.innerHTML=(playing?stopSvg():playSvg())+'<span>'+(playing?(isEn()?'Stop':'إيقاف'):(isEn()?'Listen and repeat':'اسْتَمِعِي وَرَدِّدِي'))+'</span>';
+  btn.innerHTML=(playing?stopSvg():playSvg())+'<span>'+(playing?(isEn()?'Stop':'إيقاف'):(isEn()?'Listen and repeat':'استمعي ورددي'))+'</span>';
 }
 
 function themeOf(){try{var g=JSON.parse(localStorage.getItem('letters-city:gender.v1')||'"girl"');return g==='boy'?'boy':'girl';}catch(e){return 'girl';}}
@@ -306,11 +306,11 @@ function render(){
   h+='<div class="ak-bg"></div>';
   h+='<div class="ak-top">';
   if(view==='detail'){
-    h+='<button type="button" class="ak-back" data-ak="list">'+backSvg()+'<span>'+(en?'All adhkar':'كُلُّ الْأَذْكَارِ')+'</span></button>';
+    h+='<button type="button" class="ak-back" data-ak="list">'+backSvg()+'<span>'+(en?'All adhkar':'كل الأذكار')+'</span></button>';
     h+='<h2 class="ak-h">'+(en?esc(cur.titleEn):esc(cur.titleAr))+'</h2>';
   }else{
-    h+='<button type="button" class="ak-back" data-ak="close">'+backSvg()+'<span>'+(en?'Back':'رُجُوعٌ')+'</span></button>';
-    h+='<h2 class="ak-h">'+(en?'Daily adhkar':'أَذْكَارُ الْيَوْمِ')+'</h2>';
+    h+='<button type="button" class="ak-back" data-ak="close">'+backSvg()+'<span>'+(en?'Back':'رجوع')+'</span></button>';
+    h+='<h2 class="ak-h">'+(en?'Daily adhkar':'أذكار اليوم')+'</h2>';
   }
   h+='</div>';
   if(view==='list'){
@@ -324,7 +324,7 @@ function render(){
         +'</span></button>';
     });
     if(POOL&&POOL.length){
-      h+='<div class="ak-pool-h">'+(en?'More adhkar':'أَذْكَارٌ مُتَنَوِّعَةٌ')+'</div>';
+      h+='<div class="ak-pool-h">'+(en?'More adhkar':'أذكار متنوعة')+'</div>';
       POOL.forEach(function(it){
         h+='<button type="button" class="ak-card" data-ak="open" data-id="'+it.id+'">'
           +'<span class="ak-card-row"><span class="ak-card-t"><b dir="rtl">'+esc(it.ar)+'</b>'
@@ -342,7 +342,7 @@ function render(){
       +(cur.virtue?'<p class="ak-virtue" dir="rtl">'+esc(cur.virtue)+'</p>':'')
       +'<p class="ak-ref">'+esc(cur.ref)+'</p></div>'
       +'<button type="button" class="ak-listen" data-ak="listen"></button>'
-      +(cur.meaningAr?'<div class="ak-box"><h3 class="ak-box-h">'+(en?'What it means':'مَاذَا يَعْنِي؟')+'</h3><p class="ak-box-p">'+esc(en?cur.meaningEn:cur.meaningAr)+'</p></div>':'')
+      +(cur.meaningAr?'<div class="ak-box"><h3 class="ak-box-h">'+(en?'What it means':'ماذا يعني؟')+'</h3><p class="ak-box-p">'+esc(en?cur.meaningEn:cur.meaningAr)+'</p></div>':'')
       +(en&&cur.translit?'<div class="ak-box"><h3 class="ak-box-h ak-rose">Pronunciation</h3><p class="ak-box-p" dir="ltr">'+esc(cur.translit)+'</p></div>':'');
   }
   ov.innerHTML='<div class="ak-wrap">'+h+'</div>';

@@ -1,7 +1,7 @@
 /* Lisanura access gate: login required everywhere; whiteboard is teacher-only.
    Loaded after supa-config.js and supa.js on the home page and on board/. */
 (function(){
-  function lg(){try{var v=localStorage.getItem('letters-city:lang.v1');var p=v===null?'ar':JSON.parse(v);return p==='en';}catch(e){return false;}}
+  function lg(){try{var v=localStorage.getItem('letters-city:lang.v1');var p=v===null?'en':JSON.parse(v);return p==='en';}catch(e){return false;}}
   var onBoard=location.pathname.indexOf('/board/')>-1;
   var d=document;
   if(onBoard){var hs=d.createElement('style');hs.id='lnHide';hs.textContent='html{visibility:hidden!important}';d.documentElement.appendChild(hs);}
@@ -15,10 +15,10 @@
       dlg.addEventListener('cancel',function(e){e.preventDefault();});
       box=d.createElement('div');box.style.cssText='width:100%;max-width:360px';
       var h=d.createElement('div');h.style.cssText='text-align:center;font-family:Naskh,serif;color:#7e4150;font-size:20px;margin-bottom:14px';
-      h.textContent=lg()?'Log in or create an account to start':'سَجِّلِي الدُّخُولَ أَوْ أَنْشِئِي حِسَابًا لِتَبْدَئِي';
+      h.textContent=lg()?'Log in or create an account to start':'سجلي الدخول أو أنشئي حسابا لتبدئي';
       var c=d.createElement('div');box.appendChild(h);box.appendChild(c);dlg.appendChild(box);d.body.appendChild(dlg);
       if(window.LN&&LN.configured())LN.renderAuth(c,{onAuth:function(){hideGate();location.reload();}});
-      else c.textContent=lg()?'Connection failed. Reopen the page.':'تَعَذَّرَ الِاتِّصَالُ. أَعِيدِي فَتْحَ الصَّفْحَةِ.';
+      else c.textContent=lg()?'Connection failed. Reopen the page.':'تعذر الاتصال. أعيدي فتح الصفحة.';
     }
     if(!dlg.open)dlg.showModal();
     if(!tick)tick=setInterval(function(){
@@ -33,7 +33,7 @@
   function hideBoardDoor(){
     [].forEach.call(d.querySelectorAll('button.hb-door'),function(b){
       var t=b.innerText||'';
-      if(t.indexOf('سَبُّورَةُ')>-1||/whiteboard/i.test(t))b.style.display='none';
+      if(t.indexOf('سبورة')>-1||/whiteboard/i.test(t))b.style.display='none';
     });
   }
   var mo=null;
