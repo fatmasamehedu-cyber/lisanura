@@ -7,11 +7,13 @@ window.LN=(()=>{
   const STUDENT_DOMAIN='lisanura-students.app';
   const LIB='https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js';
   let sb=null,user=null,profile=null,readyPromise=null,liveChan=null,liveJoinChan=null;
+  function lang(){try{const v=localStorage.getItem('letters-city:lang.v1');const p=v===null?'ar':JSON.parse(v);return p==='en'?'en':'ar';}catch(e){return 'ar';}}
+  function L(ar,en){return lang()==='en'?en:ar;}
 
   function configured(){const c=window.LN_CONFIG||{};return !!(c.url&&c.anon&&c.url.indexOf('https://')===0);}
   function loadLib(){if(window.supabase)return Promise.resolve();
     return new Promise((res,rej)=>{const s=document.createElement('script');s.src=LIB;
-      s.onload=res;s.onerror=()=>rej(new Error('تعذر تحميل مكتبة الاتصال'));document.head.appendChild(s);});}
+      s.onload=res;s.onerror=()=>rej(new Error(L('تعذر تحميل مكتبة الاتصال','Could not load the connection library')));document.head.appendChild(s);});}
 
   async function init(){
     if(readyPromise)return readyPromise;
@@ -47,19 +49,19 @@ window.LN=(()=>{
 
   async function signUpStudent(username,pin,name,teacherCode){
     await init();
-    if(!/^[a-zA-Z0-9_.-]{3,20}$/.test(username.trim()))throw new Error('الاسم المستعار: ٣-٢٠ حرف إنجليزي أو أرقام بدون مسافات');
-    if(!/^\d{6}$/.test(pin))throw new Error('الرقم السري: ٦ أرقام');
+    if(!/^[a-zA-Z0-9_.-]{3,20}$/.test(username.trim()))throw new Error(L('الاسم المستعار: ٣-٢٠ حرف إنجليزي أو أرقام بدون مسافات','Username: 3-20 English letters or numbers, no spaces'));
+    if(!/^\d{6}$/.test(pin))throw new Error(L('الرقم السري: ٦ أرقام','PIN: 6 digits'));
     let teacherId=null;
     if(teacherCode&&teacherCode.trim()){
       /* validate after signup (a signed-in user may read teacher rows) */}
     const {data,error}=await sb.auth.signUp({email:studentEmail(username),password:pin,
-      options:{data:{role:'student',display_name:(name||'').trim()||'طالبة'}}});
+      options:{data:{role:'student',display_name:(name||'').trim()||L('طالبة','Student')}}});
     if(error)throw new Error(arErr(error));
-    if(!data.session)throw new Error('التسجيل يحتاج تأكيد بريد — أطلبي من الدعم إيقاف تأكيد البريد');
+    if(!data.session)throw new Error(L('التسجيل يحتاج تأكيد بريد — أطلبي من الدعم إيقاف تأكيد البريد','Signup needs email confirmation. Ask support to turn off email confirmation'));
     user=data.session.user;await loadProfile();
     if(teacherCode&&teacherCode.trim()){
       const {data:t}=await sb.from('profiles').select('id,display_name').eq('id',teacherCode.trim()).eq('role','teacher').maybeSingle();
-      if(!t)throw new Error('كود المعلمة غير صحيح');
+      if(!t)throw new Error(L('كود المعلمة غير صحيح','Teacher code is incorrect'));
       await sb.from('profiles').update({teacher_id:t.id}).eq('id',user.id);
       await loadProfile();}
     return {user,profile};}
@@ -69,19 +71,19 @@ window.LN=(()=>{
     const email=idOrEmail.includes('@')?idOrEmail.trim():studentEmail(idOrEmail);
     const {data,error}=await sb.auth.signInWithPassword({email,password});
     if(error){const m=error.message||'';
-      if(/not confirmed/i.test(m))throw new Error('افتحي بريدك ودوسي رابط التأكيد الأول، وبعدين سجلي دخول');
-      throw new Error('بيانات الدخول غير صحيحة');}
+      if(/not confirmed/i.test(m))throw new Error(L('افتحي بريدك ودوسي رابط التأكيد الأول، وبعدين سجلي دخول','Open your email and tap the confirmation link first, then log in'));
+      throw new Error(L('بيانات الدخول غير صحيحة','Incorrect login details'));}
     user=data.session.user;await loadProfile();return {user,profile};}
 
   async function signOut(){await init();await sb.auth.signOut();user=null;profile=null;
     document.dispatchEvent(new CustomEvent('ln-auth',{detail:{user:null,profile:null}}));}
 
   function arErr(e){const m=(e&&e.message)||'';
-    if(/already registered|already been registered/i.test(m))return 'هذا الحساب موجود بالفعل، جربي تسجيل الدخول';
-    if(/at least 6/i.test(m))return 'كلمة السر يجب أن تكون ٦ أحرف على الأقل';
-    if(/invalid email/i.test(m))return 'البريد الإلكتروني غير صحيح';
-    if(/rate limit/i.test(m))return 'محاولات كثيرة، انتظري قليلاً';
-    return 'حدث خطأ: '+m;}
+    if(/already registered|already been registered/i.test(m))return L('هذا الحساب موجود بالفعل، جربي تسجيل الدخول','This account already exists. Try logging in');
+    if(/at least 6/i.test(m))return L('كلمة السر يجب أن تكون ٦ أحرف على الأقل','Password must be at least 6 characters');
+    if(/invalid email/i.test(m))return L('البريد الإلكتروني غير صحيح','Invalid email address');
+    if(/rate limit/i.test(m))return L('محاولات كثيرة، انتظري قليلاً','Too many attempts. Wait a little');
+    return L('حدث خطأ: ','Error: ')+m;}
 
   /* ---------------- board autosave ---------------- */
   let boardTimer=null;
@@ -106,9 +108,9 @@ window.LN=(()=>{
     await init();
     /* storage keys must be ASCII: encode the Arabic display name as base64url in the filename */
     const enc=s=>{try{return btoa(unescape(encodeURIComponent(s))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');}catch(e){return 'book';}};
-    const path=user.id+'/'+Date.now()+'-'+enc((name||'كتاب').slice(0,60))+'.pdf';
+    const path=user.id+'/'+Date.now()+'-'+enc((name||L('كتاب','Book')).slice(0,60))+'.pdf';
     const {error}=await sb.storage.from('books').upload(path,buf,{contentType:'application/pdf'});
-    if(error)throw new Error('تعذر رفع الكتاب');
+    if(error)throw new Error(L('تعذر رفع الكتاب','Could not upload the book'));
     return path;}
   async function listBooks(){
     await init();if(!user)return[];
@@ -118,7 +120,7 @@ window.LN=(()=>{
   async function downloadBook(path){
     await init();
     const {data,error}=await sb.storage.from('books').download(path);
-    if(error)throw new Error('تعذر فتح الكتاب');
+    if(error)throw new Error(L('تعذر فتح الكتاب','Could not open the book'));
     return data.arrayBuffer();}
   async function deleteBook(path){await init();await sb.storage.from('books').remove([path]);}
 
@@ -142,13 +144,13 @@ window.LN=(()=>{
 
   /* ---------------- live rooms (Realtime broadcast) ---------------- */
   async function liveStart(onViewers){
-    await init();if(!user)throw new Error('سجلي الدخول أولاً');
+    await init();if(!user)throw new Error(L('سجلي الدخول أولاً','Log in first'));
     await sb.from('live_rooms').upsert({teacher_id:user.id,live:true,updated_at:new Date().toISOString()});
     liveChan=sb.channel('live:'+user.id);
     liveChan.on('broadcast',{event:'hello'},()=>{ /* a student joined */});
     if(onViewers)liveChan.on('presence',{event:'sync'},()=>{
       const n=Object.keys(liveChan.presenceState()).length;onViewers(Math.max(0,n-1));});
-    await new Promise((res,rej)=>liveChan.subscribe(st=>st==='SUBSCRIBED'?res():st==='CHANNEL_ERROR'?rej(new Error('تعذر بدء البث')):null));
+    await new Promise((res,rej)=>liveChan.subscribe(st=>st==='SUBSCRIBED'?res():st==='CHANNEL_ERROR'?rej(new Error(L('تعذر بدء البث','Could not start the broadcast'))):null));
     await liveChan.track({role:'teacher'});
     return user.id;}
   function livePush(state){ /* host: broadcast full board (caller debounces) */
@@ -172,22 +174,23 @@ window.LN=(()=>{
   /* ---------------- auth UI (Arabic, lisanura style) ---------------- */
   function renderAuth(container,opts){
     opts=opts||{};
+    const en=lang()==='en';
     container.innerHTML=
-    '<div dir="rtl" style="font-family:Naskh,serif;max-width:340px;margin:0 auto;background:#fffdf6;border:2px solid #e9b7c9;border-radius:18px;padding:22px;box-shadow:0 8px 24px rgba(124,45,73,.15)">'
+    '<div dir="'+(en?'ltr':'rtl')+'" style="font-family:Naskh,serif;max-width:340px;margin:0 auto;background:#fffdf6;border:2px solid #e9b7c9;border-radius:18px;padding:22px;box-shadow:0 8px 24px rgba(124,45,73,.15)">'
     +'<h2 style="margin:0 0 4px;color:#7c2d49;text-align:center;font-size:22px">ليسانورا</h2>'
     +'<div id="lnTabs" style="display:flex;gap:6px;margin:12px 0">'
-    +'<button data-t="in" style="flex:1;padding:8px;border-radius:12px;border:2px solid #d16a92;background:#d16a92;color:#fff;font-weight:700;font-family:Naskh">تسجيل دخول</button>'
-    +'<button data-t="up" style="flex:1;padding:8px;border-radius:12px;border:2px solid #d16a92;background:#fff;color:#7c2d49;font-weight:700;font-family:Naskh">حساب جديد</button></div>'
+    +'<button data-t="in" style="flex:1;padding:8px;border-radius:12px;border:2px solid #d16a92;background:#d16a92;color:#fff;font-weight:700;font-family:Naskh">'+L('تسجيل دخول','Log in')+'</button>'
+    +'<button data-t="up" style="flex:1;padding:8px;border-radius:12px;border:2px solid #d16a92;background:#fff;color:#7c2d49;font-weight:700;font-family:Naskh">'+L('حساب جديد','New account')+'</button></div>'
     +'<div id="lnRole" style="display:none;gap:6px;margin-bottom:10px">'
-    +'<button data-r="teacher" style="flex:1;padding:8px;border-radius:12px;border:2px solid #d9a44f;background:#d9a44f;color:#fff;font-weight:700;font-family:Naskh">أنا معلمة</button>'
-    +'<button data-r="student" style="flex:1;padding:8px;border-radius:12px;border:2px solid #d9a44f;background:#fff;color:#7c2d49;font-weight:700;font-family:Naskh">أنا طالبة</button></div>'
-    +'<input id="lnName" placeholder="الاسم" style="display:none;width:100%;box-sizing:border-box;margin-bottom:8px;padding:9px;border-radius:10px;border:2px solid #e9b7c9;font-family:Naskh;font-size:15px">'
-    +'<input id="lnId" placeholder="البريد الإلكتروني" style="width:100%;box-sizing:border-box;margin-bottom:8px;padding:9px;border-radius:10px;border:2px solid #e9b7c9;font-family:Naskh;font-size:15px;direction:ltr;text-align:right">'
-    +'<input id="lnPass" type="password" placeholder="كلمة السر" style="width:100%;box-sizing:border-box;margin-bottom:8px;padding:9px;border-radius:10px;border:2px solid #e9b7c9;font-family:Naskh;font-size:15px;direction:ltr;text-align:right">'
-    +'<input id="lnCode" placeholder="كود المعلمة (اختياري)" style="display:none;width:100%;box-sizing:border-box;margin-bottom:8px;padding:9px;border-radius:10px;border:2px solid #e9b7c9;font-family:Naskh;font-size:13px;direction:ltr;text-align:right">'
-    +'<button id="lnGo" style="width:100%;padding:11px;border-radius:12px;border:none;background:#7c2d49;color:#fff;font-weight:700;font-family:Naskh;font-size:16px">دخول</button>'
+    +'<button data-r="teacher" style="flex:1;padding:8px;border-radius:12px;border:2px solid #d9a44f;background:#d9a44f;color:#fff;font-weight:700;font-family:Naskh">'+L('أنا معلمة','I am a teacher')+'</button>'
+    +'<button data-r="student" style="flex:1;padding:8px;border-radius:12px;border:2px solid #d9a44f;background:#fff;color:#7c2d49;font-weight:700;font-family:Naskh">'+L('أنا طالبة','I am a student')+'</button></div>'
+    +'<input id="lnName" placeholder="'+L('الاسم','Name')+'" style="display:none;width:100%;box-sizing:border-box;margin-bottom:8px;padding:9px;border-radius:10px;border:2px solid #e9b7c9;font-family:Naskh;font-size:15px">'
+    +'<input id="lnId" placeholder="'+L('البريد الإلكتروني','Email')+'" style="width:100%;box-sizing:border-box;margin-bottom:8px;padding:9px;border-radius:10px;border:2px solid #e9b7c9;font-family:Naskh;font-size:15px;direction:ltr;text-align:right">'
+    +'<input id="lnPass" type="password" placeholder="'+L('كلمة السر','Password')+'" style="width:100%;box-sizing:border-box;margin-bottom:8px;padding:9px;border-radius:10px;border:2px solid #e9b7c9;font-family:Naskh;font-size:15px;direction:ltr;text-align:right">'
+    +'<input id="lnCode" placeholder="'+L('كود المعلمة (اختياري)','Teacher code (optional)')+'" style="display:none;width:100%;box-sizing:border-box;margin-bottom:8px;padding:9px;border-radius:10px;border:2px solid #e9b7c9;font-family:Naskh;font-size:13px;direction:ltr;text-align:right">'
+    +'<button id="lnGo" style="width:100%;padding:11px;border-radius:12px;border:none;background:#7c2d49;color:#fff;font-weight:700;font-family:Naskh;font-size:16px">'+L('دخول','Log in')+'</button>'
     +'<div id="lnMsg" style="margin-top:10px;text-align:center;font-size:14px;color:#a4748a;min-height:20px"></div></div>';
-    let mode='in',role='teacher';
+    let mode='in',role='student';
     const $=id=>container.querySelector(id);
     const nameEl=$('#lnName'),idEl=$('#lnId'),passEl=$('#lnPass'),codeEl=$('#lnCode'),goEl=$('#lnGo'),msgEl=$('#lnMsg');
     function refresh(){
@@ -196,19 +199,19 @@ window.LN=(()=>{
       $('#lnRole').style.display=mode==='up'?'flex':'none';
       nameEl.style.display=mode==='up'?'block':'none';
       codeEl.style.display=(mode==='up'&&role==='student')?'block':'none';
-      idEl.placeholder=(mode==='up'&&role==='student')?'اسم مستعار بالإنجليزية':(mode==='in'?'البريد أو الاسم المستعار':'البريد الإلكتروني');
-      passEl.placeholder=(role==='student'&&mode==='up')?'رقم سري (٦ أرقام)':'كلمة السر (٦ أحرف على الأقل)';
-      goEl.textContent=mode==='in'?'دخول':'إنشاء الحساب';
+      idEl.placeholder=(mode==='up'&&role==='student')?L('اسم مستعار بالإنجليزية','Username (English letters)'):(mode==='in'?L('البريد أو الاسم المستعار','Email or username'):L('البريد الإلكتروني','Email'));
+      passEl.placeholder=(role==='student'&&mode==='up')?L('رقم سري (٦ أرقام)','PIN (6 digits)'):L('كلمة السر (٦ أحرف على الأقل)','Password (at least 6 characters)');
+      goEl.textContent=mode==='in'?L('دخول','Log in'):L('إنشاء الحساب','Create account');
       msgEl.textContent='';}
     container.querySelectorAll('#lnTabs button').forEach(b=>b.onclick=()=>{mode=b.dataset.t;refresh();});
     container.querySelectorAll('#lnRole button').forEach(b=>b.onclick=()=>{role=b.dataset.r;refresh();});
     goEl.onclick=async()=>{
-      msgEl.style.color='#a4748a';msgEl.textContent='لحظات...';goEl.disabled=true;
+      msgEl.style.color='#a4748a';msgEl.textContent=L('لحظات...','One moment...');goEl.disabled=true;
       try{
         if(mode==='in'){await signIn(idEl.value,passEl.value);
           msgEl.textContent='';opts.onAuth&&opts.onAuth({user,profile});}
-        else if(role==='teacher'){const r=await signUpTeacher(idEl.value,passEl.value,nameEl.value||'المعلمة');
-          if(r&&r.needsConfirm){msgEl.style.color='#2e7d4f';msgEl.textContent='بعثنالك رابط تأكيد على بريدك، افتحيه وبعدين ارجعي سجلي دخول';}
+        else if(role==='teacher'){const r=await signUpTeacher(idEl.value,passEl.value,nameEl.value||L('المعلمة','Teacher'));
+          if(r&&r.needsConfirm){msgEl.style.color='#2e7d4f';msgEl.textContent=L('بعثنالك رابط تأكيد على بريدك، افتحيه وبعدين ارجعي سجلي دخول','We sent a confirmation link to your email. Open it, then come back and log in');}
           else{msgEl.textContent='';opts.onAuth&&opts.onAuth({user,profile});}}
         else{await signUpStudent(idEl.value,passEl.value,nameEl.value,codeEl.value);
           msgEl.textContent='';opts.onAuth&&opts.onAuth({user,profile});}
@@ -222,10 +225,10 @@ window.LN=(()=>{
     if(window.crypto&&crypto.getRandomValues)crypto.getRandomValues(a);else for(let i=0;i<8;i++)a[i]=Math.floor(Math.random()*256);
     let s='';for(let i=0;i<8;i++)s+=abc[a[i]%62];return s;}
   async function shareBoard(state){ /* teacher: store snapshot, return short id */
-    await init();if(!user)throw new Error('سجلي الدخول الأول');
+    await init();if(!user)throw new Error(L('سجلي الدخول الأول','Log in first'));
     const id=makeShareId();
     const {error}=await sb.from('shared_boards').insert({id,state});
-    if(error)throw new Error('تعذر حفظ المشاركة');
+    if(error)throw new Error(L('تعذر حفظ المشاركة','Could not save the share'));
     return id;}
   async function loadShared(id){ /* anyone with the link may read */
     await init();
