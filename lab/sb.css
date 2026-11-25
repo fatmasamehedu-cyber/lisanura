@@ -5,7 +5,7 @@
   --sb-green:#57b66e; --sb-green-d:#3f9d58; --sb-red:#e05b5b; --sb-red-d:#c04747;
   --sb-wood:#e8c07a; --sb-wood-d:#c98f4f;
 }
-html,body{margin:0;padding:0;height:100%}
+html,body{margin:0;padding:0;height:100%;overflow-x:hidden}
 body{font-family:Naskh,"Noto Naskh Arabic",serif;color:var(--sb-ink);overflow-x:hidden}
 .sb-page{position:relative;min-height:100dvh;box-sizing:border-box;padding:14px 14px 24px;
   background-size:cover;background-position:center;display:flex;flex-direction:column;align-items:center}
