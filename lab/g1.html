@@ -4,146 +4,130 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>فوانيس الحروف — عينة</title>
-<link rel="stylesheet" href="lab.css">
+<link rel="stylesheet" href="sb.css?v=2">
 <style>
-  #g1c{touch-action:none;cursor:crosshair}
-  .g1-hud{display:flex;justify-content:space-between;align-items:center;margin:10px 2px}
-  .g1-dots{display:flex;gap:8px}
-  .g1-dot{width:16px;height:16px;border-radius:50%;background:#e6d3a8}
-  .g1-dot.on{background:#f5c15c;box-shadow:0 0 8px #f5c15c}
+  .stage{width:100%;max-width:min(540px,94vw);box-sizing:border-box;background:linear-gradient(#fffdf8d9,#fdf3dfd9);
+    border:3px solid var(--sb-gold);border-radius:22px;box-shadow:0 5px 0 #d9b878,0 12px 26px #7a5a2a26;padding:12px}
+  #g1c{display:block;width:100%;border-radius:16px;touch-action:none;cursor:crosshair;
+    background:radial-gradient(circle at 50% 42%,#fffdf6 0%,#fdf1d8 70%,#f7e3ba 100%)}
+  #prog{text-align:center;font-size:19px;font-weight:800;color:var(--sb-navy);min-height:28px;margin-top:6px}
+  #word{text-align:center;font-size:17px;font-weight:700;color:#8a6f57;margin-top:2px}
+  .sb-dots{margin:8px auto 4px}
 </style>
 </head>
 <body>
-<div class="lab-wrap">
-  <div class="lab-top">
-    <a class="lab-back" href="index.html">‹ كل العينات</a>
-    <span class="lab-badge">عينة ١</span>
+<div class="sb-page" style="background-image:url('assets/sb/bg-lantern.jpg')">
+  <div class="sb-topbar">
+    <a class="sb-roundbtn" href="index.html" aria-label="كل العينات">🏠</a>
+    <div class="sb-plaque"><h1>فوانيس الحروف</h1></div>
+    <span class="sb-roundbtn" aria-hidden="true">🔊</span>
   </div>
-  <h1 class="lab-title">فوانيس الحروف</h1>
-  <p class="lab-sub">ارسمي الحرف بإصبعك فوق النقط على الفانوس — لما تكمليه الفانوس ينور</p>
-  <div class="game-frame">
-    <canvas id="g1c" class="game" width="480" height="520"></canvas>
-    <div class="g1-hud">
-      <div class="g1-dots" id="dots"></div>
-      <div style="color:#a08a6d;font-size:14px" id="prog"></div>
-    </div>
-    <p class="game-note">صوت كلمة تبدأ بالحرف بيشتغل أول ما الفانوس ينور</p>
+  <p class="sb-sub">امسحي بصباعك فوق الحرف — لما يكمل الفانوس ينور وتسمعي كلمة تبدأ بيه</p>
+  <div class="sb-dots" id="dots"></div>
+  <div class="stage">
+    <canvas id="g1c" width="480" height="470"></canvas>
+    <div id="prog"></div>
+    <div id="word"></div>
   </div>
 </div>
+<script src="sb.js?v=2"></script>
 <script>
+SB.teacher('full');
 (function(){
 "use strict";
 var cv=document.getElementById('g1c'),ctx=cv.getContext('2d');
-var W=480,H=520;
+var W=480,H=470;
+var A='../assets/';
 var LETTERS=[
- {ch:'ا',word:'أسد',audio:'../assets/w-asad-JATU37E5.mp3'},
- {ch:'ب',word:'بطة',audio:'../assets/w-batta-HFWN7BQY.mp3'},
- {ch:'ت',word:'تفاحة',audio:'../assets/w-tuffaha-GZEF6Y6Z.mp3'},
- {ch:'ث',word:'ثعلب',audio:'../assets/w-thaalab-QBX4SFR5.mp3'},
- {ch:'ج',word:'جمل',audio:'../assets/w-jamal-UNEQW2WZ.mp3'},
- {ch:'ح',word:'حصان',audio:'../assets/w-hisan-HZX5PBSR.mp3'},
- {ch:'خ',word:'خروف',audio:'../assets/w-kharuf-IYEXGGHE.mp3'},
- {ch:'د',word:'دب',audio:'../assets/w-dubb-5VXWH7KL.mp3'},
- {ch:'ذ',word:'ذئب',audio:'../assets/w-dhib-TYB72P7Y.mp3'},
- {ch:'ر',word:'رمان',audio:'../assets/w-rumman-RDSCMWAC.mp3'},
- {ch:'ز',word:'زرافة',audio:'../assets/w-zarafa-2J5ISAVH.mp3'},
- {ch:'س',word:'سمكة',audio:'../assets/w-samaka-EOUEDDKP.mp3'},
- {ch:'ش',word:'شمس',audio:'../assets/w-shams-MZOMUSPP.mp3'},
- {ch:'ص',word:'صاروخ',audio:'../assets/w-sarukh-YE73GRUB.mp3'},
- {ch:'ض',word:'ضفدع',audio:'../assets/w-difda-RUR5OGUC.mp3'},
- {ch:'ط',word:'طائرة',audio:'../assets/w-taira-WFB3BHJ7.mp3'},
+ {ch:'ا',word:'أسد',audio:A+'w-asad-JATU37E5.mp3'},
+ {ch:'ب',word:'بطة',audio:A+'w-batta-HFWN7BQY.mp3'},
+ {ch:'ت',word:'تفاحة',audio:A+'w-tuffaha-GZEF6Y6Z.mp3'},
+ {ch:'ث',word:'ثعلب',audio:A+'w-thaalab-QBX4SFR5.mp3'},
+ {ch:'ج',word:'جمل',audio:A+'w-jamal-UNEQW2WZ.mp3'},
+ {ch:'ح',word:'حصان',audio:A+'w-hisan-HZX5PBSR.mp3'},
+ {ch:'خ',word:'خروف',audio:A+'w-kharuf-IYEXGGHE.mp3'},
+ {ch:'د',word:'دب',audio:A+'w-dubb-5VXWH7KL.mp3'},
+ {ch:'ذ',word:'ذئب',audio:A+'w-dhib-TYB72P7Y.mp3'},
+ {ch:'ر',word:'رمان',audio:A+'w-rumman-RDSCMWAC.mp3'},
+ {ch:'ز',word:'زرافة',audio:A+'w-zarafa-2J5ISAVH.mp3'},
+ {ch:'س',word:'سمكة',audio:A+'w-samaka-EOUEDDKP.mp3'},
+ {ch:'ش',word:'شمس',audio:A+'w-shams-MZOMUSPP.mp3'},
+ {ch:'ص',word:'صاروخ',audio:A+'w-sarukh-YE73GRUB.mp3'},
+ {ch:'ض',word:'ضفدع',audio:A+'w-difda-RUR5OGUC.mp3'},
+ {ch:'ط',word:'طائرة',audio:A+'w-taira-WFB3BHJ7.mp3'},
  {ch:'ظ',word:'ظرف',audio:null},
- {ch:'ع',word:'عصفور',audio:'../assets/w-usfur-LBZEZG42.mp3'},
- {ch:'غ',word:'غابة',audio:'../assets/w-ghaba-JWGTYCV4.mp3'},
- {ch:'ف',word:'فيل',audio:'../assets/w-fil-42SBITZQ.mp3'},
- {ch:'ق',word:'قمر',audio:'../assets/w-qamar-XEKXXEXQ.mp3'},
- {ch:'ك',word:'كتاب',audio:'../assets/w-kitab-AFSSQR7N.mp3'},
- {ch:'ل',word:'ليمون',audio:'../assets/w-laymun-XZERF7RJ.mp3'},
- {ch:'م',word:'موز',audio:'../assets/w-mawz-KTE25PFQ.mp3'},
- {ch:'ن',word:'نجمة',audio:'../assets/w-najma-4S4O7DC5.mp3'},
- {ch:'ه',word:'هلال',audio:'../assets/w-hilal-UM7CDBFV.mp3'},
- {ch:'و',word:'وردة',audio:'../assets/w-warda-W673IT73.mp3'},
- {ch:'ي',word:'يد',audio:'../assets/w-yad-ANZLTQWL.mp3'}
+ {ch:'ع',word:'عصفور',audio:A+'w-usfur-LBZEZG42.mp3'},
+ {ch:'غ',word:'غابة',audio:A+'w-ghaba-JWGTYCV4.mp3'},
+ {ch:'ف',word:'فيل',audio:A+'w-fil-42SBITZQ.mp3'},
+ {ch:'ق',word:'قمر',audio:A+'w-qamar-XEKXXEXQ.mp3'},
+ {ch:'ك',word:'كتاب',audio:A+'w-kitab-AFSSQR7N.mp3'},
+ {ch:'ل',word:'ليمون',audio:A+'w-laymun-XZERF7RJ.mp3'},
+ {ch:'م',word:'موز',audio:A+'w-mawz-KTE25PFQ.mp3'},
+ {ch:'ن',word:'نجمة',audio:A+'w-najma-4S4O7DC5.mp3'},
+ {ch:'ه',word:'هلال',audio:A+'w-hilal-UM7CDBFV.mp3'},
+ {ch:'و',word:'وردة',audio:A+'w-warda-W673IT73.mp3'},
+ {ch:'ي',word:'يد',audio:A+'w-yad-ANZLTQWL.mp3'}
 ];
-var cheer=new Audio('../assets/cheer.mp3');
-var idx=0,targets=[],done=false,winAll=false,lit=0;
-var dotsEl=document.getElementById('dots'),progEl=document.getElementById('prog');
-LETTERS.forEach(function(){var d=document.createElement('span');d.className='g1-dot';dotsEl.appendChild(d);});
+var idx=0,targets=[],done=false,lit=0,parts=[];
+var dotsEl=document.getElementById('dots'),progEl=document.getElementById('prog'),wordEl=document.getElementById('word');
+LETTERS.forEach(function(){var d=document.createElement('span');d.className='sb-dot';dotsEl.appendChild(d);});
 function buildTargets(){
   targets=[];
   var off=document.createElement('canvas');off.width=W;off.height=H;
   var o=off.getContext('2d');
-  o.font='700 240px "Noto Naskh Arabic",serif';
+  o.font='700 250px "Noto Naskh Arabic",serif';
   o.textAlign='center';o.textBaseline='middle';
-  o.fillText(LETTERS[idx].ch,W/2,270);
+  o.fillText(LETTERS[idx].ch,W/2,H/2+16);
   var img=o.getImageData(0,0,W,H).data;
   for(var y=0;y<H;y+=7)for(var x=0;x<W;x+=7){
     if(img[(y*W+x)*4+3]>120)targets.push({x:x,y:y,hit:false});
   }
   done=false;
+  wordEl.textContent=LETTERS[idx].word+' — '+(idx+1)+' / '+LETTERS.length;
 }
-function lantern(litF){
-  var cx=W/2,cy=250;
-  var g=ctx.createRadialGradient(cx,cy,40,cx,cy,230);
-  if(litF>0){
-    g.addColorStop(0,'rgba(245,193,92,'+(0.65*litF)+')');
-    g.addColorStop(1,'rgba(245,193,92,0)');
-  }else{
-    g.addColorStop(0,'rgba(60,50,80,0.10)');
-    g.addColorStop(1,'rgba(60,50,80,0)');
-  }
-  ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
-  ctx.strokeStyle='#8a7458';ctx.lineWidth=3;
-  ctx.beginPath();ctx.moveTo(cx,30);ctx.lineTo(cx,60);ctx.stroke();
-  ctx.fillStyle=litF>0.9?'#f5c15c':'#d9a44f';
-  ctx.beginPath();ctx.moveTo(cx-90,110);
-  ctx.quadraticCurveTo(cx-110,250,cx-70,390);
-  ctx.lineTo(cx+70,390);
-  ctx.quadraticCurveTo(cx+110,250,cx+90,110);
-  ctx.closePath();ctx.fill();
-  ctx.fillStyle='rgba(255,244,220,'+(0.25+0.65*litF)+')';
-  ctx.beginPath();ctx.moveTo(cx-70,130);
-  ctx.quadraticCurveTo(cx-88,250,cx-52,372);
-  ctx.lineTo(cx+52,372);
-  ctx.quadraticCurveTo(cx+88,250,cx+70,130);
-  ctx.closePath();ctx.fill();
-  ctx.fillStyle='#c9952f';
-  [150,210,270,330].forEach(function(y){
-    ctx.fillRect(cx-86,y,172,7);
-  });
-  ctx.fillStyle='#d9a44f';
-  ctx.beginPath();ctx.ellipse(cx,392,40,10,0,0,Math.PI*2);ctx.fill();
-  ctx.beginPath();ctx.ellipse(cx,110,30,9,0,0,Math.PI*2);ctx.fill();
-  ctx.fillRect(cx-14,60,28,52);
+function coverage(){var h=0;for(var i=0;i<targets.length;i++)if(targets[i].hit)h++;return targets.length?h/targets.length:0;}
+function sparkle(x,y){
+  for(var i=0;i<3;i++)parts.push({x:x+(Math.random()*16-8),y:y+(Math.random()*16-8),
+    vx:(Math.random()-.5)*1.2,vy:-Math.random()*1.4-.2,t:0,col:Math.random()<.5?'#ffd964':'#f0a92e'});
 }
 function draw(){
   ctx.clearRect(0,0,W,H);
-  ctx.fillStyle='#fffaf0';ctx.fillRect(0,0,W,H);
-  lantern(done?1:lit);
-  if(!winAll){
-    ctx.font='700 240px "Noto Naskh Arabic",serif';
-    ctx.textAlign='center';ctx.textBaseline='middle';
-    ctx.fillStyle='rgba(142,47,71,0.12)';
-    ctx.fillText(LETTERS[idx].ch,W/2,270);
-    for(var i=0;i<targets.length;i++){
-      var t=targets[i];
-      ctx.fillStyle=t.hit?'#8e2f47':'rgba(217,164,79,0.85)';
-      ctx.beginPath();ctx.arc(t.x,t.y,t.hit?3.4:2.6,0,Math.PI*2);ctx.fill();
-    }
-  }else{
-    ctx.fillStyle='#8e2f47';ctx.font='700 44px "Noto Naskh Arabic",serif';
-    ctx.textAlign='center';
-    ctx.fillText('برافو! كل الفوانيس نورت',W/2,250);
-    ctx.font='22px "Noto Naskh Arabic",serif';ctx.fillStyle='#a08a6d';
-    ctx.fillText('دوسي هنا للعب تاني',W/2,300);
+  // ghost letter (dashed outline feel)
+  ctx.font='700 250px "Noto Naskh Arabic",serif';
+  ctx.textAlign='center';ctx.textBaseline='middle';
+  ctx.fillStyle='#e8d5ae';
+  ctx.fillText(LETTERS[idx].ch,W/2,H/2+16);
+  // traced golden letter via hit targets
+  ctx.save();
+  ctx.beginPath();
+  ctx.font='700 250px "Noto Naskh Arabic",serif';
+  ctx.fillStyle='#f0b23e';
+  ctx.shadowColor='#ffd964';ctx.shadowBlur=done?26:10;
+  for(var i=0;i<targets.length;i++){
+    var t=targets[i];
+    if(t.hit){ctx.moveTo(t.x+9,t.y);ctx.arc(t.x,t.y,9,0,Math.PI*2);}
+  }
+  ctx.fill();
+  ctx.restore();
+  // sparkles
+  for(var j=parts.length-1;j>=0;j--){
+    var p=parts[j];p.x+=p.vx;p.y+=p.vy;p.t++;
+    if(p.t>26){parts.splice(j,1);continue;}
+    ctx.globalAlpha=1-p.t/26;
+    ctx.fillStyle=p.col;
+    ctx.beginPath();ctx.arc(p.x,p.y,2.6,0,Math.PI*2);ctx.fill();
+    ctx.globalAlpha=1;
+  }
+  // lantern glow frame when letter complete
+  if(done){
+    ctx.strokeStyle='#f0b23e';ctx.lineWidth=5;
+    ctx.shadowColor='#ffd964';ctx.shadowBlur=30;
+    ctx.strokeRect(14,14,W-28,H-28);
+    ctx.shadowBlur=0;
   }
 }
-function coverage(){
-  var h=0;for(var i=0;i<targets.length;i++)if(targets[i].hit)h++;
-  return targets.length?h/targets.length:0;
-}
 function trace(x,y){
-  if(done||winAll)return;
+  if(done)return;
   var r=cv.getBoundingClientRect();
   var px=(x-r.left)*(W/r.width),py=(y-r.top)*(H/r.height);
   var any=false;
@@ -152,22 +136,21 @@ function trace(x,y){
     if(!t.hit&&Math.abs(t.x-px)<20&&Math.abs(t.y-py)<20){t.hit=true;any=true;}
   }
   if(any){
-    var c=coverage();
-    lit=c;
+    sparkle(px,py);
+    var c=coverage();lit=c;
     progEl.textContent=Math.round(c*100)+'٪';
     if(c>=0.85){
       done=true;lit=1;
       dotsEl.children[idx].classList.add('on');
+      progEl.textContent='الفانوس نور!';
       var au=LETTERS[idx].audio;
-      if(au){try{var a=new Audio(au);a.play().catch(function(){});}catch(e){}}
+      if(au){try{new Audio(au).play().catch(function(){});}catch(e){}}
       setTimeout(function(){
         idx++;
-        if(idx>=LETTERS.length){winAll=true;try{cheer.currentTime=0;cheer.play().catch(function(){});}catch(e){}
-          progEl.textContent='برافو! بنروح اللعبة اللي بعدها';
-          setTimeout(function(){location.href='g2.html';},2600);
-        }
-        else{buildTargets();progEl.textContent='';}
-      },1400);
+        if(idx>=LETTERS.length){
+          SB.levelUp({stars:3,text:'نورتي فوانيس الحروف كلها من الألف للياء',next:'g2.html'});
+        }else{buildTargets();progEl.textContent='';}
+      },1500);
     }
   }
 }
@@ -175,7 +158,6 @@ var drawing=false;
 cv.addEventListener('pointerdown',function(e){drawing=true;trace(e.clientX,e.clientY);});
 cv.addEventListener('pointermove',function(e){if(drawing)trace(e.clientX,e.clientY);});
 window.addEventListener('pointerup',function(){drawing=false;});
-cv.addEventListener('click',function(){if(winAll){location.href='g2.html';}});
 buildTargets();
 (function loop(){draw();requestAnimationFrame(loop);})();
 })();
