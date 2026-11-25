@@ -196,7 +196,14 @@ function tabs(){
 }
 
 /* ---------- state ---------- */
-var ov=null,bar=null,tab='home',pool=null,poolP=null,aud=null,playing=false;
+var ov=null,bar=null,tab=(function(){
+  try{
+    if(location.hash&&location.hash.length>1)return 'lessons';
+    var s=sessionStorage.getItem('ln:tab');
+    if(s==='lessons'||s==='home')return s;
+  }catch(e){}
+  return 'home';
+})(),pool=null,poolP=null,aud=null,playing=false;
 
 function stopAudio(){if(aud){try{aud.pause();}catch(e){console.warn(e)} aud=null;} playing=false;}
 
@@ -515,6 +522,7 @@ function openStudents(){
 var homeBtn=null;
 function showTab(t){
   tab=t;
+  try{sessionStorage.setItem('ln:tab',t);}catch(e){}
   if(!onBoard&&ov)ov.style.display=(t==='home')?'block':'none';
   if(!onBoard&&bar)bar.style.display=(t==='home')?'flex':'none';
   if(!onBoard&&homeBtn){
