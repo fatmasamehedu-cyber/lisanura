@@ -41,8 +41,7 @@ var css=''
 +'.hn-wrap{max-width:430px;margin:0 auto}'
 +'.hn-logo{text-align:center;margin:0 0 8px}'
 +'.hn-logo img{height:86px;width:auto;max-width:78%}'
-+'.hn-hello{display:flex;align-items:flex-end;gap:6px;margin:0 0 14px}'
-+'.hn-ov[dir=rtl] .hn-hello{flex-direction:row-reverse}'
++'.hn-hello{display:flex;align-items:flex-end;gap:6px;margin:0 0 14px;flex-direction:row-reverse}'
 +'.hn-bub{flex:1;background:#fff;border-radius:18px;padding:10px 14px;box-shadow:0 3px 12px #7e415018}'
 +'.hn-girl .hn-bub{border:2px solid #eed3cd}'
 +'.hn-boy .hn-bub{border:2px solid #eed3cd}'
@@ -263,7 +262,7 @@ function buildOv(){
     +'<p class="hn-game-t">'+esc(gt?(en?gt[1]:gt[0]):gk)+'</p>'
     +'<button type="button" class="hn-play" data-hn="play" data-g="'+gk+'">'+PLAY_SVG.replace('<svg','<svg style="width:15px;height:15px;fill:currentColor"')+'<span>'+(en?'Play':(gender()==='boy'?'العب':'العبي'))+'</span></button></div>';
   h+='</div>';
-  ov.innerHTML+= '<button type="button" class="hn-gear" data-hn="gear" aria-label="'+(en?'Settings':'الإعدادات')+'"><i></i></button>';
+  ov.innerHTML+= '<button type="button" class="hn-gear" data-hn="gear" style="'+(en?'right:10px;left:auto':'left:10px;right:auto')+'" aria-label="'+(en?'Settings':'الإعدادات')+'"><i></i></button>';
   var wrap=d.createElement('div');wrap.innerHTML=h;while(wrap.firstChild)ov.appendChild(wrap.firstChild);
 
   ov.addEventListener('click',function(e){
@@ -309,7 +308,7 @@ function setKey(k,v){
 }
 function openSettings(){
   var en=isEn(),g=gender();
-  var ov2=d.createElement('div');ov2.className='hn-set';
+  var ov2=d.createElement('div');ov2.className='hn-set';ov2.setAttribute('dir',en?'ltr':'rtl');
   ov2.innerHTML='<div class="hn-set-card"><p class="hn-set-t">'+(en?'Settings':'الإعدادات')+'</p>'
     +'<div class="hn-set-row"><span class="hn-set-l">'+(en?'Language':'اللغة')+'</span><span class="hn-set-opts">'
     +'<button type="button" class="hn-opt'+(!en?' on':'')+'" data-lang="ar">العربية</button>'
