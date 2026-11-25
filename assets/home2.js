@@ -250,7 +250,7 @@ function buildOv(){
     h+='<p class="hn-cont-l">'+esc(stripT(lp.title))+(lp.plays>1?' · '+(en?lp.plays+' plays':(lp.plays===2?'مرتين':(lp.plays>=3&&lp.plays<=10?lp.plays+' مرات':lp.plays+' مرة'))):'')+'</p>';
     if(lp.key==='letters'){var f=lettersFraction();if(f>0)h+='<div class="hn-cont-bar"><div class="hn-cont-f" style="width:'+Math.round(f*100)+'%"></div></div>';}
   }else{
-    h+='<p class="hn-cont-l">'+(en?'Start your first lesson from the lessons tab.':'اِبْدَئِي أَوَّلَ دَرْسٍ مِنْ تَبْوِيبِ الدُّرُوسِ.')+'</p>';
+    h+='<p class="hn-cont-l">'+(en?'Start your first lesson from the lessons tab.':(gender()==='boy'?'ابدأ أول درس من تبويب الدروس.':'ابدئي أول درس من تبويب الدروس.'))+'</p>';
   }
   h+='<button type="button" class="hn-cont-btn" data-hn="cont">'+(en?'Continue':'تابعي')+'</button></div>';
   /* dhikr card (filled by loadPool) */
@@ -471,8 +471,8 @@ function render(){
     ov.remove();ov=null;buildOv();
   }
   if(bar){bar.remove();bar=null;}
-  buildBar();
-  showTab('home');
+  if(!onBoard)buildBar();
+  showTab(tab||'home');
 }
 
 css+="body.hb-bg-girl,body.hb-bg-boy{background-color:#faf5f0!important;background-image:url("+AB+"assets/tile-neut-BA34HDQK.svg),url("+AB+"assets/arch-neut-TQCGQA43.svg)!important}"+".lc-backbtn,.lc-theme-boy .lc-backbtn{border-color:#c16a7e!important;color:#7e4150!important}"+".hn-set-card,.tb-acc-card{background:#fffaf3!important}";css+="@keyframes hnPop{from{transform:scale(.9);opacity:0}to{transform:scale(1);opacity:1}}";var st=d.createElement('style');st.textContent=css;d.head.appendChild(st);
@@ -483,6 +483,8 @@ var mo=new MutationObserver(function(muts){
 });
 mo.observe(d.documentElement,{attributes:true,attributeFilter:['data-ln-role']});
 window.addEventListener('ls-sync',function(){if(role())render();});
+/* one shared settings popup: the app's gear opens our popup, never the old dialog */
+d.addEventListener('click',function(e){var g=e.target&&e.target.closest?e.target.closest('.lc-gear'):null;if(g){e.preventDefault();e.stopImmediatePropagation();openSettings();}},true);
 d.addEventListener('ln-auth',function(){if(role())render();});
 /* board return intents (from the old tab bar) */
 try{

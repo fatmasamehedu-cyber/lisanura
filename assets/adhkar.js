@@ -382,8 +382,8 @@ function heartIcon(){
 function paintDoor(b){
   var en=isEn();
   b.innerHTML='<span class="hb-door-icon">'+heartIcon()+'</span>'
-    +'<span class="hb-door-txt"><b>'+(en?'Daily adhkar':'أَذْكَارُ الْيَوْمِ')+'</b>'
-    +'<small>'+(en?'Short duas for your day':'أَدْعِيَةٌ قَصِيرَةٌ لِيَوْمِكِ')+'</small></span>';
+    +'<span class="hb-door-txt"><b>'+(en?'Daily adhkar':'أذكار اليوم')+'</b>'
+    +'<small>'+(en?'Short duas for your day':'أدعية قصيرة ليومك')+'</small></span>';
 }
 function ensureDoor(){
   var host=d.querySelector('.hb-doors');if(!host)return false;
