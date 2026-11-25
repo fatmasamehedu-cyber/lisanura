@@ -3,72 +3,59 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>قطر الأحداث — عينة</title>
-<link rel="stylesheet" href="lab.css">
+<title>قطار القصة — عينة</title>
+
+<link rel="stylesheet" href="sb.css">
 <style>
-  .t-card{
-    background:#fff;border:2px solid #d9a44f;border-radius:14px;padding:10px 8px;
-    font-size:16.5px;font-weight:700;color:#8e2f47;text-align:center;cursor:pointer;
-    box-shadow:0 2px 0 #e6d3a8;user-select:none;line-height:1.5;
-  }
-  .t-card.sel{border-color:#2f6fb5;background:#eaf3fb;transform:scale(1.04)}
-  .t-card:disabled{opacity:.45;cursor:default}
+  #trainRow{display:flex;gap:10px;justify-content:center;margin:10px 0 4px;direction:ltr;transition:transform 1.6s ease-in}
+  .car{width:104px;min-height:92px;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;
+    padding:8px 6px;font-size:13.5px;color:#8a7458;cursor:pointer;position:relative}
+  .car .num{font-weight:800;color:var(--sb-gold-d);font-size:18px}
+  .car .wheels{font-size:12px;letter-spacing:4px;margin-top:auto;color:#5d3a17}
+  .car.full{border-style:solid;border-color:var(--sb-pink-d);color:var(--sb-ink);font-weight:800;background:linear-gradient(#fffdf8,#fdeedd)}
+  .car.good{border-color:var(--sb-green-d)}
+  .car.bad{border-color:var(--sb-red-d);animation:sbShk .4s}
+  @keyframes sbShk{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
   #pool{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:14px}
-  #train{display:flex;gap:6px;justify-content:center;margin-top:10px;direction:ltr}
-  .car{
-    width:106px;min-height:86px;border:2.5px dashed #d9a44f;border-radius:14px;background:#fffaf0;
-    display:flex;flex-direction:column;align-items:center;justify-content:flex-start;
-    font-size:13.5px;color:#8a7458;padding:6px 4px;position:relative;cursor:pointer;
-  }
-  .car .num{font-weight:700;color:#d9a44f;font-size:17px}
-  .car.full{border-style:solid;border-color:#8e2f47;color:#8e2f47;font-weight:700;font-size:14.5px}
-  .car.good{border-color:#3f9d63;color:#3f9d63}
-  .car.bad{border-color:#c14a4a;animation:shk .4s}
-  .car .wheels{font-size:12px;letter-spacing:4px;margin-top:auto;color:#3a2d1d}
-  @keyframes shk{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
-  #g5msg{text-align:center;min-height:34px;font-size:19px;font-weight:700;color:#8e2f47;margin-top:12px}
-  #g5go{
-    display:block;margin:12px auto 0;border:0;border-radius:999px;background:#d16a92;color:#fff;
-    font-family:inherit;font-size:19px;font-weight:700;padding:10px 40px;cursor:pointer;
-  }
-  #g5go:disabled{opacity:.4}
-  #trainMove{transition:transform 1.6s ease-in}
+  .t-card{padding:12px 8px;font-size:17px;cursor:pointer;transition:transform .15s}
+  .t-card.sel{border-color:var(--sb-navy);background:linear-gradient(#fff,#eaf3fb);transform:scale(1.05)}
+  #g5msg{text-align:center;min-height:32px;font-size:19px;font-weight:800;color:var(--sb-pink-d);margin-top:12px}
+  #g5go{display:block;margin:6px auto 0}
+  .stage{background:linear-gradient(#fffdf8cc,#fdf3dfcc);border:3px solid var(--sb-gold);border-radius:22px;
+    box-shadow:0 5px 0 #d9b878,0 12px 26px #7a5a2a26;padding:14px;box-sizing:border-box}
 </style>
 </head>
 <body>
-<div class="lab-wrap">
-  <div class="lab-top">
-    <a class="lab-back" href="index.html">‹ كل العينات</a>
-    <span class="lab-badge">عينة ٦</span>
+<div class="sb-page" style="background-image:url('assets/sb/bg-train.jpg')">
+  <div class="sb-topbar">
+    <a class="sb-roundbtn" href="index.html" aria-label="كل العينات">🏠</a>
+    <div class="sb-plaque"><h1>قطار القصة</h1></div>
+    <span class="sb-roundbtn" aria-hidden="true">🔊</span>
   </div>
-  <h1 class="lab-title">قطر الأحداث</h1>
-  <p class="lab-sub">دوسي على الكارت وبعدين على العربية المناسبة — رتبي أحداث اليوم من ١ ل٤ والقطر هيمشي</p>
-  <div class="game-frame">
-    <div id="trainMove">
-      <div id="train"></div>
-    </div>
+  <p class="sb-sub">دوسي على الكارت وبعدين على العربية المناسبة — رتبي أحداث اليوم من ١ ل٤ والقطر هيمشي</p>
+  <div class="stage">
+    <div id="trainRow"></div>
     <div id="g5msg"></div>
     <div id="pool"></div>
-    <button id="g5go" type="button" disabled>شغلي القطر</button>
-    <p class="game-note">لو الترتيب غلط العربيات الغلط بتهتز وبترجع الكروت</p>
+    <button id="g5go" class="sb-pill" type="button" disabled>شغلي القطر</button>
   </div>
 </div>
+<script src="sb.js"></script>
 <script>
+SB.teacher('point');
 (function(){
 "use strict";
 var EVENTS=['صحيت من النوم','غسلت وشي وإيدي','كلت الفطار','لبست هدومي'];
-var cheer=new Audio('../assets/cheer.mp3');
-var pool=document.getElementById('pool'),train=document.getElementById('train'),
-    msg=document.getElementById('g5msg'),go=document.getElementById('g5go'),
-    trainMove=document.getElementById('trainMove');
+var pool=document.getElementById('pool'),train=document.getElementById('trainRow'),
+    msg=document.getElementById('g5msg'),go=document.getElementById('g5go');
 var order=[2,0,3,1];
 var sel=null,cars=[null,null,null,null],moving=false;
 function build(){
   pool.innerHTML='';train.innerHTML='';msg.textContent='';cars=[null,null,null,null];sel=null;moving=false;
-  trainMove.style.transform='';
+  train.style.transform='';
   order.forEach(function(ei){
     var c=document.createElement('button');
-    c.className='t-card';c.type='button';c.textContent=EVENTS[ei];
+    c.className='sb-plank t-card';c.type='button';c.textContent=EVENTS[ei];
     c.addEventListener('click',function(){
       if(moving)return;
       if(sel===c){c.classList.remove('sel');sel=null;return;}
@@ -79,14 +66,14 @@ function build(){
   });
   for(var i=0;i<4;i++)(function(i){
     var car=document.createElement('div');
-    car.className='car';
+    car.className='sb-slot car';
     car.innerHTML='<span class="num">'+(i+1)+'</span><span class="wheels">● ●</span>';
     car.addEventListener('click',function(){
       if(moving||!sel)return;
       var old=cars.indexOf(sel);
       if(old>=0){cars[old]=null;drawCar(old);}
       cars[i]=sel;drawCar(i);
-      sel.classList.remove('sel');var s=sel;sel=null;
+      sel.classList.remove('sel');sel=null;
       check();
     });
     train.appendChild(car);
@@ -104,11 +91,8 @@ function drawCar(i){
     car.innerHTML='<span class="num">'+(i+1)+'</span><span class="wheels">● ●</span>';
   }
 }
-function check(){
-  go.disabled=cars.some(function(c){return !c;});
-}
+function check(){go.disabled=cars.some(function(c){return !c;});}
 go.addEventListener('click',function(){
-  if(go.textContent==='العبي تاني'){go.textContent='شغلي القطر';build();return;}
   var ok=true;
   for(var i=0;i<4;i++){
     var car=train.children[i];
@@ -118,12 +102,11 @@ go.addEventListener('click',function(){
   }
   if(ok){
     moving=true;msg.textContent='صح! القطر ماشي';
-    try{cheer.currentTime=0;cheer.play().catch(function(){});}catch(e){}
-    trainMove.style.transform='translateX(-120%)';
+    SB.cheer();
+    train.style.transform='translateX(-130%)';
     setTimeout(function(){
-      msg.textContent='برافو! بنروح اللعبة اللي بعدها';
-    },1700);
-    setTimeout(function(){location.href='g6.html';},3400);
+      SB.levelUp({stars:3,text:'رتبتي أحداث اليوم صح',next:'g6.html'});
+    },1500);
     go.disabled=true;
   }else{
     msg.textContent='لسه — بصي على العربيات اللي بتهتز';
