@@ -190,26 +190,26 @@ window.LN=(()=>{
     const en=lang()==='en';
     const lbase=location.pathname.indexOf('/board/')>-1?'../assets/':'assets/';
     container.innerHTML=
-    '<div dir="'+(en?'ltr':'rtl')+'" style="font-family:Naskh,serif;max-width:340px;margin:0 auto;background:#fffdf6;border:2px solid #e9b7c9;border-radius:18px;padding:22px;box-shadow:0 8px 24px rgba(124,45,73,.15)">'
+    '<div dir="'+(en?'ltr':'rtl')+'" style="font-family:Naskh,serif;max-width:340px;margin:0 auto;background:#fffdf6;border:2px solid #e8cfc0;border-radius:18px;padding:22px;box-shadow:0 8px 24px rgba(124,45,73,.15)">'
     +'<div style="text-align:center;margin-bottom:6px"><img src="'+lbase+(en?'logo-en.png?v=4':'logo-ar.png?v=4')+'" alt="لِسانورا" style="height:64px;width:auto;max-width:100%"></div>'
     +'<div id="lnTabs" style="display:flex;gap:6px;margin:12px 0">'
-    +'<button data-t="in" style="flex:1;padding:8px;border-radius:12px;border:2px solid #d16a92;background:#d16a92;color:#fff;font-weight:700;font-family:Naskh">'+L('تسجيل دخول','Log in')+'</button>'
-    +'<button data-t="up" style="flex:1;padding:8px;border-radius:12px;border:2px solid #d16a92;background:#fff;color:#7c2d49;font-weight:700;font-family:Naskh">'+L('حساب جديد','New account')+'</button></div>'
+    +'<button data-t="in" style="flex:1;padding:8px;border-radius:12px;border:2px solid #c16a7e;background:#c16a7e;color:#fff;font-weight:700;font-family:Naskh">'+L('تسجيل دخول','Log in')+'</button>'
+    +'<button data-t="up" style="flex:1;padding:8px;border-radius:12px;border:2px solid #c16a7e;background:#fff;color:#7e4150;font-weight:700;font-family:Naskh">'+L('حساب جديد','New account')+'</button></div>'
     +'<div id="lnRole" style="display:none;gap:6px;margin-bottom:10px">'
     +'<button data-r="teacher" style="flex:1;padding:8px;border-radius:12px;border:2px solid #d9a44f;background:#d9a44f;color:#fff;font-weight:700;font-family:Naskh">'+L('أنا معلمة','I am a teacher')+'</button>'
-    +'<button data-r="student" style="flex:1;padding:8px;border-radius:12px;border:2px solid #d9a44f;background:#fff;color:#7c2d49;font-weight:700;font-family:Naskh">'+L('أنا طالبة','I am a student')+'</button></div>'
-    +'<input id="lnName" placeholder="'+L('الاسم','Name')+'" style="display:none;width:100%;box-sizing:border-box;margin-bottom:8px;padding:9px;border-radius:10px;border:2px solid #e9b7c9;font-family:Naskh;font-size:15px">'
-    +'<input id="lnId" placeholder="'+L('البريد الإلكتروني','Email')+'" style="width:100%;box-sizing:border-box;margin-bottom:8px;padding:9px;border-radius:10px;border:2px solid #e9b7c9;font-family:Naskh;font-size:15px;direction:ltr;'+(en?'text-align:left':'text-align:right')+'">'
-    +'<input id="lnPass" type="password" placeholder="'+L('كلمة السر','Password')+'" style="width:100%;box-sizing:border-box;margin-bottom:8px;padding:9px;border-radius:10px;border:2px solid #e9b7c9;font-family:Naskh;font-size:15px;direction:ltr;'+(en?'text-align:left':'text-align:right')+'">'
-    +'<input id="lnCode" placeholder="'+L('كود المعلمة (اختياري)','Teacher code (optional)')+'" style="display:none;width:100%;box-sizing:border-box;margin-bottom:8px;padding:9px;border-radius:10px;border:2px solid #e9b7c9;font-family:Naskh;font-size:13px;direction:ltr;'+(en?'text-align:left':'text-align:right')+'">'
-    +'<button id="lnGo" style="width:100%;padding:11px;border-radius:12px;border:none;background:#7c2d49;color:#fff;font-weight:700;font-family:Naskh;font-size:16px">'+L('دخول','Log in')+'</button>'
-    +'<div id="lnMsg" style="margin-top:10px;text-align:center;font-size:14px;color:#a4748a;min-height:20px"></div></div>';
+    +'<button data-r="student" style="flex:1;padding:8px;border-radius:12px;border:2px solid #d9a44f;background:#fff;color:#7e4150;font-weight:700;font-family:Naskh">'+L('أنا طالبة','I am a student')+'</button></div>'
+    +'<input id="lnName" placeholder="'+L('الاسم','Name')+'" style="display:none;width:100%;box-sizing:border-box;margin-bottom:8px;padding:9px;border-radius:10px;border:2px solid #e8cfc0;font-family:Naskh;font-size:15px">'
+    +'<input id="lnId" placeholder="'+L('البريد الإلكتروني','Email')+'" style="width:100%;box-sizing:border-box;margin-bottom:8px;padding:9px;border-radius:10px;border:2px solid #e8cfc0;font-family:Naskh;font-size:15px;direction:ltr;'+(en?'text-align:left':'text-align:right')+'">'
+    +'<input id="lnPass" type="password" placeholder="'+L('كلمة السر','Password')+'" style="width:100%;box-sizing:border-box;margin-bottom:8px;padding:9px;border-radius:10px;border:2px solid #e8cfc0;font-family:Naskh;font-size:15px;direction:ltr;'+(en?'text-align:left':'text-align:right')+'">'
+    +'<input id="lnCode" placeholder="'+L('كود المعلمة (اختياري)','Teacher code (optional)')+'" style="display:none;width:100%;box-sizing:border-box;margin-bottom:8px;padding:9px;border-radius:10px;border:2px solid #e8cfc0;font-family:Naskh;font-size:13px;direction:ltr;'+(en?'text-align:left':'text-align:right')+'">'
+    +'<button id="lnGo" style="width:100%;padding:11px;border-radius:12px;border:none;background:#7e4150;color:#fff;font-weight:700;font-family:Naskh;font-size:16px">'+L('دخول','Log in')+'</button>'
+    +'<div id="lnMsg" style="margin-top:10px;text-align:center;font-size:14px;color:#a98b7f;min-height:20px"></div></div>';
     let mode='in',role='student';
     const $=id=>container.querySelector(id);
     const nameEl=$('#lnName'),idEl=$('#lnId'),passEl=$('#lnPass'),codeEl=$('#lnCode'),goEl=$('#lnGo'),msgEl=$('#lnMsg');
     function refresh(){
-      container.querySelectorAll('#lnTabs button').forEach(b=>{const on=b.dataset.t===mode;b.style.background=on?'#d16a92':'#fff';b.style.color=on?'#fff':'#7c2d49';});
-      container.querySelectorAll('#lnRole button').forEach(b=>{const on=b.dataset.r===role;b.style.background=on?'#d9a44f':'#fff';b.style.color=on?'#fff':'#7c2d49';});
+      container.querySelectorAll('#lnTabs button').forEach(b=>{const on=b.dataset.t===mode;b.style.background=on?'#c16a7e':'#fff';b.style.color=on?'#fff':'#7e4150';});
+      container.querySelectorAll('#lnRole button').forEach(b=>{const on=b.dataset.r===role;b.style.background=on?'#d9a44f':'#fff';b.style.color=on?'#fff':'#7e4150';});
       $('#lnRole').style.display=mode==='up'?'flex':'none';
       nameEl.style.display=mode==='up'?'block':'none';
       codeEl.style.display=(mode==='up'&&role==='student')?'block':'none';
@@ -220,7 +220,7 @@ window.LN=(()=>{
     container.querySelectorAll('#lnTabs button').forEach(b=>b.onclick=()=>{mode=b.dataset.t;refresh();});
     container.querySelectorAll('#lnRole button').forEach(b=>b.onclick=()=>{role=b.dataset.r;refresh();});
     goEl.onclick=async()=>{
-      msgEl.style.color='#a4748a';msgEl.textContent=L('لحظات...','One moment...');goEl.disabled=true;
+      msgEl.style.color='#a98b7f';msgEl.textContent=L('لحظات...','One moment...');goEl.disabled=true;
       try{
         if(mode==='in'){await signIn(idEl.value,passEl.value);
           msgEl.textContent='';opts.onAuth&&opts.onAuth({user,profile});}

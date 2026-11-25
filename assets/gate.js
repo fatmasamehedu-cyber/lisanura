@@ -11,10 +11,10 @@
     if(onBoard){location.replace('../');return;}
     if(!dlg){
       dlg=d.createElement('dialog');dlg.id='lnGate';dlg.setAttribute('dir',lg()?'ltr':'rtl');
-      dlg.style.cssText='position:fixed;inset:0;width:100vw;height:100vh;max-width:none;max-height:none;margin:0;padding:24px 14px;border:0;background:#fdeef3;overflow:auto;display:flex;align-items:center;justify-content:center;box-sizing:border-box';
+      dlg.style.cssText='position:fixed;inset:0;width:100vw;height:100vh;max-width:none;max-height:none;margin:0;padding:24px 14px;border:0;background:#faf5f0;overflow:auto;display:flex;align-items:center;justify-content:center;box-sizing:border-box';
       dlg.addEventListener('cancel',function(e){e.preventDefault();});
       box=d.createElement('div');box.style.cssText='width:100%;max-width:360px';
-      var h=d.createElement('div');h.style.cssText='text-align:center;font-family:Naskh,serif;color:#7c2d49;font-size:20px;margin-bottom:14px';
+      var h=d.createElement('div');h.style.cssText='text-align:center;font-family:Naskh,serif;color:#7e4150;font-size:20px;margin-bottom:14px';
       h.textContent=lg()?'Log in or create an account to start':'سَجِّلِي الدُّخُولَ أَوْ أَنْشِئِي حِسَابًا لِتَبْدَئِي';
       var c=d.createElement('div');box.appendChild(h);box.appendChild(c);dlg.appendChild(box);d.body.appendChild(dlg);
       if(window.LN&&LN.configured())LN.renderAuth(c,{onAuth:function(){hideGate();location.reload();}});
