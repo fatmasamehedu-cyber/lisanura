@@ -84,7 +84,10 @@ function step(){
         burst(240,300,'#f5c15c',40);
         try{cheer.currentTime=0;cheer.play().catch(function(){});}catch(e){}
         wi++;
-        if(wi>=WORDS.length){won=true;msg='برافو! خلصتي كل الكلمات';msgT=99999;}
+        if(wi>=WORDS.length){won=true;msg='برافو! خلصتي كل الكلمات';msgT=99999;
+          setTimeout(function(){msg='بنرجع لقائمة العينات';},1800);
+          setTimeout(function(){location.href='index.html';},3600);
+        }
         else{li=0;setTimeout(function(){if(!won){newGems();playWord();}},1200);}
       }else{
         setTimeout(newGems,500);
