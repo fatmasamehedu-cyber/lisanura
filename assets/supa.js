@@ -191,7 +191,7 @@ window.LN=(()=>{
     const lbase=location.pathname.indexOf('/board/')>-1?'../assets/':'assets/';
     container.innerHTML=
     '<div dir="'+(en?'ltr':'rtl')+'" style="font-family:Naskh,serif;max-width:340px;margin:0 auto;background:#fffdf6;border:2px solid #e8cfc0;border-radius:18px;padding:22px;box-shadow:0 8px 24px rgba(124,45,73,.15)">'
-    +'<div style="text-align:center;margin-bottom:6px"><img src="'+lbase+(en?'logo-en.webp?v=2':'logo-ar.webp?v=2')+'" alt="لسانورا" style="height:64px;width:auto;max-width:100%"></div>'
+    +'<div style="text-align:center;margin-bottom:6px"><img src="'+lbase+(en?'logo-en.webp?v=3':'logo-ar.webp?v=3')+'" alt="لسانورا" style="height:64px;width:auto;max-width:100%"></div>'
     +'<div id="lnTabs" style="display:flex;gap:6px;margin:12px 0">'
     +'<button data-t="in" style="flex:1;padding:8px;border-radius:12px;border:2px solid #c16a7e;background:#c16a7e;color:#fff;font-weight:700;font-family:Naskh">'+L('تسجيل دخول','Log in')+'</button>'
     +'<button data-t="up" style="flex:1;padding:8px;border-radius:12px;border:2px solid #c16a7e;background:#fff;color:#7e4150;font-weight:700;font-family:Naskh">'+L('حساب جديد','New account')+'</button></div>'
