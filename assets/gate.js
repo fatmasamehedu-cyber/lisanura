@@ -21,13 +21,16 @@
       else c.textContent=lg()?'Connection failed. Reopen the page.':'تعذر الاتصال. أعيدي فتح الصفحة.';
     }
     if(!dlg.open)dlg.showModal();
-    if(!tick)tick=setInterval(function(){
-      var other=[].slice.call(d.querySelectorAll('dialog[open]')).some(function(x){return x!==dlg;});
-      if(other){dlg.close();dlg.showModal();}
-    },300);
+    if(!tick){tick=new MutationObserver(function(muts){
+      var hit=false,i,j,m,n;
+      for(i=0;i<muts.length&&!hit;i++){m=muts[i];
+        if(m.target&&m.target.tagName==='DIALOG'&&m.target!==dlg&&m.target.open)hit=true;
+        for(j=0;m.addedNodes&&j<m.addedNodes.length&&!hit;j++){n=m.addedNodes[j];if(n&&n.tagName==='DIALOG'&&n!==dlg)hit=true;}}
+      if(hit){dlg.close();dlg.showModal();}
+    });tick.observe(d.body,{childList:true,subtree:true,attributes:true,attributeFilter:['open']});}
   }
   function hideGate(){
-    if(tick){clearInterval(tick);tick=null;}
+    if(tick){tick.disconnect();tick=null;}
     if(dlg){dlg.close();dlg.remove();dlg=null;}
   }
   function hideBoardDoor(){

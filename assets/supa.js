@@ -60,13 +60,12 @@ window.LN=(()=>{
     if(!data.session)throw new Error(L('التسجيل يحتاج تأكيد بريد — أطلبي من الدعم إيقاف تأكيد البريد','Signup needs email confirmation. Ask support to turn off email confirmation'));
     user=data.session.user;await loadProfile();
     if(teacherCode&&teacherCode.trim()){
-      let t=null;
       const r=await sb.rpc('teacher_name_by_code',{code:teacherCode.trim()});
-      if(!r.error&&r.data)t=r.data[0]||null;
-      else{const q=await sb.from('profiles').select('id,display_name').eq('id',teacherCode.trim()).eq('role','teacher').maybeSingle();t=q.data;}
+      if(r.error)throw new Error(L('تعذر التحقق من كود المعلمة، تأكدي من الاتصال وحاولي مرة أخرى','Could not verify the teacher code. Check the connection and try again'));
+      const t=r.data&&r.data[0];
       if(!t)throw new Error(L('كود المعلمة غير صحيح','Teacher code is incorrect'));
       const lr=await sb.rpc('link_to_teacher',{code:t.id});
-      if(lr.error||lr.data===false){await sb.from('profiles').update({teacher_id:t.id}).eq('id',user.id);}
+      if(lr.error||lr.data===false)throw new Error(L('تعذر الربط بالمعلمة، حاولي مرة أخرى','Could not link to the teacher. Try again'));
       await loadProfile();}
     return {user,profile};}
 
