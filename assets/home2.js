@@ -238,9 +238,9 @@ function buildOv(){
   h+='<div class="hn-logo"><img src="'+AB+(en?'logo-en.png?v=4':'logo-ar.png?v=4')+'" alt=""></div>';
   /* greeting */
   h+='<div class="hn-hello"><div class="hn-bub"><p class="hn-hi">'
-    +(rl==='teacher'?(en?'Welcome, Teacher!':'أَهْلًا بِكِ يَا مُعَلِّمَةُ!'):(en?('Welcome'+(name?', '+esc(name):'')+'!'):('أَهْلًا يَا '+esc(name||'صَدِيقَتِي')+'!')))
+    +(rl==='teacher'?(en?'Welcome, Teacher!':'أهلا بك يا معلمة!'):(en?('Welcome'+(name?', '+esc(stripT(name)):'')+'!'):('أهلا يا '+esc(stripT(name)||'صديقتي')+'!')))
     +'</p><p class="hn-sub">'
-    +(rl==='teacher'?(en?'A happy day with your students.':'يَوْمٌ سَعِيدٌ مَعَ طَالِبَاتِكِ'):(en?'Let’s learn together today.':'هَيَّا نَتَعَلَّمْ مَعًا الْيَوْمَ'))
+    +(rl==='teacher'?(en?'A happy day with your students.':'يوم سعيد مع طالباتك'):(en?'Let’s learn together today.':'هيا نتعلم معا اليوم'))
     +'</p></div>'
     +'<img class="hn-teach" src="'+AB+'teacher-full-6VQNEAGQ.png" alt=""></div>';
   /* continue card */
