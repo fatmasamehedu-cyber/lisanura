@@ -141,7 +141,7 @@ function hud(){
   ctx.fillStyle='#ffffffcc';ctx.font='700 16px "Noto Naskh Arabic",serif';ctx.fillText('اجمعي حروف الكلمة بالترتيب',CX,128);
   ctx.fillStyle='#00000066';ctx.beginPath();ctx.roundRect?ctx.roundRect(W-110,14,96,36,18):ctx.rect(W-110,14,96,36);ctx.fill();
   ctx.fillStyle='#ffd964';ctx.font='800 20px "Noto Naskh Arabic",serif';ctx.fillText('★ '+stars,W-62,33);
-  ctx.fillStyle='#ffffffaa';ctx.font='700 14px "Noto Naskh Arabic",serif';ctx.fillText((wi+1)+' / '+WORDS.length,CX,34);
+  ctx.fillStyle='#ffffffaa';ctx.font='700 14px "Noto Naskh Arabic",serif';ctx.direction='ltr';ctx.fillText((wi+1)+' / '+WORDS.length,CX,34);ctx.direction='rtl';
 }
 var last=performance.now();
 function loop(n){var dt=Math.min(.05,(n-last)/1000);last=n;update(dt);
