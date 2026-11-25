@@ -137,8 +137,12 @@ var css=''
 +'body.hb-bg-boy .tb-code{border-color:#eed3cd;color:#7e4150}'
 +'.tb-copy{display:block;width:100%;margin-top:8px;border:0;border-radius:14px;padding:11px;min-height:46px;background:#c16a7e;color:#fff;font-family:Naskh,"Noto Naskh Arabic",serif;font-weight:700;font-size:15.5px;cursor:pointer}'
 +'body.hb-bg-boy .tb-copy{background:#c16a7e}'
-+'.ln-homebtn{position:fixed;top:12px;left:50%;transform:translateX(-50%);z-index:65;display:none;align-items:center;gap:5px;padding:0 12px;height:38px;border-radius:12px;background:#fff;border:2px solid #eed3cd;color:#7e4150;font-family:Naskh,"Noto Naskh Arabic",serif;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 2px 8px #7e415026}'
++'.ln-homebtn{position:fixed;top:10px;left:12px;z-index:65;display:none;align-items:center;justify-content:center;gap:5px;width:40px;height:40px;padding:0;border-radius:12px;background:#fff;border:2px solid #eed3cd;color:#7e4150;font-family:Naskh,"Noto Naskh Arabic",serif;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 2px 8px #7e415026}'
++'.ln-homebtn:dir(rtl){left:auto;right:12px}'
++'.ln-homebtn b{display:none}'
 +'.ln-homebtn svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}'
++'@media(min-width:480px){.ln-homebtn{width:auto;padding:0 12px}.ln-homebtn b{display:inline}}'
++'body:has(.lc-backbtn) .ln-homebtn,body:has(.ak-back) .ln-homebtn{top:66px}'
 +'.tb-st{position:fixed;inset:0;z-index:65;overflow:auto;-webkit-overflow-scrolling:touch;padding:14px 14px 100px;box-sizing:border-box}'
 +'.tb-st-bg{position:fixed;inset:0;z-index:-1;pointer-events:none;background-color:#faf5f0;background-image:url('+AB+TILES.girl[0]+'.svg),url('+AB+TILES.girl[1]+'.svg);background-repeat:repeat,no-repeat;background-size:96px 96px,340px auto;background-position:0 0,center 118px}'
 +'body.hb-bg-boy .tb-st-bg{background-color:#faf5f0;background-image:url('+AB+TILES.boy[0]+'.svg),url('+AB+TILES.boy[1]+'.svg)}'
@@ -185,7 +189,7 @@ function stopAudio(){if(aud){try{aud.pause();}catch(e){} aud=null;} playing=fals
 
 function loadPool(){
   if(poolP)return poolP;
-  poolP=fetch(AB+'dhikr-pool.json').then(function(r){return r.json();}).then(function(j){pool=j;return j;}).catch(function(){pool=[];return[];});
+  poolP=fetch(AB+'dhikr-pool.json?v=1').then(function(r){return r.json();}).then(function(j){pool=j;return j;}).catch(function(){pool=[];return[];});
   return poolP;
 }
 
@@ -366,6 +370,7 @@ function wireCode(root,en){
 }
 function openAccount(){
   var en=isEn();
+  var old3=d.querySelector('.tb-acc');if(old3)old3.remove();
   var ov3=d.createElement('div');ov3.className='tb-acc';
   var p=window.LN&&LN.profile;
   var u=window.LN&&LN.user;
@@ -384,24 +389,24 @@ function openAccount(){
   if(isT)wireCode(ov3,en);
   var out=ov3.querySelector('.tb-acc-out');out.textContent=en?'Sign out':'تسجيل الخروج';
   var cl=ov3.querySelector('.tb-acc-close');cl.textContent=en?'Close':'إغلاق';
-  cl.onclick=function(){ov3.remove();};
-  ov3.addEventListener('click',function(e){if(e.target===ov3)ov3.remove();});
+  cl.onclick=function(){ov3.remove();ovTab=null;paintTabs();};
+  ov3.addEventListener('click',function(e){if(e.target===ov3){ov3.remove();ovTab=null;paintTabs();}});
   out.onclick=function(){out.disabled=true;out.textContent=en?'Signing out...':'جاري تسجيل الخروج...';
     if(window.LN&&LN.signOut)LN.signOut().then(function(){location.reload();},function(){location.reload();});
     else location.reload();};
   d.body.appendChild(ov3);
+  ovTab='account';paintTabs();
 }
 
 /* ---------- my students overlay (teacher; never redirects) ---------- */
 function openStudents(){
   var en=isEn();
+  var old4=d.querySelector('.tb-st');if(old4)old4.remove();
   var ov4=d.createElement('div');ov4.className='tb-st';ov4.setAttribute('dir',en?'ltr':'rtl');
   ov4.innerHTML='<div class="tb-st-bg"></div><div class="tb-st-wrap">'
-    +'<div class="tb-st-top"><button type="button" class="tb-st-back">'+HOME_SVG+'<span>'+(en?'Home':'الرئيسية')+'</span></button><h2 class="tb-st-h">'+(en?'My students':'طلابي')+'</h2></div>'
+    +'<div class="tb-st-top"><h2 class="tb-st-h">'+(en?'My students':'طلابي')+'</h2></div>'
     +'<div class="tb-st-body"><div class="tb-st-msg">…</div></div></div>';
   var body=ov4.querySelector('.tb-st-body');
-  function closeSt(){ov4.remove();ovTab=null;showTab('home');}
-  ov4.querySelector('.tb-st-back').onclick=closeSt;
   d.body.appendChild(ov4);ovTab='students';
   if(bar)bar.style.display='flex';
   if(homeBtn)homeBtn.style.display='none';
@@ -453,6 +458,11 @@ function showTab(t){
   paintTabs();
 }
 var ovTab=null;
+function closeOverlays(){
+  var olds=d.querySelectorAll('.tb-st,.tb-acc');
+  for(var i=0;i<olds.length;i++)olds[i].remove();
+  ovTab=null;
+}
 function paintTabs(){
   if(!bar)return;
   var act=ovTab||(onBoard?'board':(tab==='home'?'home':'lessons'));
@@ -472,8 +482,8 @@ function buildBar(){
     b.setAttribute('aria-label',t.label);
     b.onclick=function(){
       stopAudio();
-      if(t.id==='home'){if(onBoard)location.href='../';else showTab('home');}
-      else if(t.id==='lessons'){if(onBoard){try{sessionStorage.setItem('ln:tb-scroll','1');}catch(e){} location.href='../';}else{showTab('lessons');scrollTo({top:0,behavior:'smooth'});}}
+      if(t.id==='home'){closeOverlays();if(onBoard)location.href='../';else{showTab('home');scrollTo({top:0,behavior:'smooth'});}}
+      else if(t.id==='lessons'){if(onBoard){try{sessionStorage.setItem('ln:tb-scroll','1');}catch(e){} location.href='../';}else{closeOverlays();showTab('lessons');scrollTo({top:0,behavior:'smooth'});}}
       else if(t.id==='board'){if(!onBoard)location.href='board/';}
       else if(t.id==='students'){openStudents();}
       else if(t.id==='account')openAccount();
