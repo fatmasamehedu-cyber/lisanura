@@ -1554,6 +1554,29 @@ function loadFromHash(){
 function toast(m){const t=document.getElementById('toast');t.textContent=tt(m);t.style.display='block';clearTimeout(t._x);t._x=setTimeout(()=>t.style.display='none',2200);}
 function beep(f,d){try{const ac=new (window.AudioContext||window.webkitAudioContext)();const o=ac.createOscillator(),g=ac.createGain();
   o.frequency.value=f||880;o.connect(g);g.connect(ac.destination);g.gain.setValueAtTime(.16,ac.currentTime);o.start();o.stop(ac.currentTime+(d||.15));}catch(e){}}
+/* ---- kids cheer sound (mobile-safe: preload + unlock on first tap, no overlap/cut) ---- */
+let cheerAud=null,cheerOK=false;
+function cheerSrc(){const t=document.createElement('audio');return(t.canPlayType&&t.canPlayType('audio/mpeg'))?'../assets/cheer.mp3':'../assets/cheer.ogg';}
+function cheerFallback(){beep(523,.12);setTimeout(()=>beep(659,.12),130);setTimeout(()=>beep(784,.22),260);}
+function cheerInit(){
+  if(cheerAud)return cheerAud;
+  cheerAud=new Audio(cheerSrc());
+  cheerAud.preload='auto';cheerAud.volume=.9;cheerAud._p=false;cheerAud._err=false;
+  cheerAud.addEventListener('ended',()=>{cheerAud._p=false;});
+  cheerAud.addEventListener('error',()=>{cheerAud._err=true;});
+  cheerAud.load();
+  return cheerAud;}
+cheerInit();
+document.addEventListener('pointerdown',()=>{
+  const a=cheerInit();if(cheerOK||a._err)return;
+  const pr=a.play();if(pr&&pr.then)pr.then(()=>{a.pause();a.currentTime=0;cheerOK=true;}).catch(()=>{});});
+function playCheer(){
+  const a=cheerInit();
+  if(a._p)return;
+  if(a._err){cheerFallback();return;}
+  a._p=true;a.currentTime=0;
+  const pr=a.play();
+  if(pr&&pr.then)pr.catch(()=>{a._p=false;cheerFallback();});}
 let confCv=null;
 function celebrate(){
   if(!confCv){confCv=document.createElement('canvas');confCv.style.cssText='position:fixed;inset:0;pointer-events:none;z-index:60';document.body.appendChild(confCv);}
@@ -1563,7 +1586,7 @@ function celebrate(){
   (function anim(t){const el=t-t0;c.clearRect(0,0,confCv.width,confCv.height);
     P.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.a+=p.va;c.save();c.translate(p.x,p.y);c.rotate(p.a);c.fillStyle=p.col;c.fillRect(-p.s/2,-p.s/2,p.s,p.s*.6);c.restore();});
     if(el<2600)requestAnimationFrame(anim);else c.clearRect(0,0,confCv.width,confCv.height);})(t0);
-  beep(523,.12);setTimeout(()=>beep(659,.12),130);setTimeout(()=>beep(784,.22),260);}
+  playCheer();}
 
 /* ================= widget cards ================= */
 const wPanel=document.getElementById('wPanel');
