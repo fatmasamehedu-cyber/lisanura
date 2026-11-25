@@ -262,7 +262,7 @@ function buildOv(){
     +'<p class="hn-game-t">'+esc(gt?(en?gt[1]:gt[0]):gk)+'</p>'
     +'<button type="button" class="hn-play" data-hn="play" data-g="'+gk+'">'+PLAY_SVG.replace('<svg','<svg style="width:15px;height:15px;fill:currentColor"')+'<span>'+(en?'Play':'اِلْعَبِي')+'</span></button></div>';
   h+='</div>';
-  ov.innerHTML+= '<button type="button" class="hn-gear" data-hn="gear" aria-label="'+(en?'Settings':'الْإِعْدَادَاتُ')+'"><i></i></button>';
+  ov.innerHTML+= '<button type="button" class="hn-gear" data-hn="gear" aria-label="'+(en?'Settings':'الإعدادات')+'"><i></i></button>';
   var wrap=d.createElement('div');wrap.innerHTML=h;while(wrap.firstChild)ov.appendChild(wrap.firstChild);
 
   ov.addEventListener('click',function(e){
@@ -309,14 +309,14 @@ function setKey(k,v){
 function openSettings(){
   var en=isEn(),g=gender();
   var ov2=d.createElement('div');ov2.className='hn-set';
-  ov2.innerHTML='<div class="hn-set-card"><p class="hn-set-t">'+(en?'Settings':'الْإِعْدَادَاتُ')+'</p>'
-    +'<div class="hn-set-row"><span class="hn-set-l">'+(en?'Language':'اللُّغَةُ')+'</span><span class="hn-set-opts">'
+  ov2.innerHTML='<div class="hn-set-card"><p class="hn-set-t">'+(en?'Settings':'الإعدادات')+'</p>'
+    +'<div class="hn-set-row"><span class="hn-set-l">'+(en?'Language':'اللغة')+'</span><span class="hn-set-opts">'
     +'<button type="button" class="hn-opt'+(!en?' on':'')+'" data-lang="ar">العربية</button>'
     +'<button type="button" class="hn-opt'+(en?' on':'')+'" data-lang="en">English</button></span></div>'
-    +'<div class="hn-set-row"><span class="hn-set-l">'+(en?'Character':'الشَّخْصِيَّةُ')+'</span><span class="hn-set-opts">'
-    +'<button type="button" class="hn-opt'+(g==='girl'?' on':'')+'" data-g="girl">'+(en?'Girl':'بِنْت')+'</button>'
-    +'<button type="button" class="hn-opt'+(g==='boy'?' on':'')+'" data-g="boy">'+(en?'Boy':'وَلَد')+'</button></span></div>'
-    +'<button type="button" class="hn-set-close">'+(en?'Close':'إِغْلَاق')+'</button></div>';
+    +'<div class="hn-set-row"><span class="hn-set-l">'+(en?'Character':'الشخصية')+'</span><span class="hn-set-opts">'
+    +'<button type="button" class="hn-opt'+(g==='girl'?' on':'')+'" data-g="girl">'+(en?'Girl':'بنت')+'</button>'
+    +'<button type="button" class="hn-opt'+(g==='boy'?' on':'')+'" data-g="boy">'+(en?'Boy':'ولد')+'</button></span></div>'
+    +'<button type="button" class="hn-set-close">'+(en?'Close':'إغلاق')+'</button></div>';
   ov2.addEventListener('click',function(e){
     var b=e.target.closest('[data-lang],[data-g],.hn-set-close');
     if(e.target===ov2|| (b&&b.classList.contains('hn-set-close'))){ov2.remove();return;}
