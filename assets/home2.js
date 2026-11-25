@@ -250,7 +250,7 @@ function buildOv(){
   var en=isEn(),rl=role(),p=window.LN&&LN.profile;
   var name=(p&&p.display_name)||'';
   var h='<div class="hn-wrap">';
-  h+='<div class="hn-logo"><img src="'+AB+(en?'logo-en.webp?v=1':'logo-ar.webp?v=1')+'" alt=""></div>';
+  h+='<div class="hn-logo"><img src="'+AB+(en?'logo-en.webp?v=2':'logo-ar.webp?v=2')+'" alt=""></div>';
   /* greeting */
   h+='<div class="hn-hello"><div class="hn-bub"><p class="hn-hi">'
     +(rl==='teacher'?(en?'Welcome, Teacher!':'أهلا بك يا معلمة!'):(en?('Welcome'+(name?', '+esc(stripT(name)):'')+'!'):('أهلا يا '+esc(stripT(name)||'صديقتي')+'!')))
