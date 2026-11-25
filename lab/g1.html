@@ -6,17 +6,21 @@
 <title>فوانيس الحروف — عينة</title>
 <link rel="stylesheet" href="sb.css?v=2">
 <style>
-  .stage{width:100%;max-width:min(540px,94vw);box-sizing:border-box;background:linear-gradient(#fffdf8d9,#fdf3dfd9);
-    border:3px solid var(--sb-gold);border-radius:22px;box-shadow:0 5px 0 #d9b878,0 12px 26px #7a5a2a26;padding:12px}
-  #g1c{display:block;width:100%;border-radius:16px;touch-action:none;cursor:crosshair;
-    background:radial-gradient(circle at 50% 42%,#fffdf6 0%,#fdf1d8 70%,#f7e3ba 100%)}
+  .stage{position:relative;width:min(92vw,470px);margin:6px auto 0;padding:0}
+  .lan-top{height:34px;width:46%;margin:0 auto;background:linear-gradient(#e0a94e,#b8812f 60%,#8f5f1f);border-radius:12px 12px 4px 4px;border:2px solid #7c5218;box-shadow:0 3px 8px #0006;position:relative}
+  .lan-top::before{content:"";position:absolute;left:50%;top:-30px;width:34px;height:34px;margin-left:-17px;border:6px solid #c58f3a;border-radius:50%;box-sizing:border-box}
+  .lan-body{position:relative;border-radius:46% 46% 44% 44%/36% 36% 34% 34%;padding:16px 14px 14px;margin-top:-4px;
+    background:radial-gradient(ellipse at 50% 40%,#fffbe8 0%,#ffe9a8 55%,#f6c25f 100%);
+    box-shadow:0 0 50px 14px #ffd96a88,inset 0 0 40px #f2a93a99,inset 0 -10px 24px #d98c2a66}
+  .lan-bot{height:26px;width:52%;margin:-2px auto 0;background:linear-gradient(#d9a24a,#a8741f);border-radius:4px 4px 14px 14px;border:2px solid #7c5218;box-shadow:0 4px 8px #0006}
+  #g1c{display:block;width:100%;touch-action:none;cursor:crosshair;background:transparent}
   #prog{text-align:center;font-size:19px;font-weight:800;color:var(--sb-navy);min-height:28px;margin-top:6px}
   #word{text-align:center;font-size:17px;font-weight:700;color:#8a6f57;margin-top:2px}
   .sb-dots{margin:8px auto 4px}
 </style>
 </head>
 <body>
-<div class="sb-page" style="background-image:url('assets/sb/bg-lantern.jpg')">
+<div class="sb-page" style="background-image:url('assets/sb/scene-g1.jpg')">
   <div class="sb-topbar">
     <a class="sb-roundbtn" href="index.html" aria-label="كل العينات">🏠</a>
     <div class="sb-plaque"><h1>فوانيس الحروف</h1></div>
@@ -25,9 +29,11 @@
   <p class="sb-sub">امسحي بصباعك فوق الحرف — لما يكمل الفانوس ينور وتسمعي كلمة تبدأ بيه</p>
   <div class="sb-dots" id="dots"></div>
   <div class="stage">
-    <canvas id="g1c" width="480" height="470"></canvas>
-    <div id="prog"></div>
-    <div id="word"></div>
+    <div class="lan-top"></div>
+    <div class="lan-body"><canvas id="g1c" width="480" height="470"></canvas></div>
+    <div class="lan-bot"></div>
+    <div id="prog" style="color:#fff;text-shadow:0 2px 6px #000a"></div>
+    <div id="word" style="color:#ffe9b0;text-shadow:0 2px 6px #000a"></div>
   </div>
 </div>
 <script src="sb.js?v=2"></script>
@@ -99,7 +105,7 @@ function paintGold(){
   g.clearRect(0,0,W,H);
   g.font='700 250px "Noto Naskh Arabic",serif';
   g.textAlign='center';g.textBaseline='middle';
-  g.fillStyle='#f0b23e';
+  g.fillStyle='#e2561f';
   g.fillText(LETTERS[idx].ch,W/2,H/2+16);
   g.globalCompositeOperation='destination-in';
   g.drawImage(maskCv,0,0);
@@ -110,7 +116,7 @@ function draw(){
   // ghost letter
   ctx.font='700 250px "Noto Naskh Arabic",serif';
   ctx.textAlign='center';ctx.textBaseline='middle';
-  ctx.fillStyle='#e8d5ae';
+  ctx.fillStyle='#c9a363';
   ctx.fillText(LETTERS[idx].ch,W/2,H/2+16);
   // traced golden letter (letter shape clipped to finger trail)
   paintGold();
