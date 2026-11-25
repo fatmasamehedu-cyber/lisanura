@@ -1,5 +1,5 @@
 /* ============================================================
-   ليسانورا — السحابة: حسابات، حفظ تلقائي، كتب، تقدّم، بث مباشر
+   لِسانورا — السحابة: حسابات، حفظ تلقائي، كتب، تقدّم، بث مباشر
    Lisanura cloud SDK over Supabase. Needs assets/supa-config.js first.
    Exposes window.LN. No build step; loads supabase-js from CDN on init.
    ============================================================ */
@@ -191,7 +191,7 @@ window.LN=(()=>{
     const lbase=location.pathname.indexOf('/board/')>-1?'../assets/':'assets/';
     container.innerHTML=
     '<div dir="'+(en?'ltr':'rtl')+'" style="font-family:Naskh,serif;max-width:340px;margin:0 auto;background:#fffdf6;border:2px solid #e9b7c9;border-radius:18px;padding:22px;box-shadow:0 8px 24px rgba(124,45,73,.15)">'
-    +'<div style="text-align:center;margin-bottom:6px"><img src="'+lbase+(en?'logo-en.png':'logo-ar.png')+'" alt="ليسانورا" style="height:64px;width:auto;max-width:100%"></div>'
+    +'<div style="text-align:center;margin-bottom:6px"><img src="'+lbase+(en?'logo-en.png':'logo-ar.png')+'" alt="لِسانورا" style="height:64px;width:auto;max-width:100%"></div>'
     +'<div id="lnTabs" style="display:flex;gap:6px;margin:12px 0">'
     +'<button data-t="in" style="flex:1;padding:8px;border-radius:12px;border:2px solid #d16a92;background:#d16a92;color:#fff;font-weight:700;font-family:Naskh">'+L('تسجيل دخول','Log in')+'</button>'
     +'<button data-t="up" style="flex:1;padding:8px;border-radius:12px;border:2px solid #d16a92;background:#fff;color:#7c2d49;font-weight:700;font-family:Naskh">'+L('حساب جديد','New account')+'</button></div>'

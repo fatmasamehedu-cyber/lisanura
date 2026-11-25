@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<title>سَبُّورَةُ لِيسَانُورَا</title>
+<title>سَبُّورَةُ لِسَانُورَا</title>
 <meta name="description" content="سبورة تفاعلية للمعلمة فاطمة سامح - أدوات الحصة والرسم والشرح">
 <meta http-equiv="Cache-Control" content="no-cache">
 <meta name="theme-color" content="#d16a92">
@@ -208,13 +208,13 @@ html[dir=ltr] .widgetPanel{box-shadow:4px 0 18px rgba(0,0,0,.12)}
   <canvas id="bgCanvas"></canvas>
   <canvas id="drawCanvas"></canvas>
 </div>
-<div class="mascot"><img class="wm-ar" src="../assets/logo-ar.png" alt="لِيسانورا"><img class="wm-en" src="../assets/logo-en.png" alt="LisaNura"></div>
+<div class="mascot"><img class="wm-ar" src="../assets/logo-ar.png" alt="لِسانورا"><img class="wm-en" src="../assets/logo-en.png" alt="LisaNura"></div>
 
 <div class="topwrap">
 <button class="tbtn gold menubtn" id="wPanelBtn" title="أدوات الحصة"><svg class="ic" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
 <div class="topbar">
   <button class="tbtn" id="backBtn" title="الصفحة الرئيسية" style="gap:4px;padding-inline:10px"><svg class="ic" viewBox="0 0 24 24"><path d="M4 11l8-7 8 7"/><path d="M6.5 9.5V20h11V9.5"/></svg><b style="font-family:Naskh;font-size:15px">الرئيسية</b></button>
-  <div class="title"><img src="teacher-point.png" alt=""><b>سَبُّورَةُ لِيسَانُورَا</b></div>
+  <div class="title"><img src="teacher-point.png" alt=""><b>سَبُّورَةُ لِسَانُورَا</b></div>
   <div class="pagenav">
     <button id="pgPrev" title="الصفحة السابقة"><svg class="ic" viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg></button>
     <b id="pgLabel">صفحة ١ من ١</b>
@@ -330,7 +330,7 @@ const LS='lisanura-board-v2';
 
 /* ================= language (ar/en) ================= */
 const T={"الرئيسية":"Home",
-"سَبُّورَةُ لِيسَانُورَا":"LisaNura Board",
+"سَبُّورَةُ لِسَانُورَا":"LisaNura Board",
 "الصفحة الرئيسية":"Home page",
 "الصفحة السابقة":"Previous page",
 "الصفحة التالية":"Next page",
@@ -498,7 +498,7 @@ const T={"الرئيسية":"Home",
 "أُضيفت الآيات بِسْمِ الله":"Verses added, bismillah",
 "صفحة ":"Page ",
 " من ":" of ",
-"لِيسانورا":"LisaNura",
+"لِسانورا":"LisaNura",
 "رجع العرض الأصلي":"View reset",
 "أنا طالبة":"I'm a student",
 "أنا معلمة":"I'm a teacher",
@@ -565,7 +565,7 @@ function applyLang(l,skipSave){
   try{localStorage.setItem('letters-city:lang.v1',JSON.stringify(l));}catch(e){}
   document.documentElement.lang=l;
   document.documentElement.dir=l==='en'?'ltr':'rtl';
-  document.title=l==='en'?'LisaNura Board':'سَبُّورَةُ لِيسَانُورَا';
+  document.title=l==='en'?'LisaNura Board':'سَبُّورَةُ لِسَانُورَا';
   translateDOM(document.body,l==='en');
   state.settings=Object.assign({},state.settings,{lang:l});
   syncPageUI();setSaveState();
@@ -1527,10 +1527,10 @@ document.getElementById('pdfBtn').onclick=async()=>{
     const W=1600,H=Math.round(1600*cssH/cssW);
     const pdf=new jsPDF({orientation:'landscape',unit:'px',format:[W,H],hotfixes:['px_scaling']});
     state.pages.forEach((p,i)=>{if(i)pdf.addPage([W,H],'landscape');pdf.addImage(renderPageToCanvas(p,W,H).toDataURL('image/jpeg',.92),'JPEG',0,0,W,H);});
-    pdf.save('سبورة-ليسانورا.pdf');toast('نزّلت الصفحات PDF');}
+    pdf.save('سبورة-لِسانورا.pdf');toast('نزّلت الصفحات PDF');}
   catch(e){const w=window.open('','_blank');if(!w){toast('اسمحي بالنوافذ المنبثقة');return;}
     const imgs=state.pages.map(p=>renderPageToCanvas(p,1600,Math.round(1600*cssH/cssW)).toDataURL('image/png'));
-    w.document.write('<html dir="rtl"><head><title>سَبُّورَةُ لِيسَانُورَا</title><style>body{margin:0}img{width:100%;page-break-after:always;display:block}</style></head><body>'+imgs.map(s=>'<img src="'+s+'">').join('')+'<script>onload=()=>setTimeout(()=>print(),400)<\/script></body></html>');w.document.close();}};
+    w.document.write('<html dir="rtl"><head><title>سَبُّورَةُ لِسَانُورَا</title><style>body{margin:0}img{width:100%;page-break-after:always;display:block}</style></head><body>'+imgs.map(s=>'<img src="'+s+'">').join('')+'<script>onload=()=>setTimeout(()=>print(),400)<\/script></body></html>');w.document.close();}};
 
 /* ================= share: snapshot link ================= */
 document.getElementById('shareBtn').onclick=()=>{openSharePanel();};

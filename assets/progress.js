@@ -1,4 +1,4 @@
-/* ليسانورا — تسجيل تقدم الطالبات في الألعاب
+/* لِسانورا — تسجيل تقدم الطالبات في الألعاب
    Lisanura game progress recorder: logs which games a signed-in STUDENT opens.
    Loaded on the home site after supa.js. The teacher reads the rows from the
    board's "طلابي" screen (one row per student per game: plays + last played). */
