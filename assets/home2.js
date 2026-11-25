@@ -491,6 +491,7 @@ function buildBar(){
     inn.appendChild(b);
   });
   d.body.appendChild(bar);
+  var oldHb=d.querySelectorAll('.ln-homebtn');for(var hb=0;hb<oldHb.length;hb++)oldHb[hb].remove();
   homeBtn=d.createElement('button');homeBtn.type='button';homeBtn.className='ln-homebtn';
   homeBtn.setAttribute('aria-label',isEn()?'Home':'الرئيسية');
   homeBtn.onclick=function(){stopAudio();showTab('home');scrollTo({top:0,behavior:'smooth'});};
@@ -501,12 +502,13 @@ function buildBar(){
 /* ---------- render lifecycle ---------- */
 function render(){
   var r=role();
-  if(!r){if(ov){ov.remove();ov=null;} if(bar){bar.remove();bar=null;} return;}
+  if(!r){if(ov){ov.remove();ov=null;} if(bar){bar.remove();bar=null;} if(homeBtn){homeBtn.remove();homeBtn=null;} return;}
   if(!onBoard&&!ov)buildOv();
   if(ov){ /* refresh dynamic bits on language/theme change */
     ov.remove();ov=null;buildOv();
   }
   if(bar){bar.remove();bar=null;}
+  if(homeBtn){homeBtn.remove();homeBtn=null;}
   if(!onBoard)buildBar();
   showTab(tab||'home');
 }
