@@ -17,7 +17,7 @@
       var h=d.createElement('div');h.style.cssText='text-align:center;font-family:Naskh,serif;color:#7c2d49;font-size:20px;margin-bottom:14px';
       h.textContent=lg()?'Log in or create an account to start':'سَجِّلِي الدُّخُولَ أَوْ أَنْشِئِي حِسَابًا لِتَبْدَئِي';
       var c=d.createElement('div');box.appendChild(h);box.appendChild(c);dlg.appendChild(box);d.body.appendChild(dlg);
-      if(window.LN&&LN.configured())LN.renderAuth(c,{onAuth:function(){evaluate();}});
+      if(window.LN&&LN.configured())LN.renderAuth(c,{onAuth:function(){hideGate();location.reload();}});
       else c.textContent=lg()?'Connection failed. Reopen the page.':'تَعَذَّرَ الِاتِّصَالُ. أَعِيدِي فَتْحَ الصَّفْحَةِ.';
     }
     if(!dlg.open)dlg.showModal();
@@ -55,9 +55,13 @@
       mo=new MutationObserver(hideBoardDoor);mo.observe(d.body,{childList:true,subtree:true});
     }
   }
+  function hasStoredSession(){
+    try{for(var i=0;i<localStorage.length;i++){var k=localStorage.key(i);if(k&&/^sb-.*-auth-token$/.test(k))return true;}}catch(e){}
+    return false;
+  }
   function start(){
     if(!window.LN||!LN.configured()){showGate();return;}
-    if(!onBoard)showGate(); /* cover instantly, no flash of content */
+    if(!onBoard&&!hasStoredSession())showGate(); /* cover instantly only when no remembered session */
     LN.init().then(evaluate,evaluate);
     d.addEventListener('ln-auth',evaluate);
   }
