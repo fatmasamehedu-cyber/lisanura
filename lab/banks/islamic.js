@@ -1,0 +1,37 @@
+/* Islamic studies bank. Facts and wording come from Teacher Fatma Sameh's own lesson PDFs only (src = her file id).
+   o[0] is the correct answer; the game shuffles the three options. No Quran or hadith text is quoted. */
+window.SB_BANKS=window.SB_BANKS||{};
+window.SB_BANKS.islamic={title:'Islamic Studies',tag:'Story book',items:[
+{q:'What is the first pillar of Islam?',o:['The Shahadah','Salah','Zakah'],src:'435c4a2e'},
+{q:'Salah means…',o:['Prayer','Fasting','Charity'],src:'435c4a2e'},
+{q:'How many times a day do Muslims pray?',o:['Five times','Three times','Seven times'],src:'435c4a2e'},
+{q:'Which direction do we face when we pray?',o:['Al-Ka\u2019bah in Makkah','Madinah','The sunrise'],src:'435c4a2e'},
+{q:'The third pillar is Sawm. When do Muslims fast?',o:['In the month of Ramadan','In the month of Hajj','Every Friday'],src:'435c4a2e'},
+{q:'Zakah is…',o:['Charity money to help the poor','A trip to Makkah','A kind of prayer'],src:'435c4a2e'},
+{q:'The fifth pillar is Hajj. What is Hajj?',o:['Pilgrimage to Makkah','Fasting','Giving charity'],src:'435c4a2e'},
+{q:'Where was Prophet Muhammad born?',o:['Makkah','Madinah','Syria'],src:'613fb5e1'},
+{q:'Who was the Prophet\u2019s father?',o:['Abdullah','Abu Talib','Abdul-Muttalib'],src:'613fb5e1'},
+{q:'Who was the Prophet\u2019s mother?',o:['Aminah','Haleemah','Khadeejah'],src:'613fb5e1'},
+{q:'Who took care of the Prophet in the desert when he was a young boy?',o:['Haleemah As-Sa\u2019diyyah','Aminah','Khadeejah'],src:'613fb5e1'},
+{q:'What was the name of the Prophet\u2019s tribe?',o:['Quraysh','Aalul-Bayt','Sahabah'],src:'613fb5e1'},
+{q:'What was the Prophet\u2019s first job?',o:['Shepherd','Merchant','Teacher'],src:'159ed6fe'},
+{q:'What was the Prophet\u2019s second job?',o:['Merchant','Shepherd','Builder'],src:'159ed6fe'},
+{q:'People called the Prophet As-Sadiq Al-Ameen. It means…',o:['The Truth-teller and the Trustworthy','The Brave and the Strong','The Rich and the Wise'],src:'159ed6fe'},
+{q:'Who was the last prophet?',o:['Muhammad','Ibraheem','Musa'],src:'007ee0b8'},
+{q:'What should you say when you hear the Prophet\u2019s name?',o:['SallAllahu \u2018alayhi wasallam','Allahu Akbar','Bismillah'],src:'007ee0b8'},
+{q:'What do we call the friends of the Prophet?',o:['The Sahabah','The Aalul-Bayt','The Quraysh'],src:'0cd65d40'},
+{q:'Who was the Prophet\u2019s best friend?',o:['Abu-Bakr As-Siddeeq','Bilal Ibn Rabah','Khalid Ibn-ul-Waleed'],src:'0cd65d40'},
+{q:'Who gave the first athan?',o:['Bilal Ibn Rabah','Osama Ibn Zaid','Mus\u2019ab Ibn Omair'],src:'0cd65d40'},
+{q:'What do we call the women companions of the Prophet?',o:['Sahabiyyat','Sahabah','Aalul-Bayt'],src:'0cd65d40'},
+{q:'Who was the Prophet\u2019s first wife?',o:['Khadeejah','Aishah','Sawdah'],src:'fdaf56ca'},
+{q:'How many daughters did the Prophet have?',o:['Four','Two','Six'],src:'fdaf56ca'},
+{q:'What do we call the family of the Prophet?',o:['Aalul-Bayt','Sahabah','Quraysh'],src:'fdaf56ca'},
+{q:'What is the Qiblah?',o:['The direction we face when we pray','A kind of prayer','A month of the year'],src:'e262044a'},
+{q:'What does Niyyah mean?',o:['Knowing what you are about to do and why','Washing the hands','Facing the Qiblah'],src:'e262044a'},
+{q:'What do we say when we begin Salah and raise our hands?',o:['Allahu Akbar','Bismillah','SubhanAllah'],src:'e262044a'},
+{q:'Which of these is one of the five daily prayers?',o:['Fajr','Jumuah','Taraweeh'],src:'4a22d7fd'},
+{q:'What is the key to Jannah?',o:['Our daily prayers','Money','Travel'],src:'4a22d7fd'},
+{q:'Jannah means…',o:['Paradise','Prayer','Purity'],src:'4a22d7fd'},
+{q:'What is wudoo?',o:['Cleaning the special parts of the body before prayer','A kind of prayer','The call to prayer'],src:'9e39036e'},
+{q:'What do we say when we begin wudoo?',o:['Bismillah','Allahu Akbar','Alhamdulillah'],src:'9e39036e'}
+]};
