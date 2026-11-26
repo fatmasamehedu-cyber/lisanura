@@ -28,7 +28,7 @@ function run(){
   if(en){x.setAttribute('dir','ltr');y.setAttribute('dir','ltr');}
   x.textContent=t[0];y.textContent=t[1];b.appendChild(x);sm.appendChild(y);txt.appendChild(b);txt.appendChild(sm);
   a.appendChild(span);a.appendChild(txt);
-  list.insertBefore(a,list.firstChild);
+  if(m[1]==='islamic')list.insertBefore(a,ref.nextSibling);else list.insertBefore(a,list.firstChild);
 }
 function sched(){if(busy)return;busy=true;requestAnimationFrame(run);}
 window.addEventListener('hashchange',sched);
