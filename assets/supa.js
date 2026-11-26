@@ -218,10 +218,11 @@ window.LN=(()=>{
     if(lr.error||lr.data===false)return {ok:false,err:L('تعذر الربط بالمعلمة، حاولي مرة أخرى','Could not link to the teacher. Try again')};
     await loadProfile();return {ok:true,name:t.display_name||''};}
   function mountLinkBox(){
-    const out=document.getElementById('homeAuthOut');
+    const card=document.querySelector('.tb-acc-card');
+    const out=card?card.querySelector('.tb-acc-out'):document.getElementById('homeAuthOut');
     const old=document.getElementById('lnLinkBox');
     if(!out||!user||!profile||profile.role!=='student'){if(old)old.remove();return;}
-    const host=out.parentElement&&out.parentElement.parentElement;if(!host)return;
+    const host=card||(out.parentElement&&out.parentElement.parentElement);if(!host)return;
     const linked=!!profile.teacher_id;
     if(old&&old.dataset.linked===String(linked)&&old.dataset.lang===lang()&&old.parentElement===host)return;
     if(old)old.remove();
@@ -243,7 +244,7 @@ window.LN=(()=>{
         const r=await linkTeacherByCode(inp.value);go.disabled=false;
         if(r.ok){msg.style.color='#2e7d4f';msg.textContent=L('تم الربط بالمعلمة','Linked to your teacher')+(r.name?': '+r.name:'');setTimeout(mountLinkBox,1500);}
         else{msg.style.color='#b3261e';msg.textContent=r.err;}};}
-    host.appendChild(b);}
+    if(card)host.insertBefore(b,out);else host.appendChild(b);}
   (function(){let tmr=null;const mo=new MutationObserver(()=>{clearTimeout(tmr);tmr=setTimeout(()=>{try{mountLinkBox();}catch(e){console.warn(e)}},150);});
     const go=()=>mo.observe(document.body,{childList:true,subtree:true});
     if(document.body)go();else document.addEventListener('DOMContentLoaded',go);})();
