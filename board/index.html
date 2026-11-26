@@ -1894,7 +1894,11 @@ async function livePayloadBuild(){
   const o=JSON.parse(json);
   state.pages.forEach((p,pi)=>p.strokes.forEach((s,si)=>{
     if(s.kind==='image'&&typeof s.src==='string'&&s.src.indexOf('data:')===0){const r=refs.get(s.src);if(r)o.pages[pi].strokes[si].ref=r;}}));
-  return {d:LZString.compressToEncodedURIComponent(JSON.stringify(o)),failed};}
+  let d=LZString.compressToEncodedURIComponent(JSON.stringify(o));
+  if(d.length>240000&&o.pages.length>1){ /* too big: send only the current page so students still see the live page */
+    const cp=o.pages[o.cur]||o.pages[0];
+    d=LZString.compressToEncodedURIComponent(JSON.stringify({pages:[cp],cur:0,defBg:o.defBg}));}
+  return {d,failed};}
 let liveWarned=false;
 function liveDirty(){
   if(window.LN_LIVE&&window.LN&&LN.configured()){clearTimeout(liveTimerLN);liveTimerLN=setTimeout(async()=>{try{
