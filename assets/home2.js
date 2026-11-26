@@ -478,7 +478,7 @@ function openStudents(){
             var t=(LN.GAME_TITLES||{})[r.game]||[r.game,r.game],n3=Math.min(3,r.data.stars);
             h2+='<div class="tb-st-row"><span>'+esc(en?(t[1]||t[0]):t[0])+'</span><span style="color:#c9961a">'+'\u2605'.repeat(n3)+'<span style="color:#d8cdbf">'+'\u2605'.repeat(3-n3)+'</span></span></div>';
           });
-          if(!rows.length)h2+='<div class="tb-st-none">'+(en?'No games yet':'لم تلعب بعد')+'</div>';
+          if(!rows.length&&!srows.length)h2+='<div class="tb-st-none">'+(en?'No games yet':'لم تلعب بعد')+'</div>';
           rows.forEach(function(r){
             var key=r.game.slice(3),g=(LN.GAME_TITLES||{})[key]||[key,key];
             var n=(r.data&&r.data.plays)||1;
