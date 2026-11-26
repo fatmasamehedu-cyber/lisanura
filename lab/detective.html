@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Tajweed Detective</title>
+<link rel="stylesheet" href="sb.css?v=4">
+<style>
+.sb-page{background:radial-gradient(ellipse at 50% 0%,#ffe9c4 0%,#f9d3a2 45%,#e9a97a 100%)}
+.shelf{width:100%;max-width:min(520px,94vw);display:flex;justify-content:space-between;align-items:flex-end;height:44px;margin:-4px 0 -10px;padding:0 10px;box-sizing:border-box}
+.shelf i{display:block;width:26px;border-radius:4px 4px 0 0;box-shadow:inset -3px 0 #0003,0 2px 0 #5d3c1560}
+.book{position:relative;width:100%;max-width:min(520px,94vw);box-sizing:border-box;border-radius:14px;padding:10px;
+  background:linear-gradient(90deg,#fbf0d3 0%,#fff8e5 47%,#e8d3a0 50%,#fff8e5 53%,#fbf0d3 100%);
+  border:4px solid #b9803a;box-shadow:0 0 0 3px #e5c078 inset,0 8px 0 #7a4f1f,0 16px 26px #4a2d0a55}
+.book:before{content:"";position:absolute;inset:8px;border:2px solid #d8b062;border-radius:8px;pointer-events:none}
+#rounds{display:flex;gap:5px;justify-content:center;margin:2px 0 2px}
+#rounds .sb-star{width:20px;height:20px}
+.ref{text-align:center;font-weight:800;font-size:13px;color:#8a6f57;letter-spacing:.3px}
+#ayah{direction:rtl;text-align:center;font-family:"Amiri","Scheherazade New","Noto Naskh Arabic","Traditional Arabic",serif;font-size:clamp(26px,7.4vw,34px);line-height:2.1;color:#2d2a4a;padding:10px 8px 6px;min-height:100px}
+#ayah .hl{background:radial-gradient(#fff3a8,#ffd96a);border-radius:999px;padding:0 6px;box-shadow:0 0 0 3px #e58aa8,0 0 16px 4px #ffd96a;animation:glow 1.4s ease-in-out infinite}
+@keyframes glow{50%{box-shadow:0 0 0 3px #e58aa8,0 0 24px 8px #ffe48f}}
+.q{text-align:center;font-size:17px;font-weight:800;color:var(--sb-navy);margin:2px 4px 4px}
+#fb{min-height:22px;text-align:center;font-size:16px;font-weight:800}
+#opts{display:flex;flex-direction:column;gap:8px;margin-top:10px;width:100%;max-width:min(520px,94vw)}
+.tag{display:flex;align-items:center;gap:12px;border:0;font-family:inherit;font-size:18px;font-weight:800;color:var(--sb-navy);background:#fffdf6;border-radius:14px;padding:9px 14px;box-shadow:0 4px 0 #d9b878,0 8px 14px #5d3c1530;cursor:pointer;text-align:left}
+.tag:active{transform:translateY(2px)}
+.tag b{flex:none;width:22px;height:22px;border-radius:50%;box-shadow:inset 0 -3px 0 #0002}
+.tag:nth-child(1) b{background:#ee7fa6}.tag:nth-child(2) b{background:#5cc77a}.tag:nth-child(3) b{background:#6aaaf0}
+.tag.ok{background:#3f9d58;color:#fff}.tag.no{background:#c04747;color:#fff}
+.sb-teacher{height:min(13vh,110px)!important}
+</style>
+</head>
+<body>
+<div class="sb-page">
+  <div class="sb-topbar">
+    <a class="sb-roundbtn" href="index.html" aria-label="All samples">🏠</a>
+    <div class="sb-plaque"><h1>Tajweed Detective</h1></div>
+    <span class="sb-roundbtn" style="visibility:hidden"></span>
+  </div>
+  <div class="shelf" aria-hidden="true"><i style="height:36px;background:#8c4a5a"></i><i style="height:30px;background:#3f6fa8"></i><i style="height:40px;background:#c9953a"></i><i style="height:28px;background:#4f8f6a"></i><span style="flex:1"></span><i style="height:32px;background:#7a5aa8"></i><i style="height:38px;background:#c9644a"></i></div>
+  <div class="book">
+    <div id="rounds"></div>
+    <div class="ref" id="ref"></div>
+    <div id="ayah"></div>
+    <div class="q">Which tajweed rule is on the glowing letters?</div>
+    <div id="fb"></div>
+  </div>
+  <div id="opts"></div>
+</div>
+<script src="sb.js?v=4"></script>
+<script src="banks/cases.js?v=1"></script>
+<script>
+SB.teacher('full');
+(function(){
+"use strict";
+function shuf(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}return a;}
+var N=8,seen={},Q=[];
+shuf(window.SB_CASES).forEach(function(c){if(Q.length<N&&(seen[c.r]||0)<2){seen[c.r]=(seen[c.r]||0)+1;Q.push(c);}});
+var i=0,score=0,lock=false;
+var ay=document.getElementById('ayah'),ref=document.getElementById('ref'),fb=document.getElementById('fb'),rs=document.getElementById('rounds'),oe=document.getElementById('opts');
+Q.forEach(function(){var s=document.createElement('div');s.className='sb-star';rs.appendChild(s);});
+function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;');}
+function show(){
+  var c=Q[i];lock=false;fb.textContent='';oe.innerHTML='';
+  ref.textContent=c.ref;
+  ay.innerHTML=esc(c.t.slice(0,c.s))+'<span class="hl">'+esc(c.t.slice(c.s,c.e))+'</span>'+esc(c.t.slice(c.e));
+  shuf(c.o).forEach(function(t){var b=document.createElement('button');b.type='button';b.className='tag';b.innerHTML='<b></b><span></span>';b.lastChild.textContent=t;b.onclick=function(){ans(b,t);};oe.appendChild(b);});
+}
+function ans(b,t){
+  if(lock)return;lock=true;
+  var c=Q[i],ok=t===c.r;
+  [].forEach.call(oe.children,function(x){if(x.lastChild.textContent===c.r)x.classList.add('ok');});
+  if(ok){score++;rs.children[i].classList.add('on');fb.style.color='#3f9d58';fb.textContent='Case solved!';SB.react('ok');}
+  else{b.classList.add('no');fb.style.color='#c04747';fb.textContent='Not quite. The green tag is the rule.';SB.react('no');}
+  setTimeout(function(){
+    i++;
+    if(i>=Q.length){var st=score>=N-1?3:score>=N-3?2:1;
+      SB.levelUp({stars:st,title:'Case closed!',text:'You solved '+score+' of '+N+' cases',next:'index.html',nextText:'Back to the games menu'});}
+    else show();
+  },1700);
+}
+show();
+window.__d={click:function(good){var c=Q[i];var bs=[].slice.call(oe.children);var t=bs.filter(function(x){return (x.lastChild.textContent===c.r)===good;})[0];t.click();}};
+})();
+</script>
+</body>
+</html>
