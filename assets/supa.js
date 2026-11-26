@@ -163,7 +163,7 @@ window.LN=(()=>{
   async function liveStart(onViewers){
     await init();if(!user)throw new Error(L('سجلي الدخول أولا','Log in first'));
     await sb.from('live_rooms').upsert({teacher_id:user.id,live:true,updated_at:new Date().toISOString()});
-    liveChan=sb.channel('live:'+user.id);
+    liveChan=sb.channel('live:'+user.id,{config:{private:true}});
     liveChan.on('broadcast',{event:'hello'},()=>{ /* a student joined */});
     if(onViewers)liveChan.on('presence',{event:'sync'},()=>{
       const n=Object.keys(liveChan.presenceState()).length;onViewers(Math.max(0,n-1));});
@@ -177,11 +177,10 @@ window.LN=(()=>{
     await init();
     try{const {data:room}=await sb.from('live_rooms').select('live').eq('teacher_id',teacherId).maybeSingle();
       if(!room||!room.live){onStatus&&onStatus('offline');return false;}}catch(e){console.warn(e)}
-    liveJoinChan=sb.channel('live:'+teacherId);
+    liveJoinChan=sb.channel('live:'+teacherId,{config:{private:true}});
     liveJoinChan.on('broadcast',{event:'state'},m=>onState&&onState(m.payload&&m.payload.data));
     await new Promise(res=>liveJoinChan.subscribe(st=>{if(st==='SUBSCRIBED'){onStatus&&onStatus('live');res();}if(st==='CHANNEL_ERROR'){onStatus&&onStatus('error');res();}}));
     await liveJoinChan.track({role:'student'});
-    liveJoinChan.send({type:'broadcast',event:'hello',payload:{}});
     return true;}
   async function liveStop(){
     if(liveChan){await liveChan.unsubscribe();liveChan=null;}
@@ -250,8 +249,8 @@ window.LN=(()=>{
     return id;}
   async function loadShared(id){ /* anyone with the link may read */
     await init();
-    try{const {data}=await sb.from('shared_boards').select('state').eq('id',id).maybeSingle();
-      return data?data.state:null;}catch(e){return null;}}
+    try{const {data}=await sb.rpc('get_shared_board',{board_id:id});
+      const row=Array.isArray(data)?data[0]:data;return row?row.state:null;}catch(e){return null;}}
 
   async function isAdmin(){ /* true only for the site owner; false before the SQL exists */
     await init();if(!user)return false;

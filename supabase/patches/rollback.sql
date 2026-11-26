@@ -1,0 +1,11 @@
+drop trigger if exists protect_profile_cols on public.profiles;
+drop function if exists public.protect_profile_cols();
+drop policy if exists "linked students read their teacher room" on public.live_rooms;
+create policy "signed-in users read live rooms" on public.live_rooms for select using (live = true);
+drop policy if exists "live channel read" on realtime.messages;
+drop policy if exists "live channel send" on realtime.messages;
+grant execute on function public.handle_new_user() to anon, authenticated;
+grant execute on function public.my_student_ids() to anon;
+grant select on public.shared_boards to anon;
+drop policy if exists "anyone reads a shared board by link" on public.shared_boards;
+create policy "anyone reads a shared board by link" on public.shared_boards for select using (true);
