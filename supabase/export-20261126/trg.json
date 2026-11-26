@@ -1,0 +1,1 @@
+[{"event_object_schema":"auth","event_object_table":"users","trigger_name":"on_auth_user_created","action_timing":"AFTER","event_manipulation":"INSERT","action_statement":"EXECUTE FUNCTION handle_new_user()"}]
