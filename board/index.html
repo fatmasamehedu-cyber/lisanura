@@ -324,7 +324,7 @@ function fit(){cssW=innerWidth;cssH=innerHeight;
   redraw();if(textPos)clampEntry();}
 addEventListener('resize',fit);
 
-let state={pages:[{bg:'blank',strokes:[]}],cur:0};
+let state={pages:[{bg:'lines',strokes:[]}],cur:0,defBg:'lines'};
 let tool=null,shape='line',color='#7e4150',penSize=6,smartOn=true,readOnly=false;
 const PALETTE=['#7e4150','#c16a7e','#d9a44f','#4f7fd9','#3aa77c','#e05c5c','#7a54c9','#222222','#ffffff','#8a5a2b'];
 const LS='lisanura-board-v2';
@@ -1464,7 +1464,7 @@ const bgGrid=document.getElementById('bgGrid');
   if(LAYOUTS.some(l=>l[0]===id))drawLayout(tc,id,128,88,3);else drawScene(tc,id,128,88);
   b.appendChild(th);const sp=document.createElement('span');sp.textContent=label;b.appendChild(sp);
   b.dataset.bg=id;b.title=label;
-  b.addEventListener('click',()=>{curPage().bg=id;bgGrid.querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b));closePops();redraw();save();liveDirty();});
+  b.addEventListener('click',()=>{curPage().bg=id;state.defBg=id;bgGrid.querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b));closePops();redraw();save();liveDirty();});
   bgGrid.appendChild(b);});
 /* stickers picker */
 const stGrid=document.getElementById('stickerGrid');
@@ -1507,7 +1507,7 @@ function syncPageUI(){pgLabel.textContent=tt('صفحة ')+arNum(state.cur+1)+tt(
   bgGrid.querySelectorAll('button').forEach(x=>x.classList.toggle('on',x.dataset.bg===curPage().bg));redraw();}
 document.getElementById('pgPrev').onclick=()=>{if(state.cur>0){state.cur--;undoStack=[];redoStack=[];syncPageUI();liveDirty();}};
 document.getElementById('pgNext').onclick=()=>{if(state.cur<state.pages.length-1){state.cur++;undoStack=[];redoStack=[];syncPageUI();liveDirty();}};
-document.getElementById('pgAdd').onclick=()=>{state.pages.splice(state.cur+1,0,{bg:'blank',strokes:[]});state.cur++;undoStack=[];redoStack=[];syncPageUI();save();liveDirty();};
+document.getElementById('pgAdd').onclick=()=>{state.pages.splice(state.cur+1,0,{bg:state.defBg||'lines',strokes:[]});state.cur++;undoStack=[];redoStack=[];syncPageUI();save();liveDirty();};
 document.getElementById('pgDel').onclick=()=>{if(state.pages.length<=1){curPage().strokes=[];}else{state.pages.splice(state.cur,1);state.cur=Math.min(state.cur,state.pages.length-1);}
   undoStack=[];redoStack=[];syncPageUI();save();liveDirty();};
 document.getElementById('undoBtn').onclick=()=>{if(!undoStack.length)return;redoStack.push(JSON.stringify(curPage().strokes,(k,v)=>k==='_img'?undefined:v));
