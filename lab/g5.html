@@ -102,14 +102,14 @@ go.addEventListener('click',function(){
   }
   if(ok){
     moving=true;msg.textContent='صح! القطر ماشي';
-    SB.cheer();
+    SB.cheer();SB.react('ok');
     train.style.transform='translateX(-130%)';
     setTimeout(function(){
       SB.levelUp({stars:3,text:'رتبتي أحداث اليوم صح',next:'g6.html'});
     },1500);
     go.disabled=true;
   }else{
-    msg.textContent='لسه — بصي على العربيات اللي بتهتز';
+    msg.textContent='لسه — بصي على العربيات اللي بتهتز';SB.react('no');
     setTimeout(function(){
       for(var i=0;i<4;i++){
         var car=train.children[i];

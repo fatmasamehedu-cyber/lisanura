@@ -58,9 +58,9 @@ function update(dt){
     if(!it.done&&it.p>=0.93&&it.p<1.0&&Math.abs(lane-it.lane)<0.5){
       it.done=true;
       var q=P(it.p,it.lane);
-      if(it.ch===word()[pos]){pos++;stars++;burst(q.x,q.y,'#ffd964');beep(660+pos*110);flash=.3;
+      if(it.ch===word()[pos]){pos++;stars++;burst(q.x,q.y,'#ffd964');beep(660+pos*110);flash=.3;SB.react('ok');
         if(pos>=word().length){win();}}
-      else{it.bad=true;}
+      else{it.bad=true;SB.react('no');}
     }
     if(it.p>1.25)items.splice(i,1);}
   for(var j=parts.length-1;j>=0;j--){var q2=parts[j];q2.x+=q2.vx*dt;q2.y+=q2.vy*dt;q2.l-=dt;if(q2.l<=0)parts.splice(j,1);}

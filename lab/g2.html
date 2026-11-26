@@ -91,7 +91,7 @@ window.addEventListener('pointerup',function(e){
       el.remove();
       slot.textContent=ROUNDS[round].ans;slot.classList.add('filled');
       stars[round].classList.add('on');
-      msg.textContent='صح! لوح جديد في الجسر';
+      msg.textContent='صح! لوح جديد في الجسر';SB.react('ok');
       var au=ROUNDS[round].audio;
       if(au){try{new Audio(au).play().catch(function(){});}catch(e2){}}
       round++;
@@ -99,7 +99,7 @@ window.addEventListener('pointerup',function(e){
         setTimeout(function(){SB.levelUp({stars:3,text:'كملتي الجسر كله',next:'g3.html'});},1100);
       }else setTimeout(build,1100);
     }else{
-      el.classList.add('wrong');msg.textContent='جربي تاني';
+      el.classList.add('wrong');msg.textContent='جربي تاني';SB.react('no');
       setTimeout(function(){el.classList.remove('wrong');home(el);},450);
     }
   }else home(el);
