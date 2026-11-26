@@ -9,3 +9,5 @@ grant execute on function public.my_student_ids() to anon;
 grant select on public.shared_boards to anon;
 drop policy if exists "anyone reads a shared board by link" on public.shared_boards;
 create policy "anyone reads a shared board by link" on public.shared_boards for select using (true);
+drop policy if exists "teacher manages own live images" on storage.objects;
+drop policy if exists "linked students read teacher live images" on storage.objects;

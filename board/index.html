@@ -13,7 +13,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/peerjs/1.5.4/peerjs.min.js"></script>
 <script src="https://fatmasamehedu-cyber.github.io/lisanura/assets/supa-config.js?v=4"></script>
-<script src="https://fatmasamehedu-cyber.github.io/lisanura/assets/supa.js?v=15"></script>
+<script src="https://fatmasamehedu-cyber.github.io/lisanura/assets/supa.js?v=16"></script>
 <script src="https://fatmasamehedu-cyber.github.io/lisanura/assets/gate.js?v=10"></script>
 <script src="https://fatmasamehedu-cyber.github.io/lisanura/assets/home2.js?v=24"></script>
 <style>
@@ -608,6 +608,10 @@ function migrate(o){ /* v1: world 1600x1000, sizes in px */
 function load(){try{const d=localStorage.getItem(LS)||localStorage.getItem('lisanura-board-v1');
   if(d){const s=JSON.parse(d);if(s&&s.pages&&s.pages.length)state=migrate(s);}}catch(e){console.warn(e)}
   if(state.cur>=state.pages.length)state.cur=0;}
+const refImgs={};
+function hydrateRefs(){state.pages.forEach(p=>p.strokes.forEach(s=>{if(s.kind==='image'&&s.ref&&!s._img){
+  if(refImgs[s.ref]){s._img=refImgs[s.ref];return;}
+  LN.liveFetchImage(s.ref).then(u=>{if(!u)return;const im=new Image();im.onload=()=>{refImgs[s.ref]=im;state.pages.forEach(q=>q.strokes.forEach(t=>{if(t.ref===s.ref)t._img=im;}));redraw();};im.src=u;});}}));}
 function rehydrate(){state.pages.forEach(p=>p.strokes.forEach(s=>{if(s.kind==='image'&&s.src&&!s._img){const im=new Image();im.onload=redraw;im.src=s.src;s._img=im;}}));}
 
 /* undo/redo */
@@ -1871,18 +1875,25 @@ async function openBook(book){
 /* ================= share: live + snapshot ================= */
 let peer=null,conns=[],liveId=null,liveTimer=null;
 let liveTimerLN=null;
-function livePayload(){
-  const mk=(lim)=>LZString.compressToEncodedURIComponent(JSON.stringify(state,(k,v)=>{
+async function livePayloadBuild(){
+  const refs=new Map();let failed=0;
+  for(const p of state.pages)for(const s of p.strokes){
+    if(s.kind==='image'&&typeof s.src==='string'&&s.src.indexOf('data:')===0&&!refs.has(s.src)){
+      const r=await LN.liveUploadImage(s.src);refs.set(s.src,r);if(!r)failed++;}}
+  const json=JSON.stringify(state,function(k,v){
     if(k==='_img')return undefined;
-    if(k==='src'&&typeof v==='string'&&v.indexOf('data:')===0&&v.length>lim)return '';
-    return v;}));
-  let d=mk(30000);
-  if(d.length>180000)d=mk(0);
-  return d;}
+    if(k==='src'&&typeof v==='string'&&v.indexOf('data:')===0)return '';
+    if(k==='_x')return undefined;
+    return v;});
+  const o=JSON.parse(json);
+  state.pages.forEach((p,pi)=>p.strokes.forEach((s,si)=>{
+    if(s.kind==='image'&&typeof s.src==='string'&&s.src.indexOf('data:')===0){const r=refs.get(s.src);if(r)o.pages[pi].strokes[si].ref=r;}}));
+  return {d:LZString.compressToEncodedURIComponent(JSON.stringify(o)),failed};}
 let liveWarned=false;
 function liveDirty(){
   if(window.LN_LIVE&&window.LN&&LN.configured()){clearTimeout(liveTimerLN);liveTimerLN=setTimeout(async()=>{try{
-    const d=livePayload();
+    const pb=await livePayloadBuild();const d=pb.d;
+    if(pb.failed&&!liveWarned){liveWarned=true;toast('اللوحة كبيرة على البث، بعض المحتوى مش هيظهر للطالب');}
     if(d.length>240000){if(!liveWarned){liveWarned=true;toast('اللوحة كبيرة على البث، بعض المحتوى مش هيظهر للطالب');}return;}
     const r=await LN.livePush(d);
     if(r!=='ok'&&!liveWarned){liveWarned=true;toast('تعذر إرسال البث للطالب، جاري المحاولة');}
@@ -1946,7 +1957,7 @@ function joinLive(hostId){
   const badge=document.createElement('div');badge.className='liveBadge';badge.textContent=tt('بث مباشر من المعلمة...');document.body.appendChild(badge);
   if(window.LN&&LN.configured()){
     LN.init().then(()=>LN.liveJoin(hostId,
-      data=>{try{state=JSON.parse(LZString.decompressFromEncodedURIComponent(data));rehydrate();syncPageUI();}catch(e){console.warn(e)}},
+      data=>{try{state=JSON.parse(LZString.decompressFromEncodedURIComponent(data));rehydrate();hydrateRefs();syncPageUI();}catch(e){console.warn(e)}},
       stt=>{badge.textContent=tt(stt==='live'?'متصلة بالمعلمة':stt==='offline'?'المعلمة لسه ما بدأتش البث':'مشكلة اتصال، جاري المحاولة');}));
     return;}
   let p;

@@ -163,6 +163,7 @@ window.LN=(()=>{
   let liveBeat=null,liveTok=null;
   async function liveStart(onViewers,onJoin){
     await init();if(!user)throw new Error(L('سجلي الدخول أولا','Log in first'));
+    await liveCleanup();
     await sb.from('live_rooms').upsert({teacher_id:user.id,live:true,updated_at:new Date().toISOString()});
     liveChan=sb.channel('live:'+user.id,{config:{private:true}});
     liveChan.on('broadcast',{event:'hello'},()=>{ /* a student joined */});
@@ -177,6 +178,33 @@ window.LN=(()=>{
     liveBeat=setInterval(async()=>{await tok();try{await sb.from('live_rooms').upsert({teacher_id:user.id,live:true,updated_at:new Date().toISOString()});}catch(e){console.warn(e)}},60000);
     if(!window._lnLiveUnload){window._lnLiveUnload=true;addEventListener('pagehide',liveStopBeacon);}
     return user.id;}
+
+  /* ---- live images: board images go to a private bucket; the live payload carries only references ---- */
+  const liveRefCache=new Map();
+  function hashStr(t){let h=5381,i=t.length;while(i)h=(h*33)^t.charCodeAt(--i);return (h>>>0).toString(36)+t.length.toString(36);}
+  function compressDataUrl(src,max){return new Promise((res,rej)=>{const im=new Image();
+    im.onload=()=>{const k=Math.min(1,max/Math.max(im.naturalWidth,im.naturalHeight));
+      const c=document.createElement('canvas');c.width=Math.max(1,Math.round(im.naturalWidth*k));c.height=Math.max(1,Math.round(im.naturalHeight*k));
+      c.getContext('2d').drawImage(im,0,0,c.width,c.height);
+      c.toBlob(b=>{if(b&&b.type==='image/webp')return res(b);c.toBlob(j=>j?res(j):rej(new Error('compress')),'image/jpeg',.85);},'image/webp',.85);};
+    im.onerror=()=>rej(new Error('decode'));im.src=src;});}
+  async function liveUploadImage(dataUrl){ /* teacher: returns a storage path, or null */
+    await init();if(!user)return null;
+    if(liveRefCache.has(dataUrl))return liveRefCache.get(dataUrl);
+    const key=hashStr(dataUrl);
+    try{const blob=await compressDataUrl(dataUrl,1600);
+      const path=user.id+'/'+key+(blob.type==='image/webp'?'.webp':'.jpg');
+      const {error}=await sb.storage.from('live').upload(path,blob,{upsert:true,contentType:blob.type,cacheControl:'3600'});
+      if(error){console.warn(error);return null;}
+      liveRefCache.set(dataUrl,path);return path;}catch(e){console.warn(e);return null;}}
+  async function liveFetchImage(path){ /* student: returns an object URL, or null */
+    await init();
+    try{const {data,error}=await sb.storage.from('live').download(path);if(error||!data)return null;return URL.createObjectURL(data);}catch(e){return null;}}
+  async function liveCleanup(){ /* teacher: delete all of her live images */
+    await init();if(!user)return;
+    try{const {data}=await sb.storage.from('live').list(user.id,{limit:1000});
+      if(data&&data.length)await sb.storage.from('live').remove(data.map(f=>user.id+'/'+f.name));}catch(e){console.warn(e)}
+    liveRefCache.clear();}
   function liveStopBeacon(){ /* page closing: mark the room offline even if the page dies */
     if(!liveChan||!user||!liveTok)return;
     try{const c=window.LN_CONFIG;fetch(c.url+'/rest/v1/live_rooms?teacher_id=eq.'+user.id,{method:'PATCH',keepalive:true,
@@ -196,6 +224,7 @@ window.LN=(()=>{
   async function liveStop(){
     clearInterval(liveBeat);liveBeat=null;
     if(liveChan){await liveChan.unsubscribe();liveChan=null;}
+    await liveCleanup();
     if(sb&&user)try{await sb.from('live_rooms').upsert({teacher_id:user.id,live:false,updated_at:new Date().toISOString()});}catch(e){console.warn(e)}}
   function liveLeave(){if(liveJoinChan){liveJoinChan.unsubscribe();liveJoinChan=null;}}
 
@@ -280,6 +309,6 @@ window.LN=(()=>{
     uploadBook,listBooks,downloadBook,deleteBook,
     saveProgress,loadProgress,listStudents,listStudentsProgress,myTeacher,GAME_TITLES,
     isAdmin,adminWhoJoined,myStudentsActivity,
-    liveStart,livePush,liveJoin,liveStop,liveLeave,liveStopBeacon,
+    liveStart,livePush,liveJoin,liveStop,liveLeave,liveStopBeacon,liveUploadImage,liveFetchImage,liveCleanup,
     get user(){return user;},get profile(){return profile;},
     teacherCode(){return user?user.id:null;}};})();
