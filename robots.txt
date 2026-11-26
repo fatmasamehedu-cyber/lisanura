@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /lisanura/welcome/
+Allow: /lisanura/$
+Disallow: /lisanura/board/
+Disallow: /lisanura/game/
+Disallow: /lisanura/lab/
+Disallow: /lisanura/supabase/
+
+Sitemap: https://fatmasamehedu-cyber.github.io/lisanura/sitemap.xml
