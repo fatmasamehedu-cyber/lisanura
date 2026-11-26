@@ -419,5 +419,6 @@ function boot(){
   mo.observe(d.body,{childList:true,subtree:true});
   window.addEventListener('ls-sync',function(){var b=d.getElementById('akDoor');if(b)b._akLang=null;ensureDoor();if(ov)render();});
 }
+window.LisanAdhkar={open:open};
 if(d.body)boot();else d.addEventListener('DOMContentLoaded',boot);
 })();
