@@ -66,3 +66,11 @@ body{font-family:Naskh,"Noto Naskh Arabic",serif;color:var(--sb-ink);overflow-x:
 @media (max-height:700px){.sb-teacher{height:20vh}}
 @font-face{font-family:'Noto Naskh Arabic';src:url('../fonts/NotoNaskhArabic-Regular.woff2') format('woff2');font-weight:400;font-display:swap}
 @font-face{font-family:'Noto Naskh Arabic';src:url('../fonts/NotoNaskhArabic-Bold.woff2') format('woff2');font-weight:700;font-display:swap}
+
+.sb-hop{animation:sbHop .7s ease-out}
+@keyframes sbHop{0%{translate:0 0;scale:1}25%{translate:0 -26px;scale:1.05}50%{translate:0 0;scale:.98}70%{translate:0 -12px;scale:1.02}100%{translate:0 0;scale:1}}
+.sb-shake{animation:sbShake .7s ease-in-out;transform-origin:50% 100%}
+@keyframes sbShake{0%{translate:0 0;rotate:0deg}15%{translate:-10px 0;rotate:-6deg}35%{translate:8px 0;rotate:5deg}55%{translate:-6px 0;rotate:-3deg}75%{translate:3px 0;rotate:2deg}100%{translate:0 0;rotate:0deg}}
+.sb-bub{position:fixed;z-index:60;min-width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font:900 24px/1 sans-serif;color:#fff;box-shadow:0 3px 8px #0004;border:3px solid #fff;animation:sbBub 1.2s ease-out forwards;pointer-events:none}
+.sb-bub.ok{background:#f0a92e}.sb-bub.no{background:#e05b5b}
+@keyframes sbBub{0%{transform:scale(0)}20%{transform:scale(1.2)}35%{transform:scale(1)}85%{opacity:1}100%{transform:translateY(-14px);opacity:0}}

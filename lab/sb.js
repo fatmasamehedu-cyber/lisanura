@@ -43,7 +43,17 @@ function levelUp(o){
   if(o.next)setTimeout(function(){location.href=o.next;},o.delay||3000);
   return ov;
 }
-window.SB={teacher:teacher,cheer:cheer,levelUp:levelUp,confetti:confetti};
+/* react('ok'|'no'): motion only on the real teacher image (translate/rotate/uniform scale). Right = hop, wrong = recoil + shake with a ! bubble. */
+function react(kind){
+  var im=document.querySelector('.sb-teacher');if(!im)return;
+  im.classList.remove('sb-hop','sb-shake');void im.offsetWidth;
+  im.classList.add(kind==='ok'?'sb-hop':'sb-shake');
+  var r=im.getBoundingClientRect();
+  var b=document.createElement('div');b.className='sb-bub '+(kind==='ok'?'ok':'no');b.textContent=kind==='ok'?'\u2605':'!';
+  b.style.left=(r.left+r.width*0.62)+'px';b.style.top=(r.top-6)+'px';
+  document.body.appendChild(b);setTimeout(function(){b.remove();im.classList.remove('sb-hop','sb-shake');},1300);
+}
+window.SB={teacher:teacher,cheer:cheer,levelUp:levelUp,confetti:confetti,react:react};
 /* profile + stars (lab): gender, running star tally, games played */
 var KEY='lab:profile.v1';
 function load(){try{return JSON.parse(localStorage.getItem(KEY))||{};}catch(e){return {};}}

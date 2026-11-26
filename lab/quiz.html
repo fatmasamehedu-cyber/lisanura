@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Quiz sample</title>
-<link rel="stylesheet" href="sb.css?v=3">
+<link rel="stylesheet" href="sb.css?v=4">
 <style>
 .book{width:100%;max-width:min(520px,94vw);box-sizing:border-box;background:#fffdf8;border:4px solid #c98f4f;border-radius:20px;
   box-shadow:0 6px 0 #a8743a,0 14px 28px #5d3c1540;padding:12px}
@@ -42,7 +42,7 @@
   </div>
   <div id="opts"></div>
 </div>
-<script src="sb.js?v=3"></script>
+<script src="sb.js?v=4"></script>
 <script src="banks/tajweed.js?v=1"></script>
 <script src="banks/islamic.js?v=1"></script>
 <script src="banks/arabic.js?v=1"></script>
@@ -68,8 +68,8 @@ function ans(b,t){
   if(lock)return;lock=true;
   var ok=t===Q[i].c;
   [].forEach.call(oe.children,function(x){if(x.textContent===Q[i].c)x.classList.add('ok');});
-  if(ok){score++;rs.children[i].classList.add('on');fb.style.color='#3f9d58';fb.textContent='Well done!';}
-  else{b.classList.add('no');fb.style.color='#c04747';fb.textContent='Not quite. Look at the green answer.';}
+  if(ok){score++;rs.children[i].classList.add('on');fb.style.color='#3f9d58';fb.textContent='Well done!';SB.react('ok');}
+  else{b.classList.add('no');fb.style.color='#c04747';fb.textContent='Not quite. Look at the green answer.';SB.react('no');}
   setTimeout(function(){
     i++;
     if(i>=Q.length){var st=score>=N-1?3:score>=N-3?2:1;

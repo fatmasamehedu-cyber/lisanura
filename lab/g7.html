@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>صح أم خطأ — عينة</title>
-<link rel="stylesheet" href="sb.css?v=3">
+<link rel="stylesheet" href="sb.css?v=4">
 <style>
 .book{width:100%;max-width:min(520px,94vw);box-sizing:border-box;background:#fffdf8;border:4px solid #c98f4f;border-radius:20px;
   box-shadow:0 6px 0 #a8743a,0 14px 28px #5d3c1540;padding:12px}
@@ -36,7 +36,7 @@
     <button class="sb-pill red" id="f" type="button">✗ خطأ</button>
   </div>
 </div>
-<script src="sb.js?v=3"></script>
+<script src="sb.js?v=4"></script>
 <script>
 SB.teacher('full');
 (function(){
@@ -55,8 +55,8 @@ function show(){qE.textContent=Q[i].t;fb.textContent='';lock=false;}
 function ans(v){
   if(lock)return;lock=true;
   var ok=v===Q[i].a;
-  if(ok){score++;rs.children[i].classList.add('on');fb.style.color='#3f9d58';fb.textContent='أحسنتِ! إجابة صح';}
-  else{fb.style.color='#c04747';fb.textContent='حاولي تاني — الإجابة: '+(Q[i].a?'صح':'خطأ');}
+  if(ok){score++;rs.children[i].classList.add('on');fb.style.color='#3f9d58';fb.textContent='أحسنتِ! إجابة صح';SB.react('ok');}
+  else{fb.style.color='#c04747';fb.textContent='حاولي تاني — الإجابة: '+(Q[i].a?'صح':'خطأ');SB.react('no');}
   setTimeout(function(){
     i++;
     if(i>=Q.length){var st=score>=Q.length-1?3:score>=Q.length-2?2:1;
