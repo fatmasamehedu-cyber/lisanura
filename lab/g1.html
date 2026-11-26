@@ -6,7 +6,8 @@
 <title>فوانيس الحروف — عينة</title>
 <link rel="stylesheet" href="sb.css?v=2">
 <style>
-  .stage{position:relative;width:min(92vw,470px);margin:6px auto 0;padding:0}
+  .stage{position:relative;width:min(66vw,330px);margin:0 0 0 auto;align-self:flex-end;padding:0}
+  .sb-teacher{height:min(22vh,190px)!important}
   .lan-top{height:34px;width:46%;margin:0 auto;background:linear-gradient(#e0a94e,#b8812f 60%,#8f5f1f);border-radius:12px 12px 4px 4px;border:2px solid #7c5218;box-shadow:0 3px 8px #0006;position:relative}
   .lan-top::before{content:"";position:absolute;left:50%;top:-30px;width:34px;height:34px;margin-left:-17px;border:6px solid #c58f3a;border-radius:50%;box-sizing:border-box}
   .lan-body{position:relative;border-radius:46% 46% 44% 44%/36% 36% 34% 34%;padding:16px 14px 14px;margin-top:-4px;
@@ -119,6 +120,10 @@ function draw(){
   ctx.textAlign='center';ctx.textBaseline='middle';
   ctx.fillStyle='#c9a363';
   ctx.fillText(LETTERS[idx].ch,W/2,H/2+16);
+  // letter number badge
+  ctx.save();ctx.fillStyle='#d9534f';ctx.beginPath();ctx.arc(W-52,56,34,0,7);ctx.fill();ctx.lineWidth=4;ctx.strokeStyle='#fff3d6';ctx.stroke();
+  ctx.fillStyle='#fff';ctx.font='800 34px sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.direction='ltr';ctx.fillText(String(idx+1),W-52,58);ctx.restore();
+  ctx.textAlign='center';ctx.textBaseline='middle';
   // traced golden letter (letter shape clipped to finger trail)
   paintGold();
   ctx.save();
@@ -157,7 +162,7 @@ function trace(x,y){
     sparkle(px,py);
     var c=coverage();lit=c;
     progEl.textContent=Math.round(c*100)+'٪';
-    if(c>=0.85){
+    if(c>=0.9){
       done=true;lit=1;
       dotsEl.children[idx].classList.add('on');
       progEl.textContent='الفانوس نور!';
