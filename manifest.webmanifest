@@ -1,7 +1,7 @@
 {
   "name": "LisaNura - لسانورا",
   "short_name": "LisaNura",
-  "description": "ألعاب تعليمية: اللغة العربية، القرآن والتجويد، الإسلاميات.",
+  "description": "Educational games for children: Arabic language, Quran and Tajweed, Islamic studies. | ألعاب تعليمية: اللغة العربية، القرآن والتجويد، الإسلاميات.",
   "start_url": "./",
   "display": "standalone",
   "background_color": "#faf5f0",
