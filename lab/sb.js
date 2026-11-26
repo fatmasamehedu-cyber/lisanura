@@ -26,6 +26,8 @@ function confetti(host,n){
 function levelUp(o){
   o=o||{};
   var stars=o.stars==null?3:o.stars;
+  var game=(location.pathname.split('/').pop()||'lab').replace('.html','')+(location.search.match(/b=(\w+)/)?'-'+RegExp.$1:'');
+  var tot=window.SB.profile?window.SB.profile.gamePlayed(game,stars).stars:0;
   var ov=document.createElement('div');ov.className='sb-lv';
   var ribbon=document.createElement('div');ribbon.className='sb-lv-ribbon';ribbon.textContent=o.title||'برافو!';ribbon.setAttribute('dir',/[\u0600-\u06FF]/.test(ribbon.textContent)?'rtl':'ltr');
   var st=document.createElement('div');st.className='sb-lv-stars';
@@ -34,7 +36,8 @@ function levelUp(o){
   var pod=document.createElement('div');pod.className='sb-lv-podium';
   var tx=document.createElement('div');tx.className='sb-lv-text';tx.textContent=o.text||'';tx.setAttribute('dir',/[\u0600-\u06FF]/.test(tx.textContent)?'rtl':'ltr');
   var nx=document.createElement('div');nx.className='sb-lv-next';nx.textContent=o.nextText||(o.next?'بنروح اللعبة اللي بعدها':'بنرجع لقائمة العينات');
-  ov.appendChild(ribbon);ov.appendChild(st);ov.appendChild(t);ov.appendChild(pod);
+  var tt=document.createElement('div');tt.className='sb-lv-total';tt.textContent='\u2605 +'+stars+'  |  '+tot;tt.setAttribute('dir','ltr');
+  ov.appendChild(ribbon);ov.appendChild(st);ov.appendChild(tt);ov.appendChild(t);ov.appendChild(pod);
   if(o.text)ov.appendChild(tx);
   if(o.next!==null)ov.appendChild(nx);
   document.body.appendChild(ov);

@@ -74,3 +74,5 @@ body{font-family:Naskh,"Noto Naskh Arabic",serif;color:var(--sb-ink);overflow-x:
 .sb-bub{position:fixed;z-index:60;min-width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font:900 24px/1 sans-serif;color:#fff;box-shadow:0 3px 8px #0004;border:3px solid #fff;animation:sbBub 1.2s ease-out forwards;pointer-events:none}
 .sb-bub.ok{background:#f0a92e}.sb-bub.no{background:#e05b5b}
 @keyframes sbBub{0%{transform:scale(0)}20%{transform:scale(1.2)}35%{transform:scale(1)}85%{opacity:1}100%{transform:translateY(-14px);opacity:0}}
+
+.sb-lv-total{position:relative;z-index:3;margin:-4px auto 6px;padding:3px 16px;border-radius:999px;background:#fff8e8;color:#8a4b12;font-weight:800;font-size:18px;box-shadow:0 3px 0 #c9a15c;width:max-content;max-width:90%}
