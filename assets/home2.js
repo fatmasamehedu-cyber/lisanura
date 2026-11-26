@@ -471,12 +471,12 @@ function openStudents(){
             +'<div class="tb-st-sub">'+(en?'Joined':'انضمت')+' '+(st.created_at?new Date(st.created_at).toLocaleDateString(en?'en-GB':'ar-EG',{day:'numeric',month:'long'}):'')
             +(la?(' · '+(en?'Last active':'آخر نشاط')+' '+fmtWhen(la,en)):'')+'</div>';
           var srows=(st.progress||[]).filter(function(r){return r.game&&r.game.indexOf('lc:')!==0&&r.data&&typeof r.data.stars==='number'&&r.data.stars>0;});
-          var sTot=0;srows.forEach(function(r){sTot+=Math.min(3,r.data.stars);});
+          var sTot=0;srows.forEach(function(r){sTot+=(r.game==='tf'?r.data.stars:Math.min(3,r.data.stars));});
           h2+='<div class="tb-st-row tb-st-stars"><span>'+(en?'Total stars':'مجموع النجوم')+'</span><span style="color:#c9961a;font-weight:700">\u2605 '+(en?sTot:arNum(sTot))+'</span></div>';
           srows.sort(function(x,y){return x.game<y.game?-1:1;});
           srows.forEach(function(r){
-            var t=(LN.GAME_TITLES||{})[r.game]||[r.game,r.game],n3=Math.min(3,r.data.stars);
-            h2+='<div class="tb-st-row"><span>'+esc(en?(t[1]||t[0]):t[0])+'</span><span style="color:#c9961a">'+'\u2605'.repeat(n3)+'<span style="color:#d8cdbf">'+'\u2605'.repeat(3-n3)+'</span></span></div>';
+            var t=(LN.GAME_TITLES||{})[r.game]||[r.game,r.game],n3=Math.min(3,r.data.stars),cnt=r.game==='tf';
+            h2+='<div class="tb-st-row"><span>'+esc(en?(t[1]||t[0]):t[0])+'</span><span style="color:#c9961a">'+(cnt?('\u2605 '+(en?r.data.stars:arNum(r.data.stars))):('\u2605'.repeat(n3)+'<span style="color:#d8cdbf">'+'\u2605'.repeat(3-n3)+'</span>'))+'</span></div>';
           });
           if(!rows.length&&!srows.length)h2+='<div class="tb-st-none">'+(en?'No games yet':'لم تلعب بعد')+'</div>';
           rows.forEach(function(r){
