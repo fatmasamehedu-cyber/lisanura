@@ -5,14 +5,15 @@
    ============================================================ */
 window.LN=(()=>{
   const STUDENT_DOMAIN='lisanura-students.app';
-  const LIB='https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js';
+  const LIB='https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.119.2/dist/umd/supabase.min.js';
+  const LIB_SRI='sha384-7i/4BYWz4Mn+lJfg2HWfEPfZQ7tmFKF3CTSKlXBpxWjNlLjcg+T6smpHG4gLmU1u';
   let sb=null,user=null,profile=null,readyPromise=null,liveChan=null,liveJoinChan=null;
   function lang(){try{const v=localStorage.getItem('letters-city:lang.v1');const p=v===null?'en':JSON.parse(v);return p==='en'?'en':'ar';}catch(e){return 'en';}}
   function L(ar,en){return lang()==='en'?en:ar;}
 
   function configured(){const c=window.LN_CONFIG||{};return !!(c.url&&c.anon&&c.url.indexOf('https://')===0);}
   function loadLib(){if(window.supabase)return Promise.resolve();
-    return new Promise((res,rej)=>{const s=document.createElement('script');s.src=LIB;
+    return new Promise((res,rej)=>{const s=document.createElement('script');s.src=LIB;s.integrity=LIB_SRI;s.crossOrigin='anonymous';
       s.onload=res;s.onerror=()=>rej(new Error(L('تعذر تحميل مكتبة الاتصال','Could not load the connection library')));document.head.appendChild(s);});}
 
   async function init(){
@@ -82,7 +83,7 @@ window.LN=(()=>{
     document.dispatchEvent(new CustomEvent('ln-auth',{detail:{user:null,profile:null}}));}
 
   function arErr(e){const m=(e&&e.message)||'';
-    if(/already registered|already been registered/i.test(m))return L('هذا الحساب موجود بالفعل، جربي تسجيل الدخول','This account already exists. Try logging in');
+    if(/already registered|already been registered/i.test(m))return L('تعذر إنشاء الحساب بهذا الاسم. جربي اسما آخر، أو سجلي الدخول إن كان حسابك.','We could not create an account with this username. Try another one, or log in if it is yours.');
     if(/at least 6/i.test(m))return L('كلمة السر يجب أن تكون ٦ أحرف على الأقل','Password must be at least 6 characters');
     if(/invalid email/i.test(m))return L('البريد الإلكتروني غير صحيح','Invalid email address');
     if(/rate limit/i.test(m))return L('محاولات كثيرة، انتظري قليلا','Too many attempts. Wait a little');
