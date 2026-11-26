@@ -166,7 +166,7 @@ function trace(x,y){
       done=true;lit=1;
       dotsEl.children[idx].classList.add('on');
       progEl.textContent='الفانوس نور!';
-      var au=LETTERS[idx].audio;
+      var au='assets/ln/'+(idx<9?'0':'')+(idx+1)+'.mp3';
       if(au){try{new Audio(au).play().catch(function(){});}catch(e){}}
       setTimeout(function(){
         idx++;

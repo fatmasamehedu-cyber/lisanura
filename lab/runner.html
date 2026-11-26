@@ -43,7 +43,7 @@ document.addEventListener('keydown',function(e){if(e.key==='ArrowLeft')move(-1);
 var sx=null;
 cv.addEventListener('pointerdown',function(e){sx=e.clientX;});
 cv.addEventListener('pointerup',function(e){if(sx==null)return;var dx=e.clientX-sx;sx=null;
- if(Math.abs(dx)>24)move(dx>0?1:-1);else{var r=cv.getBoundingClientRect();move(e.clientX<r.left+r.width/2?-1:1);}});
+ if(Math.abs(dx)>24)move(dx>0?1:-1);else{var r=cv.getBoundingClientRect();if(e.clientY<r.top+r.height*0.22&&e.clientY>r.top+r.height*0.13){say();return;}move(e.clientX<r.left+r.width/2?-1:1);}});
 function spawnItem(){
   var need=word()[pos],ch;
   if(Math.random()<.5)ch=need;else{do{ch=ALPHA[Math.floor(Math.random()*ALPHA.length)];}while(ch===need);}
@@ -138,8 +138,8 @@ function hud(){
     ctx.fillStyle=i<pos?'#ffd964':'#ffffff26';ctx.strokeStyle='#ffd96a';ctx.lineWidth=3;
     ctx.beginPath();ctx.roundRect?ctx.roundRect(x-22,60,44,52,10):ctx.rect(x-22,60,44,52);ctx.fill();ctx.stroke();
     ctx.fillStyle='#3a2a52';ctx.font='800 34px "Noto Naskh Arabic",serif';ctx.textAlign='center';ctx.textBaseline='middle';
-    if(i<pos)ctx.fillText(w[i],x,88);}
-  ctx.fillStyle='#ffffffcc';ctx.font='700 16px "Noto Naskh Arabic",serif';ctx.fillText('اجمعي حروف الكلمة بالترتيب',CX,128);
+    ctx.globalAlpha=i<pos?1:.35;ctx.fillStyle=i<pos?'#3a2a52':'#ffffff';ctx.fillText(w[i],x,88);ctx.globalAlpha=1;}
+  ctx.fillStyle='#00000066';ctx.beginPath();ctx.roundRect?ctx.roundRect(CX-120,124,240,46,23):ctx.rect(CX-120,124,240,46);ctx.fill();ctx.fillStyle='#ffe9a8';ctx.font='700 20px "Noto Naskh Arabic",serif';ctx.fillText('🔊 الكلمة: '+WORDS[wi].w,CX,148);ctx.fillStyle='#ffffffcc';ctx.font='700 15px "Noto Naskh Arabic",serif';ctx.fillText('اجمعي حروفها بالترتيب — اضغطي على الكلمة لتسمعيها',CX,186);
   ctx.fillStyle='#00000066';ctx.beginPath();ctx.roundRect?ctx.roundRect(W-110,14,96,36,18):ctx.rect(W-110,14,96,36);ctx.fill();
   ctx.fillStyle='#ffd964';ctx.font='800 20px "Noto Naskh Arabic",serif';ctx.fillText('★ '+stars,W-62,33);
   ctx.fillStyle='#ffffffaa';ctx.font='700 14px "Noto Naskh Arabic",serif';ctx.direction='ltr';ctx.fillText((wi+1)+' / '+WORDS.length,CX,34);ctx.direction='rtl';
