@@ -218,10 +218,12 @@ window.LN=(()=>{
       if(!room||!room.live||(Date.now()-new Date(room.updated_at).getTime())>600000){onStatus&&onStatus('offline');return false;}}catch(e){console.warn(e)}
     liveJoinChan=sb.channel('live:'+teacherId,{config:{private:true}});
     liveJoinChan.on('broadcast',{event:'state'},m=>onState&&onState(m.payload&&m.payload.data));
+    liveJoinChan.on('broadcast',{event:'ended'},()=>{onStatus&&onStatus('ended');});
     await new Promise(res=>liveJoinChan.subscribe(st=>{if(st==='SUBSCRIBED'){onStatus&&onStatus('live');res();}if(st==='CHANNEL_ERROR'){onStatus&&onStatus('error');res();}}));
     await liveJoinChan.track({role:'student'});
     return true;}
   async function liveStop(){
+    if(liveChan){try{await liveChan.send({type:'broadcast',event:'ended',payload:{}});}catch(e){console.warn(e)}}
     clearInterval(liveBeat);liveBeat=null;
     if(liveChan){await liveChan.unsubscribe();liveChan=null;}
     await liveCleanup();

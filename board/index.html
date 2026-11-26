@@ -13,7 +13,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/peerjs/1.5.4/peerjs.min.js"></script>
 <script src="https://fatmasamehedu-cyber.github.io/lisanura/assets/supa-config.js?v=4"></script>
-<script src="https://fatmasamehedu-cyber.github.io/lisanura/assets/supa.js?v=16"></script>
+<script src="https://fatmasamehedu-cyber.github.io/lisanura/assets/supa.js?v=17"></script>
 <script src="https://fatmasamehedu-cyber.github.io/lisanura/assets/gate.js?v=10"></script>
 <script src="https://fatmasamehedu-cyber.github.io/lisanura/assets/home2.js?v=24"></script>
 <style>
@@ -433,6 +433,11 @@ const T={"الرئيسية":"Home",
 "مشاركة مع الطالب":"Share with student",
 "بث مباشر: الطالب يشوف رسمك لحظة بلحظة":"Live: the student watches your drawing in real time",
 "بدء بث مباشر":"Start live broadcast",
+"إنهاء البث":"End broadcast",
+"إنهاء البث؟":"End the broadcast?",
+"انتهى البث":"The broadcast has ended",
+"نعم":"Yes",
+"لا":"No",
 "اللوحة كبيرة على البث، بعض المحتوى مش هيظهر للطالب":"The board is too big to broadcast, some content will not reach the student",
 "تعذر إرسال البث للطالب، جاري المحاولة":"Could not send the broadcast, retrying",
 "أو لقطة ثابتة: الطالب يفتح نسخة من السبورة دلوقتي":"Or a snapshot: the student opens a copy of the board right now",
@@ -1909,8 +1914,20 @@ function buildShare(body){
     +'<div style="font-size:13px;color:var(--maroon);text-align:center">أو لقطة ثابتة: الطالب يفتح نسخة من السبورة دلوقتي</div>'
     +'<button class="abtn blue" id="goSnap">نسخ رابط اللقطة</button>'
     +'<div id="shOut" style="width:100%;font-size:12px;word-break:break-all;color:var(--rose-d);text-align:center;direction:ltr"></div>'
-    +'<div id="shSt" style="font-size:13px;font-weight:700;color:var(--maroon)"></div>';
+    +'<div id="shSt" style="font-size:13px;font-weight:700;color:var(--maroon)"></div>'
+    +'<div id="endWrap" style="display:none;width:100%;border-top:2px solid var(--line);padding-top:10px;text-align:center">'
+    +'<button class="abtn" id="endLive" style="background:#b3261e;box-shadow:0 4px 0 #7d1a15;display:inline-flex;align-items:center;gap:8px"><svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="5" width="14" height="14" rx="3" fill="#fff"/></svg><span>إنهاء البث</span></button>'
+    +'<div id="endAsk" style="display:none;font-weight:700;color:var(--maroon)"><div style="margin-bottom:8px">إنهاء البث؟</div>'
+    +'<button class="abtn" id="endYes" style="background:#b3261e;box-shadow:0 4px 0 #7d1a15;margin:0 4px">نعم</button><button class="abtn blue" id="endNo" style="margin:0 4px">لا</button></div></div>';
   const out=body.querySelector('#shOut'),st=body.querySelector('#shSt');
+  const endWrap=body.querySelector('#endWrap'),endBtn=body.querySelector('#endLive'),endAsk=body.querySelector('#endAsk');
+  if(window.LN_LIVE){endWrap.style.display='block';out.textContent=location.origin+location.pathname+'#live='+LN.teacherCode();st.textContent=tt('البث شغال - انسخي الرابط');}
+  endBtn.onclick=()=>{endBtn.style.display='none';endAsk.style.display='block';};
+  body.querySelector('#endNo').onclick=()=>{endAsk.style.display='none';endBtn.style.display='inline-flex';};
+  body.querySelector('#endYes').onclick=async()=>{
+    try{clearTimeout(liveTimerLN);await LN.liveStop();}catch(e){console.warn(e)}
+    window.LN_LIVE=false;endWrap.style.display='none';endAsk.style.display='none';endBtn.style.display='inline-flex';
+    out.textContent='';st.textContent=tt('انتهى البث');};
   body.querySelector('#goSnap').onclick=async()=>{
     let link=null;
     if(window.LN&&LN.configured()&&LN.user){ /* signed in: short cloud link */
@@ -1928,7 +1945,7 @@ function buildShare(body){
       st.textContent=tt('جاري تجهيز البث...');
       try{
         await LN.liveStart(n=>{st.textContent=n>0?tt('متصل: ')+arNum(n)+tt(' طالب'):tt('البث شغال، في انتظار الطلاب');},()=>{liveDirty();});
-        window.LN_LIVE=true;
+        window.LN_LIVE=true;endWrap.style.display='block';
         const link=location.origin+location.pathname+'#live='+LN.teacherCode();
         out.textContent=link;
         try{await navigator.clipboard.writeText(link);st.textContent=tt('البث شغال - الرابط اتنسخ، ابعتيه للطالب');}
@@ -1958,7 +1975,7 @@ function joinLive(hostId){
   if(window.LN&&LN.configured()){
     LN.init().then(()=>LN.liveJoin(hostId,
       data=>{try{state=JSON.parse(LZString.decompressFromEncodedURIComponent(data));rehydrate();hydrateRefs();syncPageUI();}catch(e){console.warn(e)}},
-      stt=>{badge.textContent=tt(stt==='live'?'متصلة بالمعلمة':stt==='offline'?'المعلمة لسه ما بدأتش البث':'مشكلة اتصال، جاري المحاولة');}));
+      stt=>{badge.textContent=tt(stt==='ended'?'انتهى البث':stt==='live'?'متصلة بالمعلمة':stt==='offline'?'المعلمة لسه ما بدأتش البث':'مشكلة اتصال، جاري المحاولة');}));
     return;}
   let p;
   const connect=()=>{try{p=new Peer();}catch(e){badge.textContent=tt('تعذر الاتصال بالبث');return;}
