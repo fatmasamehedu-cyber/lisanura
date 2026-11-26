@@ -18,10 +18,10 @@ create policy "linked students read their teacher room" on public.live_rooms for
 -- 3. shared_boards: no anonymous listing. Read one board by its id through a function.
 drop policy if exists "anyone reads a shared board by link" on public.shared_boards;
 revoke select on public.shared_boards from anon;
-create or replace function public.get_shared_board(board_id uuid) returns table(id uuid, state jsonb, created_at timestamptz)
+create or replace function public.get_shared_board(board_id text) returns table(id text, state jsonb, created_at timestamptz)
   language sql stable security definer set search_path = public as $$
-  select s.id, s.state::jsonb, s.created_at from public.shared_boards s where s.id = board_id $$;
-grant execute on function public.get_shared_board(uuid) to anon, authenticated;
+  select s.id, s.state, s.created_at from public.shared_boards s where s.id = board_id $$;
+grant execute on function public.get_shared_board(text) to anon, authenticated;
 -- needs a client change in the shared-board loader to call rpc get_shared_board.
 
 -- 4. Trigger function and helper should not be callable by anon.
