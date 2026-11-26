@@ -205,6 +205,48 @@ window.LN=(()=>{
     try{const {data}=await sb.storage.from('live').list(user.id,{limit:1000});
       if(data&&data.length)await sb.storage.from('live').remove(data.map(f=>user.id+'/'+f.name));}catch(e){console.warn(e)}
     liveRefCache.clear();}
+
+  /* ---------------- link to a teacher later (student account panel) ---------------- */
+  async function linkTeacherByCode(code){
+    await init();if(!user)return {ok:false,err:L('سجلي الدخول أولا','Log in first')};
+    code=(code||'').trim();
+    if(!/^[0-9a-fA-F-]{32,36}$/.test(code))return {ok:false,err:L('كود المعلمة غير صحيح','Teacher code is incorrect')};
+    const r=await sb.rpc('teacher_name_by_code',{code});
+    if(r.error)return {ok:false,err:L('تعذر التحقق من الكود، تأكدي من الاتصال وحاولي مرة أخرى','Could not verify the code. Check the connection and try again')};
+    const t=r.data&&r.data[0];if(!t)return {ok:false,err:L('كود المعلمة غير صحيح','Teacher code is incorrect')};
+    const lr=await sb.rpc('link_to_teacher',{code:t.id});
+    if(lr.error||lr.data===false)return {ok:false,err:L('تعذر الربط بالمعلمة، حاولي مرة أخرى','Could not link to the teacher. Try again')};
+    await loadProfile();return {ok:true,name:t.display_name||''};}
+  function mountLinkBox(){
+    const out=document.getElementById('homeAuthOut');
+    const old=document.getElementById('lnLinkBox');
+    if(!out||!user||!profile||profile.role!=='student'){if(old)old.remove();return;}
+    const host=out.parentElement&&out.parentElement.parentElement;if(!host)return;
+    const linked=!!profile.teacher_id;
+    if(old&&old.dataset.linked===String(linked)&&old.dataset.lang===lang()&&old.parentElement===host)return;
+    if(old)old.remove();
+    const b=document.createElement('div');b.id='lnLinkBox';b.dataset.linked=String(linked);b.dataset.lang=lang();
+    b.setAttribute('dir',lang()==='en'?'ltr':'rtl');
+    b.style.cssText='font-family:Naskh,serif;background:#fff;border:2px solid #e9b7c9;border-radius:18px;padding:14px 18px;margin-top:12px;color:#7c2d49';
+    const ttl='font-size:16px;font-weight:700;margin-bottom:8px';
+    if(linked){
+      b.innerHTML='<div style="'+ttl+'">'+L('أنتِ مرتبطة بمعلمتك','You are linked to your teacher')+'</div><div id="lnLinkName" style="font-size:14px"></div>';
+      sb.rpc('teacher_name_by_code',{code:profile.teacher_id}).then(r=>{const t=r.data&&r.data[0];const el=b.querySelector('#lnLinkName');if(el&&t&&t.display_name)el.textContent=t.display_name;});
+    }else{
+      b.innerHTML='<div style="'+ttl+'">'+L('اربطي حسابك بمعلمتك','Link your account to your teacher')+'</div>'
+        +'<div style="font-size:13px;color:#a4748a;margin-bottom:8px">'+L('اكتبي كود المعلمة الذي أرسلته لك','Enter the teacher code she sent you')+'</div>'
+        +'<input id="lnLinkCode" autocomplete="off" autocapitalize="off" spellcheck="false" dir="ltr" placeholder="'+L('كود المعلمة','Teacher code')+'" style="width:100%;box-sizing:border-box;padding:10px;border:2px solid #e9b7c9;border-radius:12px;font-size:15px;margin-bottom:8px">'
+        +'<button id="lnLinkGo" style="background:#c16a7e;color:#fff;border:0;border-radius:12px;padding:9px 20px;font-family:Naskh,serif;font-size:15px;font-weight:700;cursor:pointer">'+L('ربط','Link')+'</button>'
+        +'<div id="lnLinkMsg" style="font-size:14px;font-weight:700;margin-top:8px"></div>';
+      const go=b.querySelector('#lnLinkGo'),msg=b.querySelector('#lnLinkMsg'),inp=b.querySelector('#lnLinkCode');
+      go.onclick=async()=>{go.disabled=true;msg.style.color='#7c2d49';msg.textContent=L('جاري الربط...','Linking...');
+        const r=await linkTeacherByCode(inp.value);go.disabled=false;
+        if(r.ok){msg.style.color='#2e7d4f';msg.textContent=L('تم الربط بالمعلمة','Linked to your teacher')+(r.name?': '+r.name:'');setTimeout(mountLinkBox,1500);}
+        else{msg.style.color='#b3261e';msg.textContent=r.err;}};}
+    host.appendChild(b);}
+  (function(){let tmr=null;const mo=new MutationObserver(()=>{clearTimeout(tmr);tmr=setTimeout(()=>{try{mountLinkBox();}catch(e){console.warn(e)}},150);});
+    const go=()=>mo.observe(document.body,{childList:true,subtree:true});
+    if(document.body)go();else document.addEventListener('DOMContentLoaded',go);})();
   function liveStopBeacon(){ /* page closing: mark the room offline even if the page dies */
     if(!liveChan||!user||!liveTok)return;
     try{const c=window.LN_CONFIG;fetch(c.url+'/rest/v1/live_rooms?teacher_id=eq.'+user.id,{method:'PATCH',keepalive:true,
@@ -311,6 +353,6 @@ window.LN=(()=>{
     uploadBook,listBooks,downloadBook,deleteBook,
     saveProgress,loadProgress,listStudents,listStudentsProgress,myTeacher,GAME_TITLES,
     isAdmin,adminWhoJoined,myStudentsActivity,
-    liveStart,livePush,liveJoin,liveStop,liveLeave,liveStopBeacon,liveUploadImage,liveFetchImage,liveCleanup,
+    linkTeacherByCode,liveStart,livePush,liveJoin,liveStop,liveLeave,liveStopBeacon,liveUploadImage,liveFetchImage,liveCleanup,
     get user(){return user;},get profile(){return profile;},
     teacherCode(){return user?user.id:null;}};})();
