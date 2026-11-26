@@ -13,8 +13,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/peerjs/1.5.4/peerjs.min.js"></script>
 <script src="https://fatmasamehedu-cyber.github.io/lisanura/assets/supa-config.js?v=4"></script>
-<script src="https://fatmasamehedu-cyber.github.io/lisanura/assets/supa.js?v=14"></script>
-<script src="https://fatmasamehedu-cyber.github.io/lisanura/assets/gate.js?v=9"></script>
+<script src="https://fatmasamehedu-cyber.github.io/lisanura/assets/supa.js?v=15"></script>
+<script src="https://fatmasamehedu-cyber.github.io/lisanura/assets/gate.js?v=10"></script>
 <script src="https://fatmasamehedu-cyber.github.io/lisanura/assets/home2.js?v=24"></script>
 <style>
 @font-face{font-family:'Naskh';src:url('https://fatmasamehedu-cyber.github.io/lisanura/fonts/NotoNaskhArabic-Regular.ttf') format('truetype');font-weight:400}
@@ -433,6 +433,8 @@ const T={"الرئيسية":"Home",
 "مشاركة مع الطالب":"Share with student",
 "بث مباشر: الطالب يشوف رسمك لحظة بلحظة":"Live: the student watches your drawing in real time",
 "بدء بث مباشر":"Start live broadcast",
+"اللوحة كبيرة على البث، بعض المحتوى مش هيظهر للطالب":"The board is too big to broadcast, some content will not reach the student",
+"تعذر إرسال البث للطالب، جاري المحاولة":"Could not send the broadcast, retrying",
 "أو لقطة ثابتة: الطالب يفتح نسخة من السبورة دلوقتي":"Or a snapshot: the student opens a copy of the board right now",
 "نسخ رابط اللقطة":"Copy snapshot link",
 "جاري تجهيز الرابط...":"Preparing the link...",
@@ -1869,8 +1871,22 @@ async function openBook(book){
 /* ================= share: live + snapshot ================= */
 let peer=null,conns=[],liveId=null,liveTimer=null;
 let liveTimerLN=null;
+function livePayload(){
+  const mk=(lim)=>LZString.compressToEncodedURIComponent(JSON.stringify(state,(k,v)=>{
+    if(k==='_img')return undefined;
+    if(k==='src'&&typeof v==='string'&&v.indexOf('data:')===0&&v.length>lim)return '';
+    return v;}));
+  let d=mk(30000);
+  if(d.length>180000)d=mk(0);
+  return d;}
+let liveWarned=false;
 function liveDirty(){
-  if(window.LN_LIVE&&window.LN&&LN.configured()){clearTimeout(liveTimerLN);liveTimerLN=setTimeout(()=>{try{LN.livePush(LZString.compressToEncodedURIComponent(JSON.stringify(state,(k,v)=>k==='_img'?undefined:v)));}catch(e){console.warn(e)}},400);}
+  if(window.LN_LIVE&&window.LN&&LN.configured()){clearTimeout(liveTimerLN);liveTimerLN=setTimeout(async()=>{try{
+    const d=livePayload();
+    if(d.length>240000){if(!liveWarned){liveWarned=true;toast('اللوحة كبيرة على البث، بعض المحتوى مش هيظهر للطالب');}return;}
+    const r=await LN.livePush(d);
+    if(r!=='ok'&&!liveWarned){liveWarned=true;toast('تعذر إرسال البث للطالب، جاري المحاولة');}
+    else if(r==='ok')liveWarned=false;}catch(e){console.warn(e)}},400);}
   if(!peer||!conns.length)return;
   clearTimeout(liveTimer);liveTimer=setTimeout(()=>{
     const data=LZString.compressToEncodedURIComponent(JSON.stringify(state,(k,v)=>k==='_img'?undefined:v));
@@ -1900,7 +1916,7 @@ function buildShare(body){
       if(window.LN_LIVE){st.textContent=tt('البث شغال بالفعل');return;}
       st.textContent=tt('جاري تجهيز البث...');
       try{
-        await LN.liveStart(n=>{st.textContent=n>0?tt('متصل: ')+arNum(n)+tt(' طالب'):tt('البث شغال، في انتظار الطلاب');});
+        await LN.liveStart(n=>{st.textContent=n>0?tt('متصل: ')+arNum(n)+tt(' طالب'):tt('البث شغال، في انتظار الطلاب');},()=>{liveDirty();});
         window.LN_LIVE=true;
         const link=location.origin+location.pathname+'#live='+LN.teacherCode();
         out.textContent=link;

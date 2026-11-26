@@ -160,29 +160,41 @@ window.LN=(()=>{
     return data||null;}
 
   /* ---------------- live rooms (Realtime broadcast) ---------------- */
-  async function liveStart(onViewers){
+  let liveBeat=null,liveTok=null;
+  async function liveStart(onViewers,onJoin){
     await init();if(!user)throw new Error(L('سجلي الدخول أولا','Log in first'));
     await sb.from('live_rooms').upsert({teacher_id:user.id,live:true,updated_at:new Date().toISOString()});
     liveChan=sb.channel('live:'+user.id,{config:{private:true}});
     liveChan.on('broadcast',{event:'hello'},()=>{ /* a student joined */});
     if(onViewers)liveChan.on('presence',{event:'sync'},()=>{
       const n=Object.keys(liveChan.presenceState()).length;onViewers(Math.max(0,n-1));});
+    if(onJoin)liveChan.on('presence',{event:'join'},p=>{const n=(p&&p.newPresences)||[];if(n.some(x=>x.role==='student'))onJoin();});
     await new Promise((res,rej)=>liveChan.subscribe(st=>st==='SUBSCRIBED'?res():st==='CHANNEL_ERROR'?rej(new Error(L('تعذر بدء البث','Could not start the broadcast'))):null));
     await liveChan.track({role:'teacher'});
+    clearInterval(liveBeat);
+    const tok=async()=>{try{const {data}=await sb.auth.getSession();liveTok=data&&data.session&&data.session.access_token;}catch(e){}};
+    await tok();
+    liveBeat=setInterval(async()=>{await tok();try{await sb.from('live_rooms').upsert({teacher_id:user.id,live:true,updated_at:new Date().toISOString()});}catch(e){console.warn(e)}},60000);
+    if(!window._lnLiveUnload){window._lnLiveUnload=true;addEventListener('pagehide',liveStopBeacon);}
     return user.id;}
-  function livePush(state){ /* host: broadcast full board (caller debounces) */
-    if(!liveChan)return;
-    liveChan.send({type:'broadcast',event:'state',payload:{data:state}});}
+  function liveStopBeacon(){ /* page closing: mark the room offline even if the page dies */
+    if(!liveChan||!user||!liveTok)return;
+    try{const c=window.LN_CONFIG;fetch(c.url+'/rest/v1/live_rooms?teacher_id=eq.'+user.id,{method:'PATCH',keepalive:true,
+      headers:{apikey:c.anon,Authorization:'Bearer '+liveTok,'Content-Type':'application/json'},body:JSON.stringify({live:false,updated_at:new Date().toISOString()})});}catch(e){}}
+  async function livePush(state){ /* host: broadcast full board (caller debounces). Returns 'ok' or an error text */
+    if(!liveChan)return 'no-channel';
+    try{const r=await liveChan.send({type:'broadcast',event:'state',payload:{data:state}});return r==='ok'?'ok':String(r);}catch(e){return 'error';}}
   async function liveJoin(teacherId,onState,onStatus){
     await init();
-    try{const {data:room}=await sb.from('live_rooms').select('live').eq('teacher_id',teacherId).maybeSingle();
-      if(!room||!room.live){onStatus&&onStatus('offline');return false;}}catch(e){console.warn(e)}
+    try{const {data:room}=await sb.from('live_rooms').select('live,updated_at').eq('teacher_id',teacherId).maybeSingle();
+      if(!room||!room.live||(Date.now()-new Date(room.updated_at).getTime())>600000){onStatus&&onStatus('offline');return false;}}catch(e){console.warn(e)}
     liveJoinChan=sb.channel('live:'+teacherId,{config:{private:true}});
     liveJoinChan.on('broadcast',{event:'state'},m=>onState&&onState(m.payload&&m.payload.data));
     await new Promise(res=>liveJoinChan.subscribe(st=>{if(st==='SUBSCRIBED'){onStatus&&onStatus('live');res();}if(st==='CHANNEL_ERROR'){onStatus&&onStatus('error');res();}}));
     await liveJoinChan.track({role:'student'});
     return true;}
   async function liveStop(){
+    clearInterval(liveBeat);liveBeat=null;
     if(liveChan){await liveChan.unsubscribe();liveChan=null;}
     if(sb&&user)try{await sb.from('live_rooms').upsert({teacher_id:user.id,live:false,updated_at:new Date().toISOString()});}catch(e){console.warn(e)}}
   function liveLeave(){if(liveJoinChan){liveJoinChan.unsubscribe();liveJoinChan=null;}}
@@ -268,6 +280,6 @@ window.LN=(()=>{
     uploadBook,listBooks,downloadBook,deleteBook,
     saveProgress,loadProgress,listStudents,listStudentsProgress,myTeacher,GAME_TITLES,
     isAdmin,adminWhoJoined,myStudentsActivity,
-    liveStart,livePush,liveJoin,liveStop,liveLeave,
+    liveStart,livePush,liveJoin,liveStop,liveLeave,liveStopBeacon,
     get user(){return user;},get profile(){return profile;},
     teacherCode(){return user?user.id:null;}};})();
