@@ -21,10 +21,14 @@ window.LN=(()=>{
     readyPromise=(async()=>{
       if(!configured())return null;
       await loadLib();
+      const isRec=/[#&]type=recovery/.test(location.hash);
       sb=window.supabase.createClient(window.LN_CONFIG.url,window.LN_CONFIG.anon);
       try{const {data}=await sb.auth.getSession();
         if(data&&data.session){user=data.session.user;await loadProfile();}}catch(e){console.warn(e)}
+      if(isRec&&user)showRecovery();
+      try{const pc=localStorage.getItem('ln:pendingCode');if(pc&&user){localStorage.removeItem('ln:pendingCode');if(profile&&profile.role==='student'&&!profile.teacher_id)await linkTeacherByCode(pc);}}catch(e){console.warn(e)}
       sb.auth.onAuthStateChange(async(ev,sess)=>{
+        if(ev==='PASSWORD_RECOVERY'){showRecovery();return;}
         user=sess?sess.user:null;profile=null;
         if(user)await loadProfile();
         document.dispatchEvent(new CustomEvent('ln-auth',{detail:{user,profile}}));});
@@ -274,6 +278,7 @@ window.LN=(()=>{
   function liveLeave(){if(liveJoinChan){liveJoinChan.unsubscribe();liveJoinChan=null;}}
 
   /* ---------------- auth UI (Arabic, lisanura style) ---------------- */
+  const GOOGLE_G='<svg width="18" height="18" viewBox="0 0 48 48" style="vertical-align:-4px;margin-inline-end:8px"><path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9.1 3.6l6.8-6.8C35.8 2.4 30.3 0 24 0 14.6 0 6.5 5.4 2.6 13.2l7.9 6.1C12.4 13.6 17.7 9.5 24 9.5z"/><path fill="#4285F4" d="M46.5 24.5c0-1.6-.1-3.1-.4-4.5H24v9h12.7c-.6 3-2.3 5.5-4.8 7.2l7.6 5.9c4.5-4.1 7-10.2 7-17.6z"/><path fill="#FBBC05" d="M10.5 28.7c-.5-1.5-.8-3-.8-4.7s.3-3.2.8-4.7l-7.9-6.1C.9 16.4 0 20.1 0 24s.9 7.6 2.6 10.8l7.9-6.1z"/><path fill="#34A853" d="M24 48c6.5 0 11.9-2.1 15.9-5.8l-7.6-5.9c-2.1 1.4-4.9 2.3-8.3 2.3-6.3 0-11.6-4.1-13.5-9.8l-7.9 6.1C6.5 42.6 14.6 48 24 48z"/></svg>';
   function renderAuth(container,opts){
     opts=opts||{};
     const en=lang()==='en';
@@ -281,17 +286,22 @@ window.LN=(()=>{
     container.innerHTML=
     '<div dir="'+(en?'ltr':'rtl')+'" style="font-family:Naskh,serif;max-width:340px;margin:0 auto;background:#fffdf6;border:2px solid #e8cfc0;border-radius:18px;padding:22px;box-shadow:0 8px 24px rgba(124,45,73,.15)">'
     +'<div style="text-align:center;margin-bottom:6px"><img src="'+lbase+(en?'logo-en.webp?v=3':'logo-ar.webp?v=3')+'" alt="لسانورا" style="height:64px;width:auto;max-width:100%"></div>'
-    +'<div id="lnTabs" style="display:flex;gap:6px;margin:12px 0">'
+    +'<div id="lnTitle" style="display:none;text-align:center;font-weight:700;color:#7e4150;font-size:18px;margin:12px 0 4px">'+L('إعادة تعيين كلمة السر','Reset your password')+'</div>'
+     +'<div id="lnTabs" style="display:flex;gap:6px;margin:12px 0">'
     +'<button data-t="in" style="flex:1;padding:8px;border-radius:12px;border:2px solid #c16a7e;background:#c16a7e;color:#fff;font-weight:700;font-family:Naskh">'+L('تسجيل دخول','Log in')+'</button>'
     +'<button data-t="up" style="flex:1;padding:8px;border-radius:12px;border:2px solid #c16a7e;background:#fff;color:#7e4150;font-weight:700;font-family:Naskh">'+L('حساب جديد','New account')+'</button></div>'
     +'<div id="lnRole" style="display:none;gap:6px;margin-bottom:10px">'
     +'<button data-r="teacher" style="flex:1;padding:8px;border-radius:12px;border:2px solid #d9a44f;background:#d9a44f;color:#fff;font-weight:700;font-family:Naskh">'+L('أنا معلمة','I am a teacher')+'</button>'
     +'<button data-r="student" style="flex:1;padding:8px;border-radius:12px;border:2px solid #d9a44f;background:#fff;color:#7e4150;font-weight:700;font-family:Naskh">'+L('أنا طالبة','I am a student')+'</button></div>'
-    +'<input id="lnName" placeholder="'+L('الاسم','Name')+'" style="display:none;width:100%;box-sizing:border-box;margin-bottom:8px;padding:9px;border-radius:10px;border:2px solid #e8cfc0;font-family:Naskh;font-size:15px">'
+    +'<div id="lnGWrap"><button id="lnGoogle" type="button" style="width:100%;padding:10px;border-radius:12px;border:2px solid #e8cfc0;background:#fff;color:#4a3a3f;font-weight:700;font-family:Naskh;font-size:15px;cursor:pointer">'+GOOGLE_G+''+L('المتابعة بحساب جوجل','Continue with Google')+'</button>'
+     +'<div style="display:flex;align-items:center;gap:10px;margin:12px 0;color:#a98b7f;font-size:13px"><span style="flex:1;height:1px;background:#e8cfc0"></span>'+L('أو','or')+'<span style="flex:1;height:1px;background:#e8cfc0"></span></div></div>'
+     +'<input id="lnName" placeholder="'+L('الاسم','Name')+'" style="display:none;width:100%;box-sizing:border-box;margin-bottom:8px;padding:9px;border-radius:10px;border:2px solid #e8cfc0;font-family:Naskh;font-size:15px">'
     +'<input id="lnId" placeholder="'+L('البريد الإلكتروني','Email')+'" style="width:100%;box-sizing:border-box;margin-bottom:8px;padding:9px;border-radius:10px;border:2px solid #e8cfc0;font-family:Naskh;font-size:15px;direction:ltr;'+(en?'text-align:left':'text-align:right')+'">'
     +'<input id="lnPass" type="password" placeholder="'+L('كلمة السر','Password')+'" style="width:100%;box-sizing:border-box;margin-bottom:8px;padding:9px;border-radius:10px;border:2px solid #e8cfc0;font-family:Naskh;font-size:15px;direction:ltr;'+(en?'text-align:left':'text-align:right')+'">'
     +'<input id="lnCode" placeholder="'+L('كود المعلمة (اختياري)','Teacher code (optional)')+'" style="display:none;width:100%;box-sizing:border-box;margin-bottom:8px;padding:9px;border-radius:10px;border:2px solid #e8cfc0;font-family:Naskh;font-size:13px;direction:ltr;'+(en?'text-align:left':'text-align:right')+'">'
     +'<button id="lnGo" style="width:100%;padding:11px;border-radius:12px;border:none;background:#7e4150;color:#fff;font-weight:700;font-family:Naskh;font-size:16px">'+L('دخول','Log in')+'</button>'
+     +'<button id="lnForgot" type="button" style="display:block;margin:12px auto 0;background:none;border:none;color:#7e4150;font-family:Naskh;font-size:15px;text-decoration:underline;cursor:pointer;padding:4px">'+L('نسيتي كلمة السر؟','Forgot password?')+'</button>'
+     +'<button id="lnBack" type="button" style="display:none;margin:12px auto 0;background:none;border:none;color:#7e4150;font-family:Naskh;font-size:15px;text-decoration:underline;cursor:pointer;padding:4px">'+L('الرجوع لتسجيل الدخول','Back to log in')+'</button>'
     +'<div id="lnMsg" style="margin-top:10px;text-align:center;font-size:14px;color:#a98b7f;min-height:20px"></div></div>';
     let mode='in',role='student';
     const $=id=>container.querySelector(id);
@@ -305,10 +315,34 @@ window.LN=(()=>{
       idEl.placeholder=(mode==='up'&&role==='student')?L('اسم مستعار بالإنجليزية','Username (English letters)'):(mode==='in'?L('البريد أو الاسم المستعار','Email or username'):L('البريد الإلكتروني','Email'));
       passEl.placeholder=(role==='student'&&mode==='up')?L('رقم سري (٦ أرقام)','PIN (6 digits)'):L('كلمة السر (٦ أحرف على الأقل)','Password (at least 6 characters)');
       goEl.textContent=mode==='in'?L('دخول','Log in'):L('إنشاء الحساب','Create account');
+      const fg=mode==='forgot';
+      $('#lnTabs').style.display=fg?'none':'flex';$('#lnTitle').style.display=fg?'block':'none';
+      if(fg){$('#lnRole').style.display='none';nameEl.style.display='none';codeEl.style.display='none';
+        idEl.placeholder=L('اكتبي بريدك الإلكتروني','Enter your email');goEl.textContent=L('إرسال رابط إعادة التعيين','Send reset link');}
+      passEl.style.display=fg?'none':'block';$('#lnGWrap').style.display=fg?'none':'block';
+      $('#lnForgot').style.display=mode==='in'?'block':'none';$('#lnBack').style.display=fg?'block':'none';
       msgEl.textContent='';}
+    container.querySelector('#lnGoogle').onclick=async()=>{
+      msgEl.style.color='#a98b7f';msgEl.textContent=L('لحظات...','One moment...');
+      try{await init();
+        if(mode==='up'&&role==='student'&&codeEl.value.trim()){try{localStorage.setItem('ln:pendingCode',codeEl.value.trim());}catch(e){}}
+        const {error}=await sb.auth.signInWithOAuth({provider:'google',options:{redirectTo:siteBase()}});
+        if(error)throw error;}
+      catch(e){msgEl.style.color='#c0392b';msgEl.textContent=L('تعذر الدخول بحساب جوجل. حاولي مرة أخرى.','Could not sign in with Google. Try again.');}};
+    container.querySelector('#lnForgot').onclick=()=>{mode='forgot';refresh();};
+    container.querySelector('#lnBack').onclick=()=>{mode='in';refresh();};
     container.querySelectorAll('#lnTabs button').forEach(b=>b.onclick=()=>{mode=b.dataset.t;refresh();});
     container.querySelectorAll('#lnRole button').forEach(b=>b.onclick=()=>{role=b.dataset.r;refresh();});
     goEl.onclick=async()=>{
+      try{sessionStorage.removeItem('ln:pwchanged');}catch(e){}
+      if(mode==='forgot'){
+        msgEl.style.color='#a98b7f';
+        const em=idEl.value.trim();
+        if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(em)){msgEl.style.color='#c0392b';msgEl.textContent=L('اكتبي بريدا إلكترونيا صحيحا','Enter a valid email address');return;}
+        msgEl.textContent=L('لحظات...','One moment...');goEl.disabled=true;
+        try{await sendReset(em);}catch(e){console.warn(e)}
+        msgEl.style.color='#2e7d4f';msgEl.textContent=L('لو البريد ده له حساب، بعتنالك رابط إعادة التعيين. شوفي صندوق الوارد والرسائل غير المرغوبة.','If this email has an account, we sent a reset link. Check your inbox and spam.');
+        goEl.disabled=false;return;}
       msgEl.style.color='#a98b7f';msgEl.textContent=L('لحظات...','One moment...');goEl.disabled=true;
       try{
         if(mode==='in'){await signIn(idEl.value,passEl.value);
@@ -320,7 +354,43 @@ window.LN=(()=>{
           msgEl.textContent='';opts.onAuth&&opts.onAuth({user,profile});}
       }catch(e){msgEl.style.color='#c0392b';msgEl.textContent=e.message;}
       goEl.disabled=false;};
-    refresh();}
+    refresh();
+    try{if(sessionStorage.getItem('ln:pwchanged')){msgEl.style.color='#2e7d4f';msgEl.textContent=L('اتغيرت كلمة السر. سجلي الدخول.','Password changed. Please log in.');}}catch(e){}}
+
+  /* ---------------- forgot password / recovery ---------------- */
+  function siteBase(){return location.origin+location.pathname.replace(/(board|game|welcome)\/[^/]*$/,'').replace(/[^/]*$/,'');}
+  async function sendReset(email){
+    await init();
+    if(!sb)throw new Error('not configured');
+    if(/@lisanura-students\.app$/i.test(email))return; /* student placeholder address: nothing to send */
+    const {error}=await sb.auth.resetPasswordForEmail(email,{redirectTo:siteBase()});
+    if(error)console.warn(error.message);}
+  function showRecovery(){
+    if(document.getElementById('lnRecover'))return;
+    const o=document.createElement('div');o.id='lnRecover';
+    o.setAttribute('dir',lang()==='en'?'ltr':'rtl');
+    o.style.cssText='position:fixed;inset:0;z-index:2147483647;background:#faf5f0;overflow:auto;display:flex;align-items:center;justify-content:center;padding:24px 14px;box-sizing:border-box';
+    const inp='width:100%;box-sizing:border-box;margin-bottom:8px;padding:9px;border-radius:10px;border:2px solid #e8cfc0;font-family:Naskh;font-size:15px;direction:ltr';
+    o.innerHTML='<div style="width:100%;max-width:360px;background:#fffdf6;border:2px solid #e8cfc0;border-radius:18px;padding:22px;box-shadow:0 8px 24px rgba(124,45,73,.15);font-family:Naskh,serif">'
+      +'<div style="text-align:center;font-weight:700;color:#7e4150;font-size:19px;margin-bottom:12px">'+L('اختاري كلمة سر جديدة','Choose a new password')+'</div>'
+      +'<input id="lnNp1" type="password" placeholder="'+L('كلمة السر الجديدة (٦ أحرف على الأقل)','New password (at least 6 characters)')+'" style="'+inp+'">'
+      +'<input id="lnNp2" type="password" placeholder="'+L('أعيدي كتابة كلمة السر','Confirm new password')+'" style="'+inp+'">'
+      +'<button id="lnNpGo" style="width:100%;padding:11px;border-radius:12px;border:none;background:#7e4150;color:#fff;font-weight:700;font-family:Naskh;font-size:16px">'+L('حفظ كلمة السر','Save password')+'</button>'
+      +'<div id="lnNpMsg" style="margin-top:10px;text-align:center;font-size:14px;color:#a98b7f;min-height:20px"></div></div>';
+    document.body.appendChild(o);
+    const m=o.querySelector('#lnNpMsg'),go=o.querySelector('#lnNpGo');
+    go.onclick=async()=>{
+      const a=o.querySelector('#lnNp1').value,b=o.querySelector('#lnNp2').value;m.style.color='#c0392b';
+      if(a.length<6){m.textContent=L('كلمة السر لازم ٦ أحرف على الأقل','Password must be at least 6 characters');return;}
+      if(a!==b){m.textContent=L('كلمتا السر غير متطابقتين','Passwords do not match');return;}
+      go.disabled=true;m.style.color='#a98b7f';m.textContent=L('لحظات...','One moment...');
+      const {error}=await sb.auth.updateUser({password:a});
+      if(error){go.disabled=false;m.style.color='#c0392b';
+        m.textContent=/expired|invalid|session/i.test(error.message||'')?L('انتهت صلاحية الرابط. اطلبي رابطا جديدا.','This link has expired. Ask for a new one.'):L('تعذر حفظ كلمة السر. حاولي مرة أخرى.','Could not save the password. Try again.');return;}
+      try{sessionStorage.setItem('ln:pwchanged','1');}catch(e){}
+      try{await sb.auth.signOut();}catch(e){}
+      try{history.replaceState(null,'',siteBase());}catch(e){}
+      location.reload();};}
 
   /* ---------------- short share links (shared snapshots) ---------------- */
   function makeShareId(){const abc='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -349,7 +419,7 @@ window.LN=(()=>{
     try{const {data,error}=await sb.rpc('my_students_activity');return error?null:(data||[]);}catch(e){console.warn(e);return null;}}
 
   return {init,configured,renderAuth,
-    signUpTeacher,signUpStudent,signIn,signOut,
+    signUpTeacher,signUpStudent,signIn,signOut,sendReset,showRecovery,
     saveBoard,saveBoardNow,loadBoard,shareBoard,loadShared,
     uploadBook,listBooks,downloadBook,deleteBook,
     saveProgress,loadProgress,listStudents,listStudentsProgress,myTeacher,GAME_TITLES,
